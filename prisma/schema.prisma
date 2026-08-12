@@ -59,7 +59,7 @@ model User {
 
   createdAt DateTime @default(now())
 
-  experiences Experience[] @relation("author_experiences")
+  experiences Experience[]
 }
 
 model Company {
@@ -76,13 +76,13 @@ model Company {
 }
 
 model Experience {
-  id String @id @default(uuid())
+  id String @id @default(uuid()) @db.Uuid
 
-  companyId String
-  company   Company @relation(fields: [companyId], references: [id])
+  authorId  String @db.Uuid
+  companyId String @db.Uuid
 
-  authorId String
-  author   User   @relation("author_experiences", fields: [authorId], references: [id])
+  author  User    @relation(fields: [authorId], references: [id])
+  company Company @relation(fields: [companyId], references: [id])
 
   degree         String
   graduationYear Int
