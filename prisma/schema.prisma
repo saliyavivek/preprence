@@ -11,3 +11,131 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum Verdict {
+  selected
+  rejected
+  not_disclosed
+}
+
+enum ExperienceStatus {
+  draft
+  pending_review
+  published
+  rejected
+}
+
+enum VerificationStatus {
+  pending
+  verified
+  rejected
+}
+
+enum Difficulty {
+  easy
+  medium
+  hard
+}
+
+enum RoundType {
+  aptitude
+  online_assessment
+  coding
+  technical
+  managerial
+  hr
+  other
+}
+
+model User {
+  id String @id @default(uuid())
+
+  email String @unique
+  name  String
+
+  branch String?
+
+  isAdmin Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  experiences Experience[] @relation("author_experiences")
+}
+
+model Company {
+  id String @id @default(uuid())
+
+  name String
+  slug String @unique
+
+  logoUrl    String?
+  websiteUrl String?
+
+  createdAt   DateTime     @default(now())
+  experiences Experience[]
+}
+
+model Experience {
+  id String @id @default(uuid())
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
+
+  authorId String
+  author   User   @relation("author_experiences", fields: [authorId], references: [id])
+
+  degree         String
+  graduationYear Int
+
+  roleTitle     String
+  interviewDate DateTime
+  verdict       Verdict?
+
+  overallTips String?
+  isAnonymous Boolean @default(false)
+
+  status    ExperienceStatus @default(draft)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @default(now())
+
+  rounds       Round[]
+  verification Verification?
+
+  @@index([companyId])
+  @@index([authorId])
+  @@index([status])
+  @@index([graduationYear])
+}
+
+model Round {
+  id String @id @default(uuid())
+
+  experienceId String
+  experience   Experience @relation(fields: [experienceId], references: [id])
+
+  roundNumber Int
+  roundType   RoundType
+
+  difficulty Difficulty?
+
+  questionsAsked  String?
+  durationMinutes Int?
+
+  @@unique([experienceId, roundNumber])
+}
+
+model Verification {
+  id String @id @default(uuid())
+
+  experienceId String     @unique
+  experience   Experience @relation(fields: [experienceId], references: [id])
+
+  proofUrl String
+  status   VerificationStatus @default(pending)
+
+  reviewedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([status])
+}
