@@ -56,20 +56,6 @@ export default async function EditExperiencePage({ params }: Props) {
       <section>
         <h2>Interview Rounds</h2>
 
-        {experience.rounds.map((round) => (
-          <article key={round.id}>
-            <h3>Round {round.roundNumber}</h3>
-
-            <p>Type: {round.roundType}</p>
-
-            {round.difficulty && <p>Difficulty: {round.difficulty}</p>}
-
-            {round.questionsAsked && <p>Questions: {round.questionsAsked}</p>}
-
-            {round.durationMinutes && <p>Duration: {round.durationMinutes} minutes</p>}
-          </article>
-        ))}
-
         {experience.status === "draft" ? (
           <>
             {experience.rounds.length === 0 ? (
@@ -209,8 +195,6 @@ export default async function EditExperiencePage({ params }: Props) {
               <button type="submit">Add Round</button>
             </form>
           </>
-        ) : experience.status === "pending_review" ? (
-          <p>This experience has been submitted for review and cannot be edited right now.</p>
         ) : (
           // For non-draft statuses (published/rejected) show rounds read-only
           <>
@@ -227,6 +211,7 @@ export default async function EditExperiencePage({ params }: Props) {
                 </article>
               ))
             )}
+            {experience.status === "pending_review" && <p>This experience has been submitted for review and cannot be edited right now.</p>}
           </>
         )}
       </section>
