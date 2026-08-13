@@ -48,10 +48,9 @@ enum RoundType {
 }
 
 model User {
-  id String @id @default(uuid())
-
-  email String @unique
-  name  String
+  id    String  @id @db.Uuid
+  email String  @unique
+  name  String?
 
   branch String?
 
@@ -63,7 +62,7 @@ model User {
 }
 
 model Company {
-  id String @id @default(uuid())
+  id String @id @default(uuid()) @db.Uuid
 
   name String
   slug String @unique
@@ -96,7 +95,7 @@ model Experience {
 
   status    ExperienceStatus @default(draft)
   createdAt DateTime         @default(now())
-  updatedAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 
   rounds       Round[]
   verification Verification?
@@ -108,10 +107,10 @@ model Experience {
 }
 
 model Round {
-  id String @id @default(uuid())
+  id String @id @default(uuid()) @db.Uuid
 
-  experienceId String
-  experience   Experience @relation(fields: [experienceId], references: [id])
+  experienceId String     @db.Uuid
+  experience   Experience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
 
   roundNumber Int
   roundType   RoundType
@@ -125,10 +124,10 @@ model Round {
 }
 
 model Verification {
-  id String @id @default(uuid())
+  id String @id @default(uuid()) @db.Uuid
 
-  experienceId String     @unique
-  experience   Experience @relation(fields: [experienceId], references: [id])
+  experienceId String     @unique @db.Uuid
+  experience   Experience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
 
   proofUrl String
   status   VerificationStatus @default(pending)
