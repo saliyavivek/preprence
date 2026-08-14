@@ -20,15 +20,8 @@ enum Verdict {
 
 enum ExperienceStatus {
   draft
-  pending_review
   published
-  rejected
-}
-
-enum VerificationStatus {
-  pending
-  verified
-  rejected
+  taken_down
 }
 
 enum Difficulty {
@@ -59,6 +52,7 @@ model User {
   createdAt DateTime @default(now())
 
   experiences Experience[]
+  reports     Report[]
 }
 
 model Company {
@@ -97,8 +91,8 @@ model Experience {
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
 
-  rounds       Round[]
-  verification Verification?
+  rounds  Round[]
+  reports Report[]
 
   @@index([companyId])
   @@index([authorId])
@@ -123,18 +117,18 @@ model Round {
   @@unique([experienceId, roundNumber])
 }
 
-model Verification {
+model Report {
   id String @id @default(uuid()) @db.Uuid
 
-  experienceId String     @unique @db.Uuid
+  experienceId String     @db.Uuid
   experience   Experience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
 
-  proofUrl String
-  status   VerificationStatus @default(pending)
+  reportedById String @db.Uuid
+  reportedBy   User   @relation(fields: [reportedById], references: [id])
 
-  reviewedAt DateTime?
-
+  reason    String?
   createdAt DateTime @default(now())
 
-  @@index([status])
+  @@unique([experienceId, reportedById])
+  @@index([experienceId])
 }
