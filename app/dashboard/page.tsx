@@ -35,7 +35,7 @@ export default async function DashboardPage() {
       <Link href="/experience/new">Write an experience</Link>
 
       <section>
-        <h2>Your experiences</h2>
+        <Link href={"/dashboard/experiences"}>Your experiences</Link>
 
         <p>You haven't submitted any experiences yet.</p>
       </section>
