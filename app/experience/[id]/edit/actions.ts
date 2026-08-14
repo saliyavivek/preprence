@@ -280,7 +280,7 @@ export async function deleteRound(
     redirect(`/experience/${experienceId}/edit`);
 }
 
-export async function submitExperienceForReview(
+export async function publishExperience(
     experienceId: string
 ): Promise<void> {
     const supabase = await createClient();
@@ -321,15 +321,14 @@ export async function submitExperienceForReview(
         throw new Error("Please add at least one interview round.");
     }
 
-    // Move draft → pending review.
     await prisma.experience.update({
         where: {
             id: experienceId,
         },
         data: {
-            status: "pending_review",
+            status: "published",
         },
     });
 
-    redirect(`/experience/${experienceId}/edit`);
+    redirect(`/experiences/${experienceId}`);
 }

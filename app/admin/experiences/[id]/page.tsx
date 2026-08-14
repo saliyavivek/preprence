@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth/admin";
-import { publishExperience, rejectExperience } from "./actions";
+import { takeDownExperience } from "./actions";
 
 type Props = {
   params: Promise<{
@@ -26,6 +26,16 @@ export default async function AdminExperiencePage({ params }: Props) {
           email: true,
         },
       },
+      reports: {
+        include: {
+          reportedBy: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+        },
+      },
       rounds: {
         orderBy: {
           roundNumber: "asc",
@@ -38,7 +48,7 @@ export default async function AdminExperiencePage({ params }: Props) {
     notFound();
   }
 
-  if (experience.status !== "pending_review") {
+  if (experience.status !== "published") {
     notFound();
   }
 
@@ -55,6 +65,7 @@ export default async function AdminExperiencePage({ params }: Props) {
         <p>Role: {experience.roleTitle}</p>
         <p>Interview Date: {experience.interviewDate.toLocaleDateString()}</p>
         <p>Verdict: {experience.verdict ?? "Not provided"}</p>
+        <p>Status: {experience.status}</p>
 
         <p>Author: {experience.isAnonymous ? "Anonymous" : (experience.author.name ?? experience.author.email)}</p>
       </section>
@@ -82,15 +93,29 @@ export default async function AdminExperiencePage({ params }: Props) {
         ))}
       </section>
 
-      <div>
-        <form action={publishExperience.bind(null, experience.id)}>
-          <button type="submit">Publish</button>
-        </form>
+      <section>
+        <h2>Reports</h2>
 
-        <form action={rejectExperience.bind(null, experience.id)}>
-          <button type="submit">Reject</button>
-        </form>
-      </div>
+        {experience.reports.length === 0 ? (
+          <p>No reports for this experience.</p>
+        ) : (
+          <>
+            <ul>
+              {experience.reports.map((report) => (
+                <li key={report.id}>
+                  <p>Reported by: {report.reportedBy.name ?? report.reportedBy.email}</p>
+                  <p>Reason: {report.reason ?? "No reason provided"}</p>
+                </li>
+              ))}
+            </ul>
+            <div>
+              <form action={takeDownExperience.bind(null, experience.id)}>
+                <button type="submit">Take Down</button>
+              </form>
+            </div>
+          </>
+        )}
+      </section>
     </main>
   );
 }

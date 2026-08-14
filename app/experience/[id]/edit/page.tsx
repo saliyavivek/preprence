@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
-import { createRound, deleteRound, submitExperienceForReview, updateRound } from "./actions";
+import { createRound, deleteRound, publishExperience, updateRound } from "./actions";
 
 type Props = {
   params: Promise<{
@@ -196,7 +196,7 @@ export default async function EditExperiencePage({ params }: Props) {
             </form>
           </>
         ) : (
-          // For non-draft statuses (published/rejected) show rounds read-only
+          // For non-draft statuses (published) show rounds read-only
           <>
             {experience.rounds.length === 0 ? (
               <p>No interview rounds added yet.</p>
@@ -211,14 +211,18 @@ export default async function EditExperiencePage({ params }: Props) {
                 </article>
               ))
             )}
-            {experience.status === "pending_review" && <p>This experience has been submitted for review and cannot be edited right now.</p>}
           </>
         )}
       </section>
 
       {experience.status === "draft" && (
-        <form action={submitExperienceForReview.bind(null, experience.id)}>
-          <button type="submit">Submit for Review</button>
+        <form action={publishExperience.bind(null, experience.id)}>
+          <button
+            type="submit"
+            disabled={experience.rounds.length === 0}
+          >
+            Publish
+          </button>
         </form>
       )}
     </main>

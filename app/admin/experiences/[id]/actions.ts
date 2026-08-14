@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth/admin";
 import { redirect } from "next/navigation";
 
-export async function publishExperience(experienceId: string): Promise<void> {
+export async function takeDownExperience(experienceId: string) {
     await requireAdmin();
 
     const experience = await prisma.experience.findUnique({
@@ -17,8 +17,8 @@ export async function publishExperience(experienceId: string): Promise<void> {
         throw new Error("Experience not found.");
     }
 
-    if (experience.status !== "pending_review") {
-        throw new Error("Only experiences pending review can be published.");
+    if (experience.status !== "published") {
+        throw new Error("Only published experiences can be taken down.");
     }
 
     await prisma.experience.update({
@@ -26,36 +26,7 @@ export async function publishExperience(experienceId: string): Promise<void> {
             id: experienceId,
         },
         data: {
-            status: "published",
-        },
-    });
-
-    redirect(`/admin/experiences`);
-}
-
-export async function rejectExperience(experienceId: string): Promise<void> {
-    await requireAdmin();
-
-    const experience = await prisma.experience.findUnique({
-        where: {
-            id: experienceId,
-        },
-    });
-
-    if (!experience) {
-        throw new Error("Experience not found.");
-    }
-
-    if (experience.status !== "pending_review") {
-        throw new Error("Only experiences pending review can be rejected.");
-    }
-
-    await prisma.experience.update({
-        where: {
-            id: experienceId,
-        },
-        data: {
-            status: "rejected",
+            status: "taken_down",
         },
     });
 

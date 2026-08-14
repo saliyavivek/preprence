@@ -73,6 +73,8 @@ export default async function ExperiencePage({ params }: Props) {
 
         {experience.overallTips ? <p>{experience.overallTips}</p> : <p>No tips provided.</p>}
       </section>
+
+      <button>Report</button>
     </main>
   );
 }
