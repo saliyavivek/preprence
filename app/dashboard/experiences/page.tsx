@@ -33,14 +33,14 @@ export default async function MyExperiencesPage() {
       <header>
         <h1>My Experiences</h1>
 
-        <Link href="/experiences/new">Share an Experience</Link>
+        <Link href="/experience/new">Share an Experience</Link>
       </header>
 
       {experiences.length === 0 ? (
         <section>
-          <p>You haven't shared any interview experiences yet.</p>
+          <p>You haven&apos;t shared any interview experiences yet.</p>
 
-          <Link href="/experiences/new">Share your first experience</Link>
+          <Link href="/experience/new">Share your first experience</Link>
         </section>
       ) : (
         <section>
