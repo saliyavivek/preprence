@@ -11,8 +11,6 @@ type Props = {
 export default async function CompanyPage({ params }: Props) {
   const { slug } = await params;
 
-  console.log(slug);
-
   const company = await prisma.company.findUnique({
     where: {
       slug,

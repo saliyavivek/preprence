@@ -37,7 +37,7 @@ export default async function DashboardPage() {
       <section>
         <Link href={"/dashboard/experiences"}>Your experiences</Link>
 
-        <p>You haven't submitted any experiences yet.</p>
+        <p>You haven&apos;t submitted any experiences yet.</p>
       </section>
     </main>
   );
