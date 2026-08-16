@@ -18,7 +18,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   return (
-    <header className="border-b border-border bg-background/95">
+    <header className={`border-b border-border bg-background/95 ${pathname === "/login" ? "hidden" : ""}`}>
       <Container className="flex min-h-18 items-center justify-between">
         <Link
           href="/"
@@ -77,8 +77,9 @@ export function SiteHeader() {
 }
 
 export function Footer() {
+  const pathname = usePathname();
   return (
-    <footer className="mt-auto border-t border-border py-8">
+    <footer className={`mt-auto border-t border-border py-8 ${pathname === "/login" ? "hidden" : ""}`}>
       <Container className="flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
         <span className="font-mono font-semibold text-foreground">preprence.</span>
         <span>Real stories. Better preparation.</span>

@@ -49,6 +49,8 @@ model User {
 
   isAdmin Boolean @default(false)
 
+  onboardingCompleted Boolean @default(false)
+
   createdAt DateTime @default(now())
 
   experiences Experience[]

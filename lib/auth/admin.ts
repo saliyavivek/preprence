@@ -24,7 +24,7 @@ export async function requireAdmin() {
     });
 
     if (!profile || !profile.isAdmin) {
-        redirect("/dashboard");
+        redirect("/");
     }
 
     return profile;

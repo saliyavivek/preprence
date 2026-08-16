@@ -48,14 +48,7 @@ export default async function NewExperiencePage() {
         </nav>
 
         <header className="flex items-center gap-5 sm:gap-8">
-          <div
-            aria-hidden="true"
-            className="flex size-20 shrink-0 items-center justify-center rounded-3xl bg-primary/8 text-4xl text-primary sm:size-24"
-          >
-            <span className="font-mono">↗</span>
-          </div>
           <div className="flex flex-col gap-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Step 1 of 2</p>
             <h1 className="text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-4xl lg:text-5xl">Share your interview experience</h1>
             <p className="text-base text-muted-foreground sm:text-lg">Help the next student know what to expect.</p>
           </div>
