@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+
 import { Footer, SiteHeader } from "@/components/layout";
+import { prisma } from "@/lib/prisma";
+import { createClient } from "@/lib/supabase/server";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,11 +21,42 @@ export const metadata: Metadata = {
   description: "Explore real interview experiences, rounds, questions, and advice shared by candidates.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+async function getCurrentUserHeaderData() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { isLoggedIn: false, userName: null, userEmail: null };
+  }
+
+  const profile = await prisma.user.findUnique({
+    where: { id: user.id },
+    select: { name: true, email: true },
+  });
+
+  return {
+    isLoggedIn: true,
+    userName: profile?.name?.trim() || null,
+    userEmail: profile?.email || user.email || null,
+  };
+}
+
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const { isLoggedIn, userName, userEmail } = await getCurrentUserHeaderData();
+
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full bg-background antialiased`}>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} h-full bg-background antialiased`}
+    >
       <body className="min-h-full bg-background font-sans text-foreground">
-        <SiteHeader />
+        <SiteHeader
+          isLoggedIn={isLoggedIn}
+          userName={userName}
+          userEmail={userEmail}
+        />
         <div className="flex-1">{children}</div>
         <Footer />
       </body>

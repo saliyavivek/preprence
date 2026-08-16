@@ -2,9 +2,42 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+
+import { createClient } from "@/lib/supabase/client";
+
 function cx(...classes: Array<string | false | undefined>) {
   return classes.filter(Boolean).join(" ");
+}
+
+function UserAvatar({ name }: { name?: string | null }) {
+  const initial = name?.trim()?.charAt(0)?.toUpperCase();
+
+  return (
+    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary shadow-sm">
+      {initial ? (
+        initial
+      ) : (
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          className="h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M20 21a8 8 0 0 0-16 0" />
+          <circle
+            cx="12"
+            cy="7"
+            r="4"
+          />
+        </svg>
+      )}
+    </div>
+  );
 }
 
 export function Container({ className, children }: { className?: string; children: ReactNode }) {
@@ -14,9 +47,28 @@ export function Section({ className, children }: { className?: string; children:
   return <section className={cx("py-14 sm:py-20", className)}>{children}</section>;
 }
 
-export function SiteHeader() {
+export function SiteHeader({ userName, userEmail, isLoggedIn = Boolean(userName) }: { userName?: string | null; userEmail?: string | null; isLoggedIn?: boolean }) {
   const [open, setOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
   const pathname = usePathname();
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    window.location.href = "/login";
+  };
+
   return (
     <header className={`border-b border-border bg-background/95 ${pathname === "/login" ? "hidden" : ""}`}>
       <Container className="flex min-h-18 items-center justify-between">
@@ -64,12 +116,86 @@ export function SiteHeader() {
           >
             Share experience
           </Link>
-          <Link
-            href="/login"
-            className="mt-2 inline-flex min-h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground md:mt-0"
-          >
-            Login
-          </Link>
+
+          {isLoggedIn ? (
+            <div
+              ref={dropdownRef}
+              className="relative mt-2 md:mt-0"
+            >
+              <button
+                type="button"
+                onClick={() => setOpen((current) => !current)}
+                className="flex items-center gap-2"
+                aria-expanded={open}
+                aria-label="Open profile menu"
+              >
+                <UserAvatar name={userName} />
+              </button>
+
+              {open && (
+                <div className="absolute right-0 top-full z-20 mt-3 w-[260px] overflow-hidden rounded-xl border border-border bg-card text-foreground text-left shadow-2xl">
+                  <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-xs font-semibold text-primary">
+                      {userName?.trim()?.charAt(0)?.toUpperCase() || (
+                        <svg
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                          className="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M20 21a8 8 0 0 0-16 0" />
+                          <circle
+                            cx="12"
+                            cy="7"
+                            r="4"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      {userName ? <div className="truncate text-sm font-medium text-foreground">{userName}</div> : null}
+                      <div className="truncate text-sm text-foreground">{userEmail || ""}</div>
+                    </div>
+                  </div>
+
+                  <div className="py-2">
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setOpen(false)}
+                      className="block px-4 py-3 text-sm text-foreground transition-colors duration-150 hover:bg-foreground/4"
+                    >
+                      Profile
+                    </Link>
+                    <Link
+                      href="/dashboard/experiences"
+                      onClick={() => setOpen(false)}
+                      className="block px-4 py-3 text-sm text-foreground transition-colors duration-150 hover:bg-foreground/4"
+                    >
+                      Your experiences
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="block w-full px-4 py-3 text-left text-sm text-foreground transition-colors duration-150 hover:bg-foreground/4"
+                    >
+                      Log out
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link
+              href="/login"
+              className="mt-2 inline-flex min-h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground md:mt-0"
+            >
+              Login
+            </Link>
+          )}
         </nav>
       </Container>
     </header>
