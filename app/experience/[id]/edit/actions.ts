@@ -332,3 +332,49 @@ export async function publishExperience(
 
     redirect(`/experiences/${experienceId}`);
 }
+
+export async function updateExperience(experienceId: string,
+    formData: FormData
+): Promise<void> {
+    const supabase = await createClient();
+
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("You must be logged in.");
+    }
+
+    const experience = await prisma.experience.findUnique({
+        where: {
+            id: experienceId,
+        },
+    });
+
+    if (!experience) {
+        throw new Error("Experience not found.");
+    }
+
+    // 3. Make sure this user owns the experience
+    if (experience.authorId !== user.id) {
+        throw new Error("You are not allowed to edit this experience.");
+    }
+
+    if (experience.status !== "draft") {
+        throw new Error("This experience can no longer be edited.");
+    }
+
+    const overallTips = formData.get("overallTips")?.toString().trim();
+    const isAnonymous = formData.get("isAnonymous") === "on";
+
+    await prisma.experience.update({
+        where: {
+            id: experienceId
+        },
+        data: {
+            overallTips,
+            isAnonymous
+        }
+    })
+}

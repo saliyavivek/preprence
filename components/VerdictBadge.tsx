@@ -1,8 +1,4 @@
-interface VerdictBadgeProps {
-  verdict: "selected" | "rejected" | "not_disclosed" | null | undefined;
-}
-
-export function VerdictBadge({ verdict }: VerdictBadgeProps) {
+export function VerdictBadge({ verdict }: { verdict: any }) {
   if (!verdict) return null;
 
   const selected = verdict === "selected";

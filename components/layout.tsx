@@ -55,7 +55,12 @@ export function SiteHeader() {
           </Link>
           <Link
             href="/experience/new"
-            className="block py-2 text-sm text-muted-foreground hover:text-foreground"
+            className={cx(
+              "relative block py-2 text-sm transition-colors hover:text-foreground",
+              pathname === "/experience/new"
+                ? "font-semibold text-primary after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-7 after:-translate-x-1/2 after:bg-primary after:content-['']"
+                : "text-muted-foreground",
+            )}
           >
             Share experience
           </Link>

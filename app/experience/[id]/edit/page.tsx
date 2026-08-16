@@ -1,230 +1,124 @@
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
-import { createRound, deleteRound, publishExperience, updateRound } from "./actions";
+import { publishExperience } from "./actions";
+import { AddRoundForm, RoundCard } from "./round-editor";
+import EditableSummary from "./editable-summary";
+import AddExperienceTimeline from "@/components/AddExperienceTimeline";
+import ExperienceHeader from "@/components/ExperienceHeader";
 
-type Props = {
-  params: Promise<{
-    id: string;
-  }>;
-};
+type Props = { params: Promise<{ id: string }> };
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" }).format(date);
+}
 
 export default async function EditExperiencePage({ params }: Props) {
   const { id } = await params;
-
   const supabase = await createClient();
-
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
 
-  if (!user) {
-    redirect("/login");
-  }
-
-  const experience = await prisma.experience.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      company: true,
-      rounds: true,
-    },
-  });
-
-  if (!experience) {
-    notFound();
-  }
-
-  // Important: don't allow users to edit someone else's experience.
-  if (experience.authorId !== user.id) {
-    notFound();
-  }
+  const experience = await prisma.experience.findUnique({ where: { id }, include: { company: true, rounds: { orderBy: { roundNumber: "asc" } } } });
+  if (!experience || experience.authorId !== user.id) notFound();
+  const isDraft = experience.status === "draft";
 
   return (
-    <main>
-      <h1>Edit Interview Experience</h1>
-
-      <p>Company: {experience.company.name}</p>
-      <p>Degree: {experience.degree}</p>
-      <p>Graduation Year: {experience.graduationYear}</p>
-      <p>Role: {experience.roleTitle}</p>
-      <p>Status: {experience.status}</p>
-
-      <hr />
-
-      <section>
-        <h2>Interview Rounds</h2>
-
-        {experience.status === "draft" ? (
-          <>
-            {experience.rounds.length === 0 ? (
-              <p>No interview rounds added yet.</p>
-            ) : (
-              experience.rounds.map((round) => (
-                <article key={round.id}>
-                  <h3>Round {round.roundNumber}</h3>
-
-                  <form action={updateRound.bind(null, experience.id, round.id)}>
-                    <div>
-                      <label htmlFor={`roundType-${round.id}`}>Round Type</label>
-
-                      <select
-                        id={`roundType-${round.id}`}
-                        name="roundType"
-                        defaultValue={round.roundType}
-                        required
-                      >
-                        <option value="aptitude">Aptitude</option>
-                        <option value="online_assessment">Online Assessment</option>
-                        <option value="coding">Coding</option>
-                        <option value="technical">Technical</option>
-                        <option value="managerial">Managerial</option>
-                        <option value="hr">HR</option>
-                        <option value="other">Other</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label htmlFor={`difficulty-${round.id}`}>Difficulty</label>
-
-                      <select
-                        id={`difficulty-${round.id}`}
-                        name="difficulty"
-                        defaultValue={round.difficulty ?? ""}
-                      >
-                        <option value="">Not specified</option>
-                        <option value="easy">Easy</option>
-                        <option value="medium">Medium</option>
-                        <option value="hard">Hard</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label htmlFor={`questions-${round.id}`}>Questions Asked</label>
-
-                      <textarea
-                        id={`questions-${round.id}`}
-                        name="questionsAsked"
-                        defaultValue={round.questionsAsked ?? ""}
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor={`duration-${round.id}`}>Duration</label>
-
-                      <input
-                        id={`duration-${round.id}`}
-                        name="durationMinutes"
-                        type="number"
-                        min="1"
-                        defaultValue={round.durationMinutes ?? ""}
-                      />
-                    </div>
-
-                    <button type="submit">Save Changes</button>
-                  </form>
-
-                  <form action={deleteRound.bind(null, experience.id, round.id)}>
-                    <button type="submit">Delete Round</button>
-                  </form>
-                </article>
-              ))
-            )}
-
-            <hr />
-
-            <h3>Add Round</h3>
-
-            <form action={createRound.bind(null, experience.id)}>
-              <div>
-                <label htmlFor="roundType">Round Type</label>
-
-                <select
-                  id="roundType"
-                  name="roundType"
-                  required
-                >
-                  <option value="">Select round type</option>
-                  <option value="aptitude">Aptitude</option>
-                  <option value="online_assessment">Online Assessment</option>
-                  <option value="coding">Coding</option>
-                  <option value="technical">Technical</option>
-                  <option value="managerial">Managerial</option>
-                  <option value="hr">HR</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="difficulty">Difficulty</label>
-
-                <select
-                  id="difficulty"
-                  name="difficulty"
-                >
-                  <option value="">Not specified</option>
-                  <option value="easy">Easy</option>
-                  <option value="medium">Medium</option>
-                  <option value="hard">Hard</option>
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="questionsAsked">Questions Asked</label>
-
-                <textarea
-                  id="questionsAsked"
-                  name="questionsAsked"
-                  placeholder="What questions were asked?"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="durationMinutes">Duration (minutes)</label>
-
-                <input
-                  id="durationMinutes"
-                  name="durationMinutes"
-                  type="number"
-                  min="1"
-                  placeholder="45"
-                />
-              </div>
-
-              <button type="submit">Add Round</button>
-            </form>
-          </>
-        ) : (
-          // For non-draft statuses (published) show rounds read-only
-          <>
-            {experience.rounds.length === 0 ? (
-              <p>No interview rounds added yet.</p>
-            ) : (
-              experience.rounds.map((round) => (
-                <article key={round.id}>
-                  <h3>Round {round.roundNumber}</h3>
-                  <p>Type: {round.roundType}</p>
-                  {round.difficulty && <p>Difficulty: {round.difficulty}</p>}
-                  {round.questionsAsked && <p>Questions: {round.questionsAsked}</p>}
-                  {round.durationMinutes && <p>Duration: {round.durationMinutes} minutes</p>}
-                </article>
-              ))
-            )}
-          </>
-        )}
-      </section>
-
-      {experience.status === "draft" && (
-        <form action={publishExperience.bind(null, experience.id)}>
-          <button
-            type="submit"
-            disabled={experience.rounds.length === 0}
+    <main className="min-h-screen bg-background">
+      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
+        <nav
+          aria-label="Breadcrumb"
+          className="flex items-center gap-3 text-sm text-muted-foreground"
+        >
+          <Link
+            href="/"
+            className="hover:text-foreground"
           >
-            Publish
-          </button>
-        </form>
-      )}
+            Home
+          </Link>
+          <span aria-hidden="true">›</span>
+          <Link
+            href="/experience/new"
+            className="hover:text-foreground"
+          >
+            Share experience
+          </Link>
+          <span aria-hidden="true">›</span>
+          <span className="font-medium text-primary">Complete experience</span>
+        </nav>
+        <header className="flex flex-col gap-3">
+          <h1 className="text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">Add your interview rounds</h1>
+          <p className="text-lg leading-7 text-muted-foreground">Tell the next student what actually happened during each round.</p>
+        </header>
+
+        <AddExperienceTimeline active={2} />
+
+        <section className="flex flex-col gap-5 rounded-xl border border-border bg-card p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div className="flex items-center gap-5">
+            <ExperienceHeader experience={experience} />
+          </div>
+          <Link
+            href="/experience/new"
+            className="rounded-md border border-input px-4 py-2 text-center text-sm font-medium hover:bg-muted"
+          >
+            Edit interview details
+          </Link>
+        </section>
+
+        <section className="flex flex-col gap-5">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight">Interview rounds</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Add the rounds you went through in the order they happened.</p>
+            </div>
+            <p className="text-sm text-muted-foreground">You can add, edit, or remove rounds before publishing.</p>
+          </div>
+          {experience.rounds.length ? (
+            <div className="flex flex-col gap-3">
+              {experience.rounds.map((round) => (
+                <RoundCard
+                  key={round.id}
+                  experienceId={experience.id}
+                  round={round}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-xl border border-dashed border-border p-8 text-center text-muted-foreground">No rounds yet. Add your first round below.</div>
+          )}
+          {isDraft && <AddRoundForm experienceId={experience.id} />}
+        </section>
+
+        <EditableSummary
+          experience={{
+            id: experience.id,
+            overallTips: experience.overallTips,
+            isAnonymous: experience.isAnonymous,
+            status: experience.status,
+          }}
+        />
+        {isDraft && (
+          <section className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
+            <div>
+              <h2 className="text-xl font-semibold">Ready to share?</h2>
+              <p className="mt-1 max-w-xl text-sm leading-6 text-muted-foreground">Make sure your interview rounds and details are accurate before publishing.</p>
+            </div>
+            <form action={publishExperience.bind(null, experience.id)}>
+              <button
+                type="submit"
+                disabled={!experience.rounds.length}
+                className="rounded-md bg-primary px-5 py-3 font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Publish experience
+              </button>
+            </form>
+          </section>
+        )}
+        {!isDraft && <p className="text-sm text-muted-foreground">This experience is published and can no longer be edited.</p>}
+      </div>
     </main>
   );
 }

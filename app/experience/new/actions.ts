@@ -36,8 +36,6 @@ export async function createExperience(formData: FormData): Promise<void> {
     const roleTitle = formData.get("roleTitle")?.toString().trim();
     const interviewDate = formData.get("interviewDate")?.toString();
     const verdictValue = formData.get("verdict")?.toString();
-    const overallTips = formData.get("overallTips")?.toString().trim();
-    const isAnonymous = formData.get("isAnonymous") === "on";
 
     // 4. Basic validation
     if (
@@ -89,8 +87,6 @@ export async function createExperience(formData: FormData): Promise<void> {
             roleTitle,
             interviewDate: new Date(interviewDate),
             verdict,
-            overallTips: overallTips || null,
-            isAnonymous,
         },
     });
 
