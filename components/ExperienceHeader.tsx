@@ -1,6 +1,6 @@
 "use client";
 
-function ExperienceCompanyLogo({ name, logoUrl }: { name: string; logoUrl: string | null }) {
+export function ExperienceCompanyLogo({ name, logoUrl }: { name: string; logoUrl: string | null }) {
   const initials = name
     .split(" ")
     .map((word) => word[0])

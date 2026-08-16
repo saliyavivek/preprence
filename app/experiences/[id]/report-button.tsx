@@ -29,8 +29,10 @@ export function ReportButton({ experienceId }: Props) {
     <div className="flex flex-col items-end gap-3">
       <button
         type="button"
-        onClick={() => setIsOpen((value) => !value)}
-        className="inline-flex min-h-10 items-center gap-2 rounded-md border border-input px-4 text-sm font-medium text-foreground transition-colors hover:border-destructive hover:text-destructive hover:bg-destructive/5 focus:outline-none focus:ring-2 focus:ring-destructive/20"
+        // onClick={() => setIsOpen((value) => !value)}
+        disabled
+        title="Coming soon"
+        className="inline-flex min-h-10 items-center gap-2 rounded-md border border-input px-4 text-sm font-medium text-foreground transition-colors hover:border-destructive hover:text-destructive hover:bg-destructive/5 focus:outline-none focus:ring-2 focus:ring-destructive/20 cursor-not-allowed"
       >
         <span aria-hidden="true">⚑</span>
         Report this experience

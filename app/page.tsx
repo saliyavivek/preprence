@@ -62,7 +62,6 @@ export default async function HomePage() {
           />
           <div className="relative mx-auto flex max-w-6xl items-center gap-10 px-5 pb-20 pt-14 sm:px-8 sm:pb-24 sm:pt-20 lg:px-12">
             <div className="flex max-w-2xl flex-1 flex-col">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">Interview experiences</p>
               <h1 className="mt-5 text-balance text-[2.6rem] font-semibold leading-[1.05] tracking-[-0.045em] sm:text-6xl lg:text-[4.1rem]">
                 Know the interview
                 <br className="hidden sm:block" /> before you face it.

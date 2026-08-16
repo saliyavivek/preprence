@@ -106,7 +106,7 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = Boolean(userName)
             Companies
           </Link>
           <Link
-            href="/experience/new"
+            href={!isLoggedIn ? "/login" : "/experience/new"}
             className={cx(
               "relative block py-2 text-sm transition-colors hover:text-foreground",
               pathname === "/experience/new"
@@ -208,7 +208,7 @@ export function Footer() {
     <footer className={`mt-auto border-t border-border py-8 ${pathname === "/login" ? "hidden" : ""}`}>
       <Container className="flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
         <span className="font-mono font-semibold text-foreground">preprence.</span>
-        <span>Real stories. Better preparation.</span>
+        <span>Real interviews. Better preparation.</span>
       </Container>
     </footer>
   );
