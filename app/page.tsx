@@ -122,7 +122,7 @@ export default async function HomePage() {
           {companies.length === 0 ? (
             <p className="border-t border-border py-5 text-muted-foreground">No companies available yet.</p>
           ) : (
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {companies.map((company) => (
                 <CompanyCard
                   key={company.id}

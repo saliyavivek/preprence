@@ -16,12 +16,12 @@ export function CompanyMark({ company, compact = false }: CompanyMarkProps) {
 
   return (
     <span
-      className={`relative grid shrink-0 place-items-center overflow-hidden rounded-md border border-border bg-card font-semibold tracking-tight text-muted-foreground ${
-        compact ? "size-9 text-[11px]" : "size-10 text-xs"
+      className={`relative grid shrink-0 place-items-center overflow-hidden rounded-xl border border-border bg-card font-semibold tracking-tight text-muted-foreground ${
+        compact ? "size-11 text-[11px]" : "size-14 text-base"
       }`}
     >
       {company.logoUrl ? (
-        <span className="flex size-full items-center justify-center scale-170 p-1.5">
+        <span className="flex size-full items-center justify-center scale-150 p-2">
           <img
             src={company.logoUrl}
             alt={`${company.name} logo`}
