@@ -124,13 +124,6 @@ export default async function HomePage() {
                   Search
                 </button>
               </form>
-
-              <Link
-                href="/companies"
-                className="mt-6 w-fit text-sm font-semibold text-primary underline-offset-4 hover:underline"
-              >
-                Browse companies
-              </Link>
             </div>
 
             <InterviewFlow />
