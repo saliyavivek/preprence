@@ -9,8 +9,21 @@ import OnboardingDetailsModal from "../components/OnboardingDetailsModal";
 async function getLandingData() {
   return Promise.all([
     prisma.company.findMany({
-      orderBy: { name: "asc" },
-      take: 8,
+      where: {
+        experiences: {
+          some: {
+            status: "published",
+          },
+        },
+      },
+      orderBy: [
+        {
+          experiences: {
+            _count: "desc",
+          },
+        },
+      ],
+      take: 6,
       include: { _count: { select: { experiences: { where: { status: "published" } } } } },
     }),
     prisma.experience.findMany({

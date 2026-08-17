@@ -15,7 +15,11 @@ async function getCompanies() {
     include: {
       _count: {
         select: {
-          experiences: true,
+          experiences: {
+            where: {
+              status: "published",
+            },
+          },
         },
       },
     },
@@ -69,22 +73,14 @@ function SquareCompanyCard({ company }: { company: Company }) {
 
   return (
     <Link
-      href={`/companies/${company.id}`}
-      className="group flex flex-col items-center justify-center gap-5 rounded-2xl border border-gray-200 bg-white hover:bg-white/45 p-6 pt-8 text-center shadow-[0_2px_10px_rgb(0,0,0,0.02)] transition-all hover:border-[#1c7b6d]/30"
+      href={`/companies/${company.slug}`}
+      className="group flex flex-col items-center justify-center gap-4"
     >
-      <div className="flex h-[5.5rem] w-[5.5rem] shrink-0 items-center justify-center rounded-[1.25rem] border border-gray-100 bg-white shadow-sm overflow-hidden">
-        {/* Placeholder for actual logo - you can replace this with next/image when logoUrls are available */}
-        <ExperienceCompanyLogo
-          name={company.name}
-          logoUrl={company.logoUrl}
-        />
-      </div>
-      <div className="flex w-full flex-col gap-1.5 px-1 pb-2">
-        <h3 className="line-clamp-2 text-[1.1rem] font-semibold leading-tight tracking-tight text-gray-900">{company.name}</h3>
-        <p className="text-[0.9rem] text-gray-500">
-          {company._count.experiences} {company._count.experiences === 1 ? "interview experience" : "interview experiences"}
-        </p>
-      </div>
+      <ExperienceCompanyLogo
+        name={company.name}
+        logoUrl={company.logoUrl}
+      />
+      <h3 className="line-clamp-2 text-[1.1rem] font-semibold leading-tight tracking-tight text-gray-900">{company.name}</h3>
     </Link>
   );
 }
@@ -95,7 +91,10 @@ export default async function CompaniesPage({ searchParams }: CompaniesPageProps
   const query = (params.q ?? "").trim();
   const showAllCompanies = params.showAll === "true" || params.showAll === "1";
   const filteredCompanies = query ? companies.filter((company) => company.name.toLowerCase().includes(query.toLowerCase())) : companies;
-  const popularCompanies = [...filteredCompanies].sort((a, b) => b._count.experiences - a._count.experiences || a.name.localeCompare(b.name)).slice(0, 3);
+  const popularCompanies = [...filteredCompanies]
+    .filter((company) => company._count.experiences > 0)
+    .sort((a, b) => b._count.experiences - a._count.experiences || a.name.localeCompare(b.name))
+    .slice(0, 3);
   const initialCompanyCount = 8;
   const hasMoreCompanies = filteredCompanies.length > initialCompanyCount;
   const companiesToDisplay = showAllCompanies ? filteredCompanies : filteredCompanies.slice(0, initialCompanyCount);
@@ -185,7 +184,7 @@ export default async function CompaniesPage({ searchParams }: CompaniesPageProps
               </div>
 
               {/* 4-Column Grid */}
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-6 mt-2">
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6 mt-2">
                 {companiesToDisplay.map((company) => (
                   <SquareCompanyCard
                     key={company.id}

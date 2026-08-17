@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { createRound, deleteRound, updateRound } from "./actions";
 
 type Round = {
@@ -22,6 +25,92 @@ const roundLabels: Record<string, string> = {
 const difficultyLabels: Record<string, string> = { easy: "Easy", medium: "Medium", hard: "Hard" };
 
 export function RoundCard({ experienceId, round }: { experienceId: string; round: Round }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [roundType, setRoundType] = useState(round.roundType);
+  const [difficulty, setDifficulty] = useState(round.difficulty ?? "");
+  const [durationMinutes, setDurationMinutes] = useState(round.durationMinutes ?? "");
+  const [questionsAsked, setQuestionsAsked] = useState(round.questionsAsked ?? "");
+
+  if (isEditing) {
+    return (
+      <article className="rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6">
+        <form
+          action={updateRound.bind(null, experienceId, round.id)}
+          className="space-y-4"
+        >
+          <label className="flex flex-col gap-1 text-sm font-medium">
+            Round type
+            <select
+              name="roundType"
+              value={roundType}
+              onChange={(e) => setRoundType(e.target.value)}
+              required
+              className="min-h-10 rounded-md border border-input bg-card px-3 font-normal"
+            >
+              <option value="aptitude">Aptitude</option>
+              <option value="online_assessment">Online Assessment</option>
+              <option value="coding">Coding</option>
+              <option value="technical">Technical</option>
+              <option value="managerial">Managerial</option>
+              <option value="hr">HR</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <label className="flex flex-col gap-1 text-sm font-medium">
+            Difficulty
+            <select
+              name="difficulty"
+              value={difficulty}
+              onChange={(e) => setDifficulty(e.target.value)}
+              className="min-h-10 rounded-md border border-input bg-card px-3 font-normal"
+            >
+              <option value="">Not specified</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </label>
+          <label className="flex flex-col gap-1 text-sm font-medium">
+            Duration (minutes)
+            <input
+              name="durationMinutes"
+              type="number"
+              min="1"
+              value={durationMinutes}
+              onChange={(e) => setDurationMinutes(e.target.value)}
+              className="min-h-10 rounded-md border border-input bg-card px-3 font-normal"
+            />
+          </label>
+          <label className="flex flex-col gap-1 text-sm font-medium">
+            Questions asked
+            <textarea
+              name="questionsAsked"
+              value={questionsAsked}
+              onChange={(e) => setQuestionsAsked(e.target.value)}
+              rows={4}
+              className="rounded-md border border-input bg-card px-3 py-2 font-normal"
+            />
+          </label>
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              className="rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground"
+            >
+              Save changes
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsEditing(false)}
+              className="rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </article>
+    );
+  }
+
   return (
     <article className="rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
@@ -44,71 +133,13 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
           </div>
         </div>
         <div className="flex shrink-0 gap-2 sm:pt-1">
-          <details className="group">
-            <summary className="cursor-pointer list-none rounded-md border border-input px-3 py-2 text-sm font-medium text-foreground hover:bg-muted [&::-webkit-details-marker]:hidden">
-              Edit round
-            </summary>
-            <form
-              action={updateRound.bind(null, experienceId, round.id)}
-              className="mt-3 flex w-full min-w-64 flex-col gap-3 rounded-lg border border-border bg-background p-4 sm:absolute sm:mr-20 sm:w-72"
-            >
-              <label className="flex flex-col gap-1 text-sm font-medium">
-                Round type
-                <select
-                  name="roundType"
-                  defaultValue={round.roundType}
-                  required
-                  className="min-h-10 rounded-md border border-input bg-card px-3 font-normal"
-                >
-                  <option value="aptitude">Aptitude</option>
-                  <option value="online_assessment">Online Assessment</option>
-                  <option value="coding">Coding</option>
-                  <option value="technical">Technical</option>
-                  <option value="managerial">Managerial</option>
-                  <option value="hr">HR</option>
-                  <option value="other">Other</option>
-                </select>
-              </label>
-              <label className="flex flex-col gap-1 text-sm font-medium">
-                Difficulty
-                <select
-                  name="difficulty"
-                  defaultValue={round.difficulty ?? ""}
-                  className="min-h-10 rounded-md border border-input bg-card px-3 font-normal"
-                >
-                  <option value="">Not specified</option>
-                  <option value="easy">Easy</option>
-                  <option value="medium">Medium</option>
-                  <option value="hard">Hard</option>
-                </select>
-              </label>
-              <label className="flex flex-col gap-1 text-sm font-medium">
-                Duration
-                <input
-                  name="durationMinutes"
-                  type="number"
-                  min="1"
-                  defaultValue={round.durationMinutes ?? ""}
-                  className="min-h-10 rounded-md border border-input bg-card px-3 font-normal"
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-sm font-medium">
-                Questions asked
-                <textarea
-                  name="questionsAsked"
-                  defaultValue={round.questionsAsked ?? ""}
-                  rows={4}
-                  className="rounded-md border border-input bg-card px-3 py-2 font-normal"
-                />
-              </label>
-              <button
-                type="submit"
-                className="rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground"
-              >
-                Save changes
-              </button>
-            </form>
-          </details>
+          <button
+            type="button"
+            onClick={() => setIsEditing(true)}
+            className="rounded-md border border-input px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
+          >
+            Edit round
+          </button>
           <form action={deleteRound.bind(null, experienceId, round.id)}>
             <button
               type="submit"
@@ -124,74 +155,108 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
 }
 
 export function AddRoundForm({ experienceId }: { experienceId: string }) {
+  const [isAdding, setIsAdding] = useState(false);
+  const [roundType, setRoundType] = useState("");
+  const [difficulty, setDifficulty] = useState("");
+  const [durationMinutes, setDurationMinutes] = useState("");
+  const [questionsAsked, setQuestionsAsked] = useState("");
+
+  if (isAdding) {
+    return (
+      <div className="rounded-xl border border-dashed border-primary/40 bg-primary/[0.03] p-5">
+        <form
+          action={createRound.bind(null, experienceId)}
+          className="space-y-4"
+        >
+          <label className="flex flex-col gap-1 text-sm font-medium">
+            Round type
+            <select
+              name="roundType"
+              value={roundType}
+              onChange={(e) => setRoundType(e.target.value)}
+              required
+              className="min-h-11 rounded-md border border-input bg-card px-3 font-normal"
+            >
+              <option value="">Select round type</option>
+              <option value="aptitude">Aptitude</option>
+              <option value="online_assessment">Online Assessment</option>
+              <option value="coding">Coding</option>
+              <option value="technical">Technical</option>
+              <option value="managerial">Managerial</option>
+              <option value="hr">HR</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <label className="flex flex-col gap-1 text-sm font-medium">
+            Difficulty
+            <select
+              name="difficulty"
+              value={difficulty}
+              onChange={(e) => setDifficulty(e.target.value)}
+              className="min-h-11 rounded-md border border-input bg-card px-3 font-normal"
+            >
+              <option value="">Not specified</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </label>
+          <label className="flex flex-col gap-1 text-sm font-medium">
+            Duration (minutes)
+            <input
+              name="durationMinutes"
+              type="number"
+              min="1"
+              placeholder="45"
+              value={durationMinutes}
+              onChange={(e) => setDurationMinutes(e.target.value)}
+              className="min-h-11 rounded-md border border-input bg-card px-3 font-normal"
+            />
+          </label>
+          <label className="flex flex-col gap-1 text-sm font-medium">
+            Questions asked
+            <textarea
+              name="questionsAsked"
+              value={questionsAsked}
+              onChange={(e) => setQuestionsAsked(e.target.value)}
+              rows={4}
+              placeholder="What questions were asked?"
+              className="rounded-md border border-input bg-card px-3 py-2 font-normal"
+            />
+          </label>
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              className="w-fit rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground"
+            >
+              Add round
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsAdding(false)}
+              className="w-fit rounded-md border border-input bg-background px-5 py-3 text-sm font-medium text-foreground hover:bg-muted"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    );
+  }
+
   return (
-    <details className="rounded-xl border border-dashed border-primary/40 bg-primary/[0.03] p-5">
-      <summary className="flex cursor-pointer list-none items-center gap-4 text-primary [&::-webkit-details-marker]:hidden">
+    <button
+      type="button"
+      onClick={() => setIsAdding(true)}
+      className="rounded-xl border border-dashed border-primary/40 bg-primary/[0.03] p-5 text-left transition-colors hover:bg-primary/[0.08]"
+    >
+      <div className="flex items-center gap-4 text-primary">
         <span className="flex size-9 items-center justify-center rounded-full border border-primary/40 text-xl">+</span>
         <span>
           <strong className="block">Add another round</strong>
           <span className="text-sm text-muted-foreground">Add the next stage of your interview.</span>
         </span>
-      </summary>
-      <form
-        action={createRound.bind(null, experienceId)}
-        className="mt-5 grid gap-4 border-t border-border pt-5 sm:grid-cols-2"
-      >
-        <label className="flex flex-col gap-1 text-sm font-medium">
-          Round type
-          <select
-            name="roundType"
-            required
-            className="min-h-11 rounded-md border border-input bg-card px-3 font-normal"
-          >
-            <option value="">Select round type</option>
-            <option value="aptitude">Aptitude</option>
-            <option value="online_assessment">Online Assessment</option>
-            <option value="coding">Coding</option>
-            <option value="technical">Technical</option>
-            <option value="managerial">Managerial</option>
-            <option value="hr">HR</option>
-            <option value="other">Other</option>
-          </select>
-        </label>
-        <label className="flex flex-col gap-1 text-sm font-medium">
-          Difficulty
-          <select
-            name="difficulty"
-            className="min-h-11 rounded-md border border-input bg-card px-3 font-normal"
-          >
-            <option value="">Not specified</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </select>
-        </label>
-        <label className="flex flex-col gap-1 text-sm font-medium">
-          Duration (minutes)
-          <input
-            name="durationMinutes"
-            type="number"
-            min="1"
-            placeholder="45"
-            className="min-h-11 rounded-md border border-input bg-card px-3 font-normal"
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-sm font-medium sm:col-span-2">
-          Questions asked
-          <textarea
-            name="questionsAsked"
-            rows={4}
-            placeholder="What questions were asked?"
-            className="rounded-md border border-input bg-card px-3 py-2 font-normal"
-          />
-        </label>
-        <button
-          type="submit"
-          className="w-fit rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground"
-        >
-          Add round
-        </button>
-      </form>
-    </details>
+      </div>
+    </button>
   );
 }

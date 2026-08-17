@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { ReportButton } from "./report-button";
 import ExperienceHeader from "@/components/ExperienceHeader";
 import { VerdictBadge } from "@/components/VerdictBadge";
+import { createClient } from "@/lib/supabase/server";
+import { deleteExperience } from "./actions";
 
 type Props = {
   params: Promise<{
@@ -101,6 +103,12 @@ type ExperienceRound = {
 };
 
 export default async function ExperiencePage({ params }: Props) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const { id } = await params;
   const experience = await prisma.experience.findFirst({
     where: { id, status: "published" },
@@ -169,7 +177,13 @@ export default async function ExperiencePage({ params }: Props) {
 
         <div className="flex flex-col gap-5 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-muted-foreground">Published on {experience.createdAt.toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}</p>
-          <ReportButton experienceId={experience.id} />
+          {user?.id === experience.authorId ? (
+            <form action={deleteExperience.bind(null, experience.id, user.id)}>
+              <button className="rounded-md bg-destructive/20 px-3 py-2 font-sm text-destructive hover:bg-destructive/30">Delete</button>
+            </form>
+          ) : (
+            <ReportButton experienceId={experience.id} />
+          )}
         </div>
       </div>
     </main>

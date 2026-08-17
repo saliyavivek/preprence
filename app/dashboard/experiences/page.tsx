@@ -60,7 +60,7 @@ function ExperienceCard({ experience }: { experience: Awaited<ReturnType<typeof 
         </div>
         <h2 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">{experience.company.name}</h2>
         <p className="mt-1 text-base text-muted-foreground">{experience.roleTitle}</p>
-        <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-border pb-4 text-sm text-muted-foreground">
+        <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-border max-w-xl pb-4 text-sm text-muted-foreground">
           <span>{experience.degree}</span>
           <span>Batch of {experience.graduationYear}</span>
           <span>Interviewed on {formatInterviewDate(experience.interviewDate)}</span>

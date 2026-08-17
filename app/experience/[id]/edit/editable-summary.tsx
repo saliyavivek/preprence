@@ -35,23 +35,19 @@ export default function EditableSummary({ experience }: { experience: Experience
           <p className="mt-1 text-sm text-muted-foreground">What would you tell another student preparing for a similar interview?</p>
         </div>
 
-        <button
-          type={isEditing ? "submit" : "button"}
-          form={isEditing ? "overall-tips-form" : undefined}
-          onClick={() => {
-            if (!isEditing) {
-              setIsEditing(true);
-            }
-          }}
-          className="rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
-        >
-          {isEditing ? "Save" : "Edit details"}
-        </button>
+        {!isEditing && (
+          <button
+            type="button"
+            onClick={() => setIsEditing(true)}
+            className="rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
+          >
+            Edit details
+          </button>
+        )}
       </div>
 
       {isEditing ? (
         <form
-          id="overall-tips-form"
           action={updateExperience.bind(null, experience.id)}
           className="space-y-4"
         >
@@ -76,6 +72,22 @@ export default function EditableSummary({ experience }: { experience: Experience
             />
             Submit anonymously
           </label>
+
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              className="rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsEditing(false)}
+              className="rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       ) : (
         <p className="whitespace-pre-line text-sm leading-6 text-muted-foreground">{experience.overallTips || "No tips added yet."}</p>
