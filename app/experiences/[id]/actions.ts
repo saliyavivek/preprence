@@ -44,7 +44,6 @@ export async function ReportExperience(
 export async function deleteExperience(
     experienceId: string,
     userId: string,
-    formData: FormData
 ): Promise<void> {
     const supabase = await createClient();
 

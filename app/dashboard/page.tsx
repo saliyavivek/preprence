@@ -3,55 +3,10 @@ import { redirect } from "next/navigation";
 
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Edit02Icon, FileIcon, Tick03Icon } from "@hugeicons/core-free-icons";
 
-const statusLabels = {
-  draft: "Draft",
-  published: "Published",
-  taken_down: "Taken down",
-} as const;
-
-function formatInterviewDate(date: Date) {
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  }).format(date);
-}
-
-function CompanyMark({ name, logoUrl }: { name: string; logoUrl: string | null }) {
-  if (logoUrl) {
-    return (
-      <img
-        src={logoUrl}
-        alt=""
-        className="size-full object-contain"
-      />
-    );
-  }
-
-  return (
-    <span
-      aria-hidden="true"
-      className="text-xl font-semibold text-primary"
-    >
-      {name.slice(0, 1).toUpperCase()}
-    </span>
-  );
-}
-
-function Status({ status }: { status: keyof typeof statusLabels }) {
-  return (
-    <span
-      className={`inline-flex items-center gap-2 rounded-md border px-3 py-1.5 text-xs font-medium ${status === "published" ? "border-emerald-200 bg-emerald-50 text-emerald-700" : status === "taken_down" ? "border-red-200 bg-red-50 text-red-700" : "border-amber-200 bg-amber-50 text-amber-700"}`}
-    >
-      <span
-        aria-hidden="true"
-        className="size-1.5 rounded-full bg-current"
-      />
-      {statusLabels[status]}
-    </span>
-  );
-}
+import { DashboardExperienceRowCard } from "@/components/DashboardExperienceRowCard";
 
 async function getDashboardData(userId: string) {
   const [profile, experiences] = await Promise.all([
@@ -115,12 +70,12 @@ export default async function DashboardPage() {
 
       <header className="mt-8">
         <h1 className="text-[2rem] font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
-          Good {greeting}, {displayName}.
+          Good {greeting}, {displayName}!
         </h1>
         <p className="mt-2 text-[1.05rem] text-muted-foreground">Welcome to your Preprence workspace.</p>
       </header>
 
-      <section className="mt-10 flex flex-col gap-6 rounded-2xl border border-[#d6f0ea] bg-card/40 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+      <section className="mt-10 flex flex-col gap-6 rounded-2xl border border-[#d6f0ea] bg-white/60 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
         <div className="flex-1">
           <h2 className="text-[1.3rem] font-semibold tracking-tight text-foreground">Share your interview experience</h2>
           <p className="mt-1.5 max-w-[420px] text-[0.95rem] leading-relaxed text-muted-foreground">Help the next student know what to expect by sharing your interview journey.</p>
@@ -137,26 +92,35 @@ export default async function DashboardPage() {
         <h2 className="text-[1.15rem] font-semibold tracking-tight text-foreground">Your activity</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <div className="flex items-center gap-5 rounded-2xl border border-border bg-card p-6 shadow-sm">
-            <span className="flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center rounded-full bg-[#eaf7f5] text-[#097063] text-xl">✦</span>
+            <span className="flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center rounded-full bg-[#e1ecf5] text-[#094770] text-xl">
+              <HugeiconsIcon icon={FileIcon} />
+            </span>
             <div>
               <p className="text-2xl font-semibold leading-none tracking-tight text-foreground">{stats.total}</p>
               <p className="mt-1.5 text-[0.95rem] font-medium text-foreground">Experiences shared</p>
+              <p className="mt-1.5 text-[0.95rem] font-medium text-muted-foreground">Keep contributing!</p>
             </div>
           </div>
 
           <div className="flex items-center gap-5 rounded-2xl border border-border bg-card p-6 shadow-sm">
-            <span className="flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center rounded-full bg-[#eefbf4] text-[#1c7b39] text-xl">✓</span>
+            <span className="flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center rounded-full bg-[#e3fbee] text-[#1c7b39] text-xl">
+              <HugeiconsIcon icon={Tick03Icon} />
+            </span>
             <div>
               <p className="text-2xl font-semibold leading-none tracking-tight text-foreground">{stats.published}</p>
               <p className="mt-1.5 text-[0.95rem] font-medium text-foreground">Published</p>
+              <p className="mt-1.5 text-[0.95rem] font-medium text-muted-foreground">Visible to other students</p>
             </div>
           </div>
 
           <div className="flex items-center gap-5 rounded-2xl border border-border bg-card p-6 shadow-sm">
-            <span className="flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center rounded-full bg-[#fdf3e1] text-[#a46600] text-xl">✎</span>
+            <span className="flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center rounded-full bg-[#fdf3e1] text-[#a46600] text-xl">
+              <HugeiconsIcon icon={Edit02Icon} />
+            </span>
             <div>
               <p className="text-2xl font-semibold leading-none tracking-tight text-foreground">{stats.draft}</p>
               <p className="mt-1.5 text-[0.95rem] font-medium text-foreground">Draft</p>
+              <p className="mt-1.5 text-[0.95rem] font-medium text-muted-foreground">Continue writing</p>
             </div>
           </div>
         </div>
@@ -177,48 +141,12 @@ export default async function DashboardPage() {
           <div className="px-6 py-10 text-center text-muted-foreground">You haven&apos;t shared any interview experiences yet.</div>
         ) : (
           <div className="divide-y divide-border border-t border-border">
-            {experiences.map((experience) => {
-              const status = experience.status as keyof typeof statusLabels;
-              const href = experience.status === "draft" ? `/experience/${experience.id}/edit` : `/experiences/${experience.id}`;
-              const actionLabel = experience.status === "draft" ? "Continue editing" : "View";
-
-              return (
-                <div
-                  key={experience.id}
-                  className="flex flex-col gap-4 px-6 py-5 sm:flex-row sm:items-center"
-                >
-                  <div className="flex size-20 items-center justify-center overflow-hidden rounded-lg border border-border bg-background">
-                    <CompanyMark
-                      name={experience.company.name}
-                      logoUrl={experience.company.logoUrl}
-                    />
-                  </div>
-
-                  <div className="min-w-0 flex-1">
-                    <h3 className="text-[1.05rem] font-semibold tracking-tight text-foreground">{experience.company.name}</h3>
-                    <p className="mt-0.5 text-[0.95rem] text-muted-foreground">{experience.roleTitle}</p>
-                    <div className="mt-2.5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[0.85rem] text-muted-foreground/80">
-                      <span>{experience.degree}</span>
-                      <span>Batch of {experience.graduationYear}</span>
-                      <span>
-                        {experience.rounds.length} {experience.rounds.length === 1 ? "round" : "rounds"}
-                      </span>
-                      <span>Interviewed on {formatInterviewDate(experience.interviewDate)}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-4 sm:shrink-0">
-                    <Status status={status} />
-                    <Link
-                      href={href}
-                      className="inline-flex min-h-10 items-center justify-center rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
-                    >
-                      {actionLabel}
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
+            {experiences.map((experience) => (
+              <DashboardExperienceRowCard
+                key={experience.id}
+                experience={experience}
+              />
+            ))}
           </div>
         )}
       </section>

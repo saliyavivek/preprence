@@ -97,7 +97,7 @@ export async function createRound(
     const roundNumber = lastRound ? lastRound.roundNumber + 1 : 1;
 
     // 10. Create round
-    const round = await prisma.round.create({
+    await prisma.round.create({
         data: {
             experienceId,
             roundNumber,

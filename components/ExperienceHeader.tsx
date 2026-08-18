@@ -1,6 +1,7 @@
 "use client";
 
 export function ExperienceCompanyLogo({ name, logoUrl }: { name: string; logoUrl: string | null }) {
+  // Company Mark - Large
   const initials = name
     .split(" ")
     .map((word) => word[0])

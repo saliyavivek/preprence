@@ -10,10 +10,6 @@ import ExperienceHeader from "@/components/ExperienceHeader";
 
 type Props = { params: Promise<{ id: string }> };
 
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" }).format(date);
-}
-
 export default async function EditExperiencePage({ params }: Props) {
   const { id } = await params;
   const supabase = await createClient();
@@ -27,7 +23,7 @@ export default async function EditExperiencePage({ params }: Props) {
   const isDraft = experience.status === "draft";
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen">
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
         <nav
           aria-label="Breadcrumb"

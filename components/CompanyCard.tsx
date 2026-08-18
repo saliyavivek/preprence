@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { CompanyMark } from "./CompanyMark";
+import { CompanyMarkSmall } from "./CompanyMark";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 
 interface CompanyCardProps {
   company: {
@@ -20,25 +22,23 @@ export function CompanyCard({ company }: CompanyCardProps) {
       href={`/companies/${company.slug}`}
       className="group flex items-center gap-4 rounded-xl border border-border bg-card px-5 py-4 transition-colors hover:border-primary/35"
     >
-      <CompanyMark company={company} />
+      <CompanyMarkSmall company={company} />
       <span className="min-w-0 flex-1">
         <span className="block truncate text-[1.1rem] font-semibold leading-6 text-foreground">{company.name}</span>
         <span className="mt-1 block text-sm leading-5 text-muted-foreground">
           {count} interview {count === 1 ? "experience" : "experiences"}
         </span>
       </span>
-      <svg
+      <span
         aria-hidden="true"
-        viewBox="0 0 24 24"
-        className="size-5 shrink-0 text-muted-foreground/70 transition-all group-hover:translate-x-0.5 group-hover:text-primary"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        className="self-center text-xl text-primary transition-transform duration-200 group-hover:translate-x-1"
       >
-        <path d="m9 18 6-6-6-6" />
-      </svg>
+        <HugeiconsIcon
+          size="100%"
+          className="h-4 w-4"
+          icon={ArrowRight01Icon}
+        />
+      </span>
     </Link>
   );
 }

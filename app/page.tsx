@@ -1,7 +1,7 @@
 ﻿import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { CompanyCard } from "@/components/CompanyCard";
-import { ExperienceRow } from "@/components/ExperienceRow";
+import { HomeExperienceRowCard } from "@/components/HomeExperienceRowCard";
 import { InterviewFlow } from "@/components/InterviewFlow";
 import { createClient } from "@/lib/supabase/server";
 import OnboardingDetailsModal from "../components/OnboardingDetailsModal";
@@ -188,9 +188,9 @@ export default async function HomePage() {
             {experiences.length === 0 ? (
               <p className="border-t border-border py-5 text-muted-foreground">No published experiences yet.</p>
             ) : (
-              <div className="rounded-lg border border-border bg-card px-3 sm:px-4">
+              <div className="rounded-lg border border-border bg-card">
                 {experiences.map((experience) => (
-                  <ExperienceRow
+                  <HomeExperienceRowCard
                     key={experience.id}
                     experience={experience}
                   />

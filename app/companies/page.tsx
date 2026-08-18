@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { CompanyCard } from "@/components/CompanyCard";
 import { prisma } from "@/lib/prisma";
-import { ExperienceCompanyLogo } from "@/components/ExperienceHeader";
+import { CompanyMarkLarge } from "@/components/CompanyMark";
 
 type CompaniesPageProps = {
   searchParams: Promise<{ q?: string; showAll?: string }>;
@@ -44,43 +44,15 @@ function EmptyState({ search }: { search?: string }) {
   );
 }
 
-// Icon helper for the arrow
-const ArrowRightIcon = () => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M5 12h14" />
-    <path d="m12 5 7 7-7 7" />
-  </svg>
-);
-
 // Custom Square Card designed for the "All companies" grid
 function SquareCompanyCard({ company }: { company: Company }) {
-  // Fallback initials if no logo is present
-  const initials = company.name
-    .split(" ")
-    .map((word) => word[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-
   return (
     <Link
       href={`/companies/${company.slug}`}
       className="group flex flex-col items-center justify-center gap-4"
     >
-      <ExperienceCompanyLogo
-        name={company.name}
-        logoUrl={company.logoUrl}
-      />
-      <h3 className="line-clamp-2 text-[1.1rem] font-semibold leading-tight tracking-tight text-gray-900">{company.name}</h3>
+      <CompanyMarkLarge company={company} />
+      <h3 className="line-clamp-2 text-[0.9rem] md:text-[1.1rem] font-semibold leading-tight tracking-tight text-gray-900 text-center">{company.name}</h3>
     </Link>
   );
 }
@@ -102,7 +74,7 @@ export default async function CompaniesPage({ searchParams }: CompaniesPageProps
   const collapseCompaniesHref = query ? `/companies?q=${encodeURIComponent(query)}` : "/companies";
 
   return (
-    <main className="min-h-[calc(100vh-8rem)] bg-[#fafafa]">
+    <main className="min-h-[calc(100vh-8rem)]">
       <div className="mx-auto flex max-w-6xl flex-col gap-12 px-5 py-14 sm:px-8 sm:py-16 lg:px-12">
         <header className="flex max-w-3xl flex-col gap-3">
           <h1 className="text-4xl font-semibold tracking-[-0.045em] text-gray-900 sm:text-5xl">Companies</h1>

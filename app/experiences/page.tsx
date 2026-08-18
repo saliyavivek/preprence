@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { DirectoryFilters, DirectorySidebar, ExperienceResult, ShareCta } from "@/components/experience-directory";
+import { DirectoryFilters, DirectorySidebar, ShareCta } from "@/components/experience-directory";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Edit02Icon } from "@hugeicons/core-free-icons";
+import { NormalExperienceRowCard } from "@/components/NormalExperienceRowCard";
 
 async function getExperiences() {
   return prisma.experience.findMany({
@@ -45,9 +46,10 @@ export default async function ExperiencesPage() {
             </div>
             {experiences.length ? (
               experiences.map((experience) => (
-                <ExperienceResult
+                <NormalExperienceRowCard
                   key={experience.id}
                   experience={experience}
+                  showCompanyMark={true}
                 />
               ))
             ) : (
@@ -55,13 +57,6 @@ export default async function ExperiencesPage() {
             )}
           </section>
           <DirectorySidebar experiences={experiences} />
-        </div>
-        <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
-          <span>← Prev</span>
-          <span className="rounded-md bg-primary px-3 py-2 text-primary-foreground">1</span>
-          <span>2</span>
-          <span>3</span>
-          <span>Next →</span>
         </div>
         <ShareCta />
       </div>

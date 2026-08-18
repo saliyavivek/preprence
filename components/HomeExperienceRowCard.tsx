@@ -1,6 +1,8 @@
 import Link from "next/link";
-import { CompanyMark } from "./CompanyMark";
+import { CompanyMarkSmall } from "./CompanyMark";
 import { VerdictBadge } from "./VerdictBadge";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 
 interface ExperienceRowProps {
   experience: {
@@ -19,15 +21,15 @@ interface ExperienceRowProps {
   };
 }
 
-export function ExperienceRow({ experience }: ExperienceRowProps) {
+export function HomeExperienceRowCard({ experience }: ExperienceRowProps) {
   const rounds = experience.rounds.length;
   return (
-    <article className="grid gap-3 border-b border-border px-1 py-4 last:border-b-0 sm:grid-cols-[minmax(220px,1.4fr)_minmax(150px,1fr)_110px_130px_auto] sm:items-center sm:gap-6 sm:px-2">
+    <Link
+      href={`/experiences/${experience.id}`}
+      className="group grid gap-3 border-b border-border px-4 py-4 last:border-b-0 sm:grid-cols-[minmax(220px,1.4fr)_minmax(150px,1fr)_110px_130px_auto] sm:items-center sm:gap-6 sm:px-5 transition-colors hover:bg-muted/20"
+    >
       <div className="flex min-w-0 items-center gap-3">
-        <CompanyMark
-          company={experience.company}
-          compact={false}
-        />
+        <CompanyMarkSmall company={experience.company} />
         <div className="min-w-0">
           <p className="truncate text-sm font-semibold leading-5 text-foreground">{experience.company.name}</p>
           <p className="truncate text-sm leading-5 text-muted-foreground">{experience.roleTitle}</p>
@@ -40,12 +42,17 @@ export function ExperienceRow({ experience }: ExperienceRowProps) {
         {rounds} {rounds === 1 ? "round" : "rounds"}
       </p>
       <VerdictBadge verdict={experience.verdict} />
-      <Link
-        href={`/experiences/${experience.id}`}
-        className="inline-flex w-fit items-center gap-1.5 rounded-md border border-border px-3.5 py-2 text-sm font-semibold text-foreground transition-colors hover:border-primary/40 hover:text-primary"
+
+      <span
+        aria-hidden="true"
+        className="self-center text-xl text-primary transition-transform duration-200 group-hover:translate-x-1"
       >
-        Read <span aria-hidden="true">›</span>
-      </Link>
-    </article>
+        <HugeiconsIcon
+          size="100%"
+          className="h-4 w-4"
+          icon={ArrowRight01Icon}
+        />
+      </span>
+    </Link>
   );
 }

@@ -26,7 +26,7 @@ export default async function NewExperiencePage() {
   });
 
   return (
-    <main className="min-h-[calc(100vh-10rem)] bg-background">
+    <main className="min-h-[calc(100vh-10rem)]">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
         <nav
           aria-label="Breadcrumb"
