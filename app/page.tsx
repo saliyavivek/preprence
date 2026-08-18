@@ -178,7 +178,7 @@ export default async function HomePage() {
                 </h2>
               </div>
               <Link
-                href="/companies"
+                href="/experiences"
                 className="text-sm font-semibold text-primary hover:underline"
               >
                 View all
