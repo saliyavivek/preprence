@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { CompanyCard } from "@/components/CompanyCard";
 import { HomeExperienceRowCard } from "@/components/HomeExperienceRowCard";
 import { InterviewFlow } from "@/components/InterviewFlow";
+import { CompanySearch } from "@/components/CompanySearch";
 import { createClient } from "@/lib/supabase/server";
 import OnboardingDetailsModal from "../components/OnboardingDetailsModal";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -83,49 +84,9 @@ export default async function HomePage() {
               </h1>
               <p className="mt-5 max-w-md text-pretty text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">Read real interview experiences shared by students from your college.</p>
 
-              <form
-                action="/companies"
-                method="get"
-                className="mt-7 flex w-full max-w-[560px] flex-col gap-3 sm:mt-8 sm:flex-row"
-              >
-                <label
-                  htmlFor="company-search"
-                  className="sr-only"
-                >
-                  Search companies, roles, or keywords
-                </label>
-                <div className="relative min-w-0 flex-1">
-                  <svg
-                    aria-hidden="true"
-                    viewBox="0 0 24 24"
-                    className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  >
-                    <circle
-                      cx="11"
-                      cy="11"
-                      r="7"
-                    />
-                    <path d="m20 20-3.5-3.5" />
-                  </svg>
-                  <input
-                    id="company-search"
-                    name="search"
-                    type="search"
-                    placeholder="Search companies, roles, or keywords..."
-                    className="h-12 w-full rounded-md border border-input bg-card pl-11 pr-4 text-base outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="h-12 w-full rounded-md bg-primary px-8 font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 sm:w-auto"
-                >
-                  Search
-                </button>
-              </form>
+              <div className="mt-7 w-full max-w-[560px] sm:mt-8">
+                <CompanySearch />
+              </div>
             </div>
 
             <InterviewFlow />

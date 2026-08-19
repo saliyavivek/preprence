@@ -57,6 +57,7 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
 
   const pathname = usePathname();
   const lastScrollY = useRef(0);
+  const desktopProfileMenuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -78,6 +79,19 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
       document.body.style.overflow = "";
     };
   }, [mobileProfileMenuOpen]);
+
+  useEffect(() => {
+    if (!desktopProfileMenuOpen) return;
+
+    function handlePointerDown(event: PointerEvent) {
+      if (!desktopProfileMenuRef.current?.contains(event.target as Node)) {
+        setDesktopProfileMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, [desktopProfileMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -200,7 +214,10 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
             </Link>
 
             {isLoggedIn ? (
-              <div className="relative">
+              <div
+                ref={desktopProfileMenuRef}
+                className="relative"
+              >
                 <button
                   type="button"
                   onClick={() => setDesktopProfileMenuOpen((current) => !current)}
