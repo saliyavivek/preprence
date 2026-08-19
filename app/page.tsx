@@ -114,7 +114,7 @@ export default async function HomePage() {
             </div>
 
             {companies.length === 0 ? (
-              <p className="border-t border-border py-5 text-muted-foreground">No companies available yet.</p>
+              <p className="border-t border-border py-5 text-muted-foreground">Nothing to show here yet.</p>
             ) : (
               <div className="grid w-full min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {companies.map((company) => (

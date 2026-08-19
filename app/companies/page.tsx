@@ -46,7 +46,6 @@ export default async function CompaniesPage() {
           <EmptyState />
         ) : (
           <div className="flex flex-col gap-14">
-            {/* Popular Companies (Kept for continuity, you can remove if not needed) */}
             <section
               aria-labelledby="popular-heading"
               className="flex flex-col gap-6"
@@ -62,6 +61,7 @@ export default async function CompaniesPage() {
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {popularCompanies.length === 0 && <p className="text-muted-foreground">Nothing to show here yet.</p>}
                 {popularCompanies.map((company) => (
                   <CompanyCard
                     key={`popular-${company.id}`}

@@ -145,23 +145,23 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
             {round.questionsAsked && (
               <div className="pt-4 text-sm leading-6 text-muted-foreground">
                 <p className="mb-1 font-semibold text-foreground">Questions asked</p>
-                <p className="whitespace-pre-line">{round.questionsAsked}</p>
+                <p className="wrap-break-word whitespace-pre-line">{round.questionsAsked}</p>
               </div>
             )}
           </div>
         </div>
-        <div className="flex w-full gap-2 sm:w-auto sm:pt-1">
+        <div className="flex w-full shrink-0 gap-2 sm:w-auto sm:pt-1">
           <button
             type="button"
             onClick={() => setIsEditing(true)}
-            className="min-h-10 flex-1 rounded-md border border-input px-3 py-2 text-sm font-medium text-foreground hover:bg-muted sm:flex-none"
+            className="min-h-10 flex-1 whitespace-nowrap rounded-md border border-input px-3 py-2 text-sm font-medium text-foreground hover:bg-muted sm:flex-none"
           >
             Edit round
           </button>
           <form action={deleteRound.bind(null, experienceId, round.id)}>
             <button
               type="submit"
-              className="min-h-10 w-full rounded-md border border-destructive/40 px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/5 sm:w-auto"
+              className="min-h-10 w-full whitespace-nowrap rounded-md border border-destructive/40 px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/5 sm:w-auto"
             >
               Delete
             </button>
