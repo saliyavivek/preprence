@@ -6,6 +6,8 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/client";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Building03Icon, FileIcon, FilePlusIcon, Folder01Icon, Logout01Icon, User03Icon } from "@hugeicons/core-free-icons";
 
 function cx(...classes: Array<string | false | undefined>) {
   return classes.filter(Boolean).join(" ");
@@ -48,25 +50,34 @@ export function Section({ className, children }: { className?: string; children:
   return <section className={cx("py-14 sm:py-20", className)}>{children}</section>;
 }
 
-export function SiteHeader({ userName, userEmail, isLoggedIn = Boolean(userName) }: { userName?: string | null; userEmail?: string | null; isLoggedIn?: boolean }) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userName?: string | null; userEmail?: string | null; isLoggedIn?: boolean }) {
+  const [mobileProfileMenuOpen, setMobileProfileMenuOpen] = useState(false);
+  const [desktopProfileMenuOpen, setDesktopProfileMenuOpen] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
   const pathname = usePathname();
   const lastScrollY = useRef(0);
   const router = useRouter();
 
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setProfileMenuOpen(false);
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setMobileProfileMenuOpen(false);
+        setDesktopProfileMenuOpen(false);
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
   }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileProfileMenuOpen ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileProfileMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -91,160 +102,296 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = Boolean(userName)
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const closeMenus = () => {
+    setMobileProfileMenuOpen(false);
+    setDesktopProfileMenuOpen(false);
+  };
+
   const handleLogout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
+    closeMenus();
     router.replace("/login");
   };
 
+  const isMobileMenuOpen = isLoggedIn && mobileProfileMenuOpen;
+
   return (
-    <header
-      className={cx(
-        "sticky top-0 z-50 border-b border-border bg-white/60 backdrop-blur-sm transition-transform duration-300 ease-out",
-        pathname === "/login" ? "hidden" : "",
-        isHeaderVisible ? "translate-y-0" : "-translate-y-full",
-      )}
-    >
-      <Container className="flex min-h-18 items-center justify-between">
-        <Link
-          href="/"
-          className="font-mono text-lg font-bold tracking-tight text-foreground"
-        >
-          preprence<span className="text-primary">.</span>
-        </Link>
-        <button
-          className="min-h-11 rounded-md border border-border px-3 text-sm md:hidden"
-          onClick={() => setMobileMenuOpen((current) => !current)}
-          aria-expanded={mobileMenuOpen}
-          aria-controls="site-navigation"
-        >
-          Menu
-        </button>
-        <nav
-          id="site-navigation"
-          className={cx(
-            "absolute left-0 right-0 top-18 z-10 border-b border-border bg-background px-5 py-4 md:static md:flex md:items-center md:gap-7 md:border-0 md:bg-transparent md:p-0",
-            !mobileMenuOpen && "hidden md:flex",
-          )}
-        >
+    <>
+      <header
+        className={cx(
+          "sticky top-0 z-50 border-b border-border bg-white/60 backdrop-blur-sm transition-transform duration-300 ease-out",
+          pathname === "/login" ? "hidden" : "",
+          isHeaderVisible ? "translate-y-0" : "-translate-y-full",
+        )}
+      >
+        <Container className="flex min-h-18 items-center justify-between">
           <Link
-            href="/companies"
-            aria-current={pathname === "/companies" ? "page" : undefined}
-            className={cx(
-              "relative block py-2 text-sm transition-colors hover:text-foreground",
-              pathname === "/companies"
-                ? "font-semibold text-primary after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-7 after:-translate-x-1/2 after:bg-primary after:content-['']"
-                : "text-muted-foreground",
-            )}
+            href="/"
+            className="font-mono text-lg font-bold tracking-tight text-foreground"
           >
-            Companies
-          </Link>
-          <Link
-            href="/experiences"
-            aria-current={pathname === "/experiences" ? "page" : undefined}
-            className={cx(
-              "relative block py-2 text-sm transition-colors hover:text-foreground",
-              pathname === "/experiences"
-                ? "font-semibold text-primary after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-7 after:-translate-x-1/2 after:bg-primary after:content-['']"
-                : "text-muted-foreground",
-            )}
-          >
-            Interview experiences
-          </Link>
-          <Link
-            href={!isLoggedIn ? "/login" : "/experience/new"}
-            className={cx(
-              "relative block py-2 text-sm transition-colors hover:text-foreground",
-              pathname === "/experience/new"
-                ? "font-semibold text-primary after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-7 after:-translate-x-1/2 after:bg-primary after:content-['']"
-                : "text-muted-foreground",
-            )}
-          >
-            Share your experience
+            preprence<span className="text-primary">.</span>
           </Link>
 
-          {isLoggedIn ? (
-            <div
-              ref={dropdownRef}
-              className="relative mt-2 md:mt-0"
-            >
+          {/* Mobile profile trigger */}
+          <div className="md:hidden">
+            {isLoggedIn ? (
               <button
                 type="button"
-                onClick={() => setProfileMenuOpen((current) => !current)}
-                className="flex items-center gap-2"
-                aria-expanded={profileMenuOpen}
-                aria-label="Open profile menu"
+                onClick={() => setMobileProfileMenuOpen((current) => !current)}
+                className="flex h-10 w-10 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                aria-expanded={mobileProfileMenuOpen}
+                aria-controls="mobile-profile-drawer"
+                aria-label={mobileProfileMenuOpen ? "Close profile menu" : "Open profile menu"}
               >
                 <UserAvatar name={userName} />
               </button>
+            ) : (
+              <Link
+                href="/login"
+                className="inline-flex min-h-10 items-center rounded-full bg-muted px-4 text-sm font-semibold text-primary"
+              >
+                Login
+              </Link>
+            )}
+          </div>
 
-              {profileMenuOpen && (
-                <div className="absolute right-0 top-full z-20 mt-3 w-[260px] overflow-hidden rounded-xl border border-border bg-white text-foreground text-left shadow-2xl">
-                  <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-xs font-semibold text-primary">
-                      {userName?.trim()?.charAt(0)?.toUpperCase() || (
-                        <svg
-                          viewBox="0 0 24 24"
-                          aria-hidden="true"
-                          className="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M20 21a8 8 0 0 0-16 0" />
-                          <circle
-                            cx="12"
-                            cy="7"
-                            r="4"
-                          />
-                        </svg>
-                      )}
-                    </div>
-                    <div className="min-w-0">
-                      {userName ? <div className="truncate text-sm font-medium text-foreground">{userName}</div> : null}
-                      <div className="truncate text-sm text-foreground">{userEmail || ""}</div>
-                    </div>
-                  </div>
-
-                  <div className="py-2">
-                    <Link
-                      href="/dashboard"
-                      onClick={() => setProfileMenuOpen(false)}
-                      className="block px-4 py-3 text-sm text-foreground transition-colors duration-150 hover:bg-foreground/4"
-                    >
-                      Profile
-                    </Link>
-                    <Link
-                      href="/dashboard/experiences"
-                      onClick={() => setProfileMenuOpen(false)}
-                      className="block px-4 py-3 text-sm text-foreground transition-colors duration-150 hover:bg-foreground/4"
-                    >
-                      Your experiences
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={handleLogout}
-                      className="block w-full px-4 py-3 text-left text-sm text-foreground transition-colors duration-150 hover:bg-foreground/4"
-                    >
-                      Log out
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
+          {/* Desktop navigation */}
+          <nav
+            id="site-navigation"
+            className="hidden md:flex md:items-center md:gap-7"
+          >
             <Link
-              href="/login"
-              className="mt-2 inline-flex min-h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground md:mt-0"
+              href="/companies"
+              aria-current={pathname === "/companies" ? "page" : undefined}
+              className={cx(
+                "relative block py-2 text-sm transition-colors hover:text-foreground",
+                pathname === "/companies"
+                  ? "font-semibold text-primary after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-7 after:-translate-x-1/2 after:bg-primary after:content-['']"
+                  : "text-muted-foreground",
+              )}
             >
-              Login
+              Companies
             </Link>
-          )}
-        </nav>
-      </Container>
-    </header>
+
+            <Link
+              href="/experiences"
+              aria-current={pathname === "/experiences" ? "page" : undefined}
+              className={cx(
+                "relative block py-2 text-sm transition-colors hover:text-foreground",
+                pathname === "/experiences"
+                  ? "font-semibold text-primary after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-7 after:-translate-x-1/2 after:bg-primary after:content-['']"
+                  : "text-muted-foreground",
+              )}
+            >
+              Interview experiences
+            </Link>
+
+            <Link
+              href={!isLoggedIn ? "/login" : "/experience/new"}
+              className={cx(
+                "relative block py-2 text-sm transition-colors hover:text-foreground",
+                pathname === "/experience/new"
+                  ? "font-semibold text-primary after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-7 after:-translate-x-1/2 after:bg-primary after:content-['']"
+                  : "text-muted-foreground",
+              )}
+            >
+              Share your experience
+            </Link>
+
+            {isLoggedIn ? (
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setDesktopProfileMenuOpen((current) => !current)}
+                  className="flex items-center gap-2 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                  aria-expanded={desktopProfileMenuOpen}
+                  aria-haspopup="menu"
+                  aria-label="Open profile menu"
+                >
+                  <UserAvatar name={userName} />
+                </button>
+
+                {desktopProfileMenuOpen && (
+                  <div
+                    role="menu"
+                    className="absolute right-0 top-full z-50 mt-3 w-[280px] overflow-hidden rounded-xl border border-border bg-background shadow-xl"
+                  >
+                    <div className="flex items-center gap-3 border-b border-border bg-primary/10 px-4 py-3.5">
+                      <UserAvatar name={userName} />
+                      <div className="min-w-0">
+                        {userName ? <div className="truncate text-sm font-medium text-foreground">{userName}</div> : null}
+                        <div className="truncate text-sm text-muted-foreground">{userEmail || ""}</div>
+                      </div>
+                    </div>
+
+                    <div className="px-3 py-3">
+                      <div className="space-y-1">
+                        <Link
+                          href="/dashboard"
+                          onClick={() => setDesktopProfileMenuOpen(false)}
+                          className="flex items-center gap-2 rounded-md px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-foreground/4"
+                          role="menuitem"
+                        >
+                          <HugeiconsIcon
+                            icon={User03Icon}
+                            className="h-4 w-4"
+                          />
+                          Profile
+                        </Link>
+
+                        <Link
+                          href="/dashboard/experiences"
+                          onClick={() => setDesktopProfileMenuOpen(false)}
+                          className="flex items-center gap-2 rounded-md px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-foreground/4"
+                          role="menuitem"
+                        >
+                          <HugeiconsIcon
+                            icon={Folder01Icon}
+                            className="h-4 w-4"
+                          />
+                          Your experiences
+                        </Link>
+                      </div>
+
+                      <div className="my-3 border-t border-border" />
+
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="flex w-full items-center gap-2 rounded-md px-3 py-2.5 text-left text-sm text-foreground transition-colors hover:bg-foreground/4"
+                        role="menuitem"
+                      >
+                        <HugeiconsIcon
+                          icon={Logout01Icon}
+                          className="h-4 w-4"
+                        />
+                        Log out
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="inline-flex min-h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground"
+              >
+                Login
+              </Link>
+            )}
+          </nav>
+        </Container>
+      </header>
+
+      {/* Mobile profile drawer lives outside the desktop nav so it can open reliably. */}
+      {isMobileMenuOpen && (
+        <>
+          <button
+            type="button"
+            aria-label="Close profile menu"
+            onClick={() => setMobileProfileMenuOpen(false)}
+            className="fixed inset-0 z-[60] bg-foreground/35 md:hidden"
+          />
+
+          <aside
+            id="mobile-profile-drawer"
+            role="dialog"
+            aria-label="Profile menu"
+            className="fixed right-0 top-0 z-[70] h-dvh w-[min(78vw,380px)] overflow-y-auto border-l border-border bg-background text-left shadow-xl md:hidden"
+          >
+            <div className="flex items-center gap-3 border-b border-border bg-primary/10 px-5 py-3.5">
+              <UserAvatar name={userName} />
+
+              <div className="min-w-0">
+                {userName ? <div className="truncate text-base font-medium text-foreground">{userName}</div> : null}
+
+                <div className="truncate text-sm text-muted-foreground">{userEmail || ""}</div>
+              </div>
+            </div>
+
+            <div className="px-5 py-5">
+              <nav aria-label="Mobile navigation">
+                <div className="space-y-1">
+                  <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Explore</p>
+                  <Link
+                    href="/companies"
+                    onClick={() => setMobileProfileMenuOpen(false)}
+                    className={cx(
+                      "rounded-md px-2 py-3 text-base transition-colors flex gap-2 items-center",
+                      pathname === "/companies" ? "font-medium text-primary" : "text-foreground hover:bg-foreground/4",
+                    )}
+                  >
+                    <HugeiconsIcon icon={Building03Icon} /> Companies
+                  </Link>
+
+                  <Link
+                    href="/experiences"
+                    onClick={() => setMobileProfileMenuOpen(false)}
+                    className={cx(
+                      "rounded-md px-2 py-3 text-base transition-colors flex gap-2 items-center",
+                      pathname === "/experiences" ? "font-medium text-primary" : "text-foreground hover:bg-foreground/4",
+                    )}
+                  >
+                    <HugeiconsIcon icon={FileIcon} />
+                    Interview experiences
+                  </Link>
+
+                  <Link
+                    href="/experience/new"
+                    onClick={() => setMobileProfileMenuOpen(false)}
+                    className={cx(
+                      "rounded-md px-2 py-3 text-base transition-colors flex gap-2 items-center",
+                      pathname === "/experience/new" ? "font-medium text-primary" : "text-foreground hover:bg-foreground/4",
+                    )}
+                  >
+                    <HugeiconsIcon icon={FilePlusIcon} />
+                    Share your experience
+                  </Link>
+                </div>
+
+                <div className="my-5 border-t border-border" />
+
+                <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Your Account</p>
+
+                <div className="space-y-1">
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setMobileProfileMenuOpen(false)}
+                    className="rounded-md px-2 py-3 text-base text-foreground transition-colors hover:bg-foreground/4 flex gap-2 items-center"
+                  >
+                    <HugeiconsIcon icon={User03Icon} />
+                    Profile
+                  </Link>
+
+                  <Link
+                    href="/dashboard/experiences"
+                    onClick={() => setMobileProfileMenuOpen(false)}
+                    className="rounded-md px-2 py-3 text-base text-foreground transition-colors hover:bg-foreground/4 flex gap-2 items-center"
+                  >
+                    <HugeiconsIcon icon={Folder01Icon} />
+                    Your experiences
+                  </Link>
+                </div>
+
+                <div className="my-5 border-t border-border" />
+
+                {/* <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Log Out</p> */}
+
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="w-full rounded-md px-2 text-left text-base text-foreground transition-colors hover:bg-foreground/4 flex gap-2 items-center"
+                >
+                  <HugeiconsIcon icon={Logout01Icon} />
+                  Log out
+                </button>
+              </nav>
+            </div>
+          </aside>
+        </>
+      )}
+    </>
   );
 }
 

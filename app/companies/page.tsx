@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { CompanyMarkLarge } from "@/components/CompanyMark";
 
 type CompaniesPageProps = {
-  searchParams: Promise<{ q?: string; showAll?: string }>;
+  searchParams: Promise<{ showAll?: string }>;
 };
 
 type Company = Awaited<ReturnType<typeof getCompanies>>[number];
@@ -26,16 +26,7 @@ async function getCompanies() {
   });
 }
 
-function EmptyState({ search }: { search?: string }) {
-  if (search) {
-    return (
-      <div className="border-y border-border py-12 text-center">
-        <h2 className="text-lg font-semibold tracking-tight">No companies found</h2>
-        <p className="mt-2 text-sm leading-6 text-muted-foreground">We couldn&apos;t find a company matching your search.</p>
-      </div>
-    );
-  }
-
+function EmptyState() {
   return (
     <div className="border-y border-border py-12 text-center">
       <h2 className="text-lg font-semibold tracking-tight">No interview experiences yet.</h2>
@@ -60,18 +51,14 @@ function SquareCompanyCard({ company }: { company: Company }) {
 export default async function CompaniesPage({ searchParams }: CompaniesPageProps) {
   const params = await searchParams;
   const companies = await getCompanies();
-  const query = (params.q ?? "").trim();
   const showAllCompanies = params.showAll === "true" || params.showAll === "1";
-  const filteredCompanies = query ? companies.filter((company) => company.name.toLowerCase().includes(query.toLowerCase())) : companies;
-  const popularCompanies = [...filteredCompanies]
+  const popularCompanies = [...companies]
     .filter((company) => company._count.experiences > 0)
     .sort((a, b) => b._count.experiences - a._count.experiences || a.name.localeCompare(b.name))
     .slice(0, 3);
   const initialCompanyCount = 8;
-  const hasMoreCompanies = filteredCompanies.length > initialCompanyCount;
-  const companiesToDisplay = showAllCompanies ? filteredCompanies : filteredCompanies.slice(0, initialCompanyCount);
-  const companiesHref = query ? `/companies?q=${encodeURIComponent(query)}&showAll=1` : "/companies?showAll=1";
-  const collapseCompaniesHref = query ? `/companies?q=${encodeURIComponent(query)}` : "/companies";
+  const hasMoreCompanies = companies.length > initialCompanyCount;
+  const companiesToDisplay = showAllCompanies ? companies : companies.slice(0, initialCompanyCount);
 
   return (
     <main className="min-h-[calc(100vh-8rem)]">
@@ -81,35 +68,8 @@ export default async function CompaniesPage({ searchParams }: CompaniesPageProps
           <p className="text-base leading-7 text-gray-500 sm:text-lg">Find interview experiences shared by students from your college.</p>
         </header>
 
-        <form
-          action="/companies"
-          className="max-w-2xl"
-        >
-          <label
-            htmlFor="company-search"
-            className="sr-only"
-          >
-            Search companies
-          </label>
-          <div className="relative">
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xl text-gray-400"
-            >
-              ⌕
-            </span>
-            <input
-              id="company-search"
-              name="q"
-              defaultValue={query}
-              placeholder="Search companies..."
-              className="min-h-12 w-full rounded-lg border border-gray-200 bg-white pl-12 pr-4 text-gray-900 outline-none placeholder:text-gray-400 focus:border-[#1c7b6d] focus:ring-1 focus:ring-[#1c7b6d] shadow-sm"
-            />
-          </div>
-        </form>
-
-        {companies.length === 0 || filteredCompanies.length === 0 ? (
-          <EmptyState search={query} />
+        {companies.length === 0 ? (
+          <EmptyState />
         ) : (
           <div className="flex flex-col gap-14">
             {/* Popular Companies (Kept for continuity, you can remove if not needed) */}
@@ -150,7 +110,7 @@ export default async function CompaniesPage({ searchParams }: CompaniesPageProps
                   >
                     All companies
                   </h2>
-                  <span className="text-[0.95rem] text-gray-500">{filteredCompanies.length} listed</span>
+                  <span className="text-[0.95rem] text-gray-500">{companies.length} listed</span>
                 </div>
                 <p className="text-[0.95rem] text-gray-500">Browse companies and read real interview experiences shared by students.</p>
               </div>
@@ -169,7 +129,7 @@ export default async function CompaniesPage({ searchParams }: CompaniesPageProps
               <div className="mt-8 flex flex-col items-center gap-6">
                 {hasMoreCompanies ? (
                   <Link
-                    href={showAllCompanies ? collapseCompaniesHref : companiesHref}
+                    href={showAllCompanies ? "/companies" : "/companies?showAll=1"}
                     className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[#1c7b6d] px-6 py-3 text-[0.95rem] font-medium text-[#1c7b6d] shadow-sm transition-colors hover:bg-[#1c7b6d]/5 sm:w-auto"
                   >
                     {showAllCompanies ? "Show fewer companies" : "View all companies"}

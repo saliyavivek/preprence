@@ -8,6 +8,8 @@ export type Experience = {
     graduationYear: number;
     interviewDate: Date;
     verdict: string | null;
+    isAnonymous: boolean;
+    author?: { name: string | null; email: string } | null;
     company: { name: string; slug: string; logoUrl: string | null };
     rounds: Array<{ roundType: string; roundNumber?: number }>;
 };

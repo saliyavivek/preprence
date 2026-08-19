@@ -66,12 +66,6 @@ export default async function CompanyPage({ params }: Props) {
                 <p className="text-sm text-muted-foreground">{count === 0 ? "No interview experiences yet" : `${count} ${count === 1 ? "experience" : "experiences"}`} shared</p>
               </div>
             </div>
-            <Link
-              href="/experience/new"
-              className="inline-flex min-h-11 items-center justify-center rounded-md border border-primary px-5 font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
-            >
-              Share your experience
-            </Link>
           </div>
         </section>
 

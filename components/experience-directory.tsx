@@ -59,10 +59,13 @@ export function DirectorySidebar({ experiences }: { experiences: Experience[] })
         </div>
         <Link
           href="/companies"
-          className="mt-5 text-sm font-medium text-primary flex items-center gap-2"
+          className="group mt-5 text-sm font-medium text-primary flex items-center gap-2"
         >
           <span>View all companies</span>
-          <HugeiconsIcon icon={ArrowRight02Icon} />
+          <HugeiconsIcon
+            icon={ArrowRight02Icon}
+            className="transition-transform duration-200 group-hover:translate-x-1"
+          />
         </Link>
       </div>
     </aside>

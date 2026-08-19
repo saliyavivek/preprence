@@ -4,7 +4,7 @@ export default function AddExperienceTimeline({ active }: { active: number }) {
   return (
     <section
       aria-label="Contribution steps"
-      className="flex items-start gap-4 sm:gap-8"
+      className="hidden items-start gap-4 sm:flex sm:gap-8"
     >
       <div className="flex min-w-0 flex-1 items-start gap-3">
         <span

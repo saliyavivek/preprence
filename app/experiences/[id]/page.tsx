@@ -5,6 +5,8 @@ import ExperienceHeader from "@/components/ExperienceHeader";
 import { VerdictBadge } from "@/components/VerdictBadge";
 import { createClient } from "@/lib/supabase/server";
 import { deleteExperience } from "./actions";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ChartNoAxesColumnIcon, Clock01Icon, QuoteUpIcon } from "@hugeicons/core-free-icons";
 
 type Props = {
   params: Promise<{
@@ -37,14 +39,26 @@ function RoundSummary({ round, index }: { round: ExperienceRound; index: number 
       </div>
 
       <div className="flex items-center gap-3 text-base text-muted-foreground">
-        <span>{round.durationMinutes ? `${round.durationMinutes} min` : "—"}</span>
+        <span className="flex items-center gap-1">
+          <HugeiconsIcon
+            icon={Clock01Icon}
+            className="w-4 h-4"
+          />
+          {round.durationMinutes ? `${round.durationMinutes} min` : "—"}
+        </span>
         <span
           aria-hidden="true"
           className="text-border"
         >
           |
         </span>
-        <span className="capitalize">{round.difficulty ? round.difficulty.toLowerCase() : "Not provided"}</span>
+        <span className="capitalize flex items-center gap-1">
+          <HugeiconsIcon
+            icon={ChartNoAxesColumnIcon}
+            className="w-4 h-4"
+          />
+          {round.difficulty ? round.difficulty.toLowerCase() : "Not provided"}
+        </span>
       </div>
     </div>
   );
@@ -70,22 +84,22 @@ function RoundDetail({ round, isLast = false }: { round: ExperienceRound; isLast
         </div>
         <dl className="mt-5 grid border-b border-border pb-5 sm:grid-cols-3">
           <div>
-            <dt className="text-xs text-muted-foreground">Type</dt>
-            <dd className="mt-1 text-sm font-medium capitalize">{formatRoundType(round.roundType)}</dd>
+            <dt className="text-sm text-muted-foreground">Type</dt>
+            <dd className="mt-1 text-md font-medium capitalize">{formatRoundType(round.roundType)}</dd>
           </div>
           <div>
-            <dt className="text-xs text-muted-foreground">Difficulty</dt>
-            <dd className="mt-1 text-sm font-medium capitalize">{round.difficulty?.toLowerCase() ?? "Not provided"}</dd>
+            <dt className="text-sm text-muted-foreground">Difficulty</dt>
+            <dd className="mt-1 text-md font-medium capitalize">{round.difficulty?.toLowerCase() ?? "Not provided"}</dd>
           </div>
           <div>
-            <dt className="text-xs text-muted-foreground">Duration</dt>
-            <dd className="mt-1 text-sm font-medium">{round.durationMinutes ? `${round.durationMinutes} minutes` : "Not provided"}</dd>
+            <dt className="text-sm text-muted-foreground">Duration</dt>
+            <dd className="mt-1 text-md font-medium">{round.durationMinutes ? `${round.durationMinutes} minutes` : "Not provided"}</dd>
           </div>
         </dl>
         {round.questionsAsked && (
           <div className="flex flex-col gap-1 pt-4">
             <h4 className="text-sm font-semibold">Questions asked</h4>
-            <p className="whitespace-pre-line text-sm leading-6 text-foreground">{round.questionsAsked}</p>
+            <p className="whitespace-pre-line text-md leading-6 text-foreground">{round.questionsAsked}</p>
           </div>
         )}
       </div>
@@ -117,13 +131,20 @@ export default async function ExperiencePage({ params }: Props) {
 
   if (!experience) notFound();
 
+  const author = experience.isAnonymous
+    ? null
+    : await prisma.user.findUnique({
+        where: { id: experience.authorId },
+        select: { name: true, email: true },
+      });
+
   const verdict = formatVerdict(experience.verdict);
 
   return (
     <main>
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-12 sm:px-8 sm:py-16 lg:px-10">
         <section className="flex justify-between items-start border-b border-border pb-7">
-          {experience && <ExperienceHeader experience={experience} />}
+          <ExperienceHeader experience={{ ...experience, author }} />
           <div className="flex flex-col b px-4 py-3">{verdict && <VerdictBadge verdict={verdict} />}</div>
         </section>
 
@@ -170,8 +191,9 @@ export default async function ExperiencePage({ params }: Props) {
 
         <section className="flex flex-col gap-4">
           <h2 className="text-xl font-semibold tracking-tight">Overall tips</h2>
-          <div className="rounded-lg border border-primary/15 bg-primary/5 px-5 py-4">
-            <p className="whitespace-pre-line text-sm leading-6 text-foreground">{experience.overallTips || "No tips provided."}</p>
+          <div className="rounded-lg border border-primary/15 bg-primary/5 px-5 py-4 flex gap-4">
+            <HugeiconsIcon icon={QuoteUpIcon} />
+            <p className="whitespace-pre-line text-md leading-6 text-foreground">{experience.overallTips || "No tips provided."}</p>
           </div>
         </section>
 

@@ -26,26 +26,36 @@ export function HomeExperienceRowCard({ experience }: ExperienceRowProps) {
   return (
     <Link
       href={`/experiences/${experience.id}`}
-      className="group grid gap-3 border-b border-border px-4 py-4 last:border-b-0 sm:grid-cols-[minmax(220px,1.4fr)_minmax(150px,1fr)_110px_130px_auto] sm:items-center sm:gap-6 sm:px-5 transition-colors hover:bg-muted/20"
+      className="group relative grid gap-3 border-b border-border px-4 py-4 pr-12 last:border-b-0 transition-colors hover:bg-muted/20 sm:grid-cols-[minmax(220px,1.4fr)_minmax(150px,1fr)_110px_130px_auto] sm:items-center sm:gap-6 sm:px-5 sm:pr-5"
     >
       <div className="flex min-w-0 items-center gap-3">
         <CompanyMarkSmall company={experience.company} />
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold leading-5 text-foreground">{experience.company.name}</p>
+          <div className="flex min-w-0 items-center justify-between gap-3">
+            <p className="truncate text-sm font-semibold leading-5 text-foreground">{experience.company.name}</p>
+            <div className="shrink-0 sm:hidden">
+              <VerdictBadge verdict={experience.verdict} />
+            </div>
+          </div>
           <p className="truncate text-sm leading-5 text-muted-foreground">{experience.roleTitle}</p>
+          <p className="text-sm leading-5 text-muted-foreground sm:hidden">
+            {rounds} {rounds === 1 ? "round" : "rounds"}
+          </p>
         </div>
       </div>
-      <p className="text-sm text-muted-foreground">
+      <p className="hidden text-sm text-muted-foreground sm:block">
         {experience.degree} <span aria-hidden="true">·</span> Class of {experience.graduationYear}
       </p>
-      <p className="text-sm text-muted-foreground">
+      <p className="hidden text-sm text-muted-foreground sm:block">
         {rounds} {rounds === 1 ? "round" : "rounds"}
       </p>
-      <VerdictBadge verdict={experience.verdict} />
+      <div className="hidden sm:block">
+        <VerdictBadge verdict={experience.verdict} />
+      </div>
 
       <span
         aria-hidden="true"
-        className="self-center text-xl text-primary transition-transform duration-200 group-hover:translate-x-1"
+        className="absolute right-4 top-1/2 -translate-y-1/2 text-xl text-primary transition-transform duration-200 group-hover:translate-x-1 sm:static sm:translate-y-0 sm:self-center"
       >
         <HugeiconsIcon
           size="100%"

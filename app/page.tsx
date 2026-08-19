@@ -73,18 +73,18 @@ export default async function HomePage() {
             aria-hidden="true"
             className="pointer-events-none absolute right-[10%] top-4 size-[30rem] rounded-full bg-primary/[0.06] blur-3xl"
           />
-          <div className="relative mx-auto flex max-w-6xl items-center gap-10 px-5 pb-20 pt-14 sm:px-8 sm:pb-24 sm:pt-20 lg:px-12">
+          <div className="relative mx-auto flex max-w-6xl items-center gap-10 px-5 pb-14 pt-10 sm:px-8 sm:pb-24 sm:pt-20 lg:px-12">
             <div className="flex max-w-2xl flex-1 flex-col">
-              <h1 className="mt-5 text-balance text-[2.6rem] font-semibold leading-[1.05] tracking-[-0.045em] sm:text-6xl lg:text-[4.1rem]">
+              <h1 className="mt-4 max-w-[19rem] text-balance text-[2.5rem] font-semibold leading-[1.02] tracking-[-0.05em] sm:mt-5 sm:max-w-2xl sm:text-6xl lg:text-[4.1rem]">
                 Know the interview
-                <br className="hidden sm:block" /> before you face it.
+                <br className="hidden sm:block" /> <span className="text-primary">before</span> you face it.
               </h1>
               <p className="mt-5 max-w-md text-pretty text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">Read real interview experiences shared by students from your college.</p>
 
               <form
                 action="/companies"
                 method="get"
-                className="mt-8 flex w-full max-w-[560px] flex-col gap-3 sm:flex-row"
+                className="mt-7 flex w-full max-w-[560px] flex-col gap-3 sm:mt-8 sm:flex-row"
               >
                 <label
                   htmlFor="company-search"
@@ -119,7 +119,7 @@ export default async function HomePage() {
                 </div>
                 <button
                   type="submit"
-                  className="h-12 rounded-md bg-primary px-8 font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                  className="h-12 w-full rounded-md bg-primary px-8 font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 sm:w-auto"
                 >
                   Search
                 </button>
@@ -130,12 +130,12 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <div className="mx-auto flex max-w-6xl flex-col gap-16 px-5 pb-20 pt-4 sm:px-8 sm:gap-20 sm:pb-24 lg:px-12">
+        <div className="mx-auto flex max-w-6xl flex-col gap-14 px-5 pb-14 pt-2 sm:gap-20 sm:px-8 sm:pb-24 sm:pt-4 lg:px-12">
           <section
             aria-labelledby="popular-companies-heading"
             className="flex flex-col gap-5"
           >
-            <div className="flex items-end justify-between gap-4">
+            <div className="flex items-end justify-between gap-3">
               <h2
                 id="popular-companies-heading"
                 className="text-2xl font-semibold tracking-[-0.02em] sm:text-[1.75rem]"
@@ -153,7 +153,7 @@ export default async function HomePage() {
             {companies.length === 0 ? (
               <p className="border-t border-border py-5 text-muted-foreground">No companies available yet.</p>
             ) : (
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid w-full min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {companies.map((company) => (
                   <CompanyCard
                     key={company.id}
@@ -199,10 +199,10 @@ export default async function HomePage() {
             )}
           </section>
 
-          <section className="flex flex-col gap-6 rounded-lg border border-primary/15 bg-primary/[0.045] px-6 py-8 sm:px-9 md:flex-row md:items-center md:justify-between md:gap-8 lg:gap-12">
+          <section className="flex flex-col gap-6 rounded-xl border border-primary/15 bg-primary/[0.045] px-5 py-6 sm:px-9 sm:py-8 md:flex-row md:items-center md:justify-between md:gap-8 lg:gap-12">
             <div className="max-w-sm shrink-0">
               <h2 className="text-2xl font-semibold tracking-[-0.02em]">Been through an interview?</h2>
-              <p className="mt-2 text-sm leading-6 text-muted-foreground">Share what you learned and help the next student prepare.</p>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">Share what you learned and help your juniors to prepare.</p>
             </div>
 
             <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-center lg:gap-8">
@@ -228,7 +228,7 @@ export default async function HomePage() {
             <div className="shrink-0">
               <Link
                 href="/experience/new"
-                className="rounded-md bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                className="inline-flex min-h-12 w-full items-center justify-center rounded-md bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 sm:w-auto"
               >
                 Share your experience
               </Link>

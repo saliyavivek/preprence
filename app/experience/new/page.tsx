@@ -2,6 +2,8 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { createExperience } from "./actions";
 import AddExperienceTimeline from "@/components/AddExperienceTimeline";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 
 function Field({ label, htmlFor, required = false, children }: { label: string; htmlFor: string; required?: boolean; children: React.ReactNode }) {
   return (
@@ -169,14 +171,18 @@ export default async function NewExperiencePage() {
             </div>
             <button
               type="submit"
-              className="inline-flex min-h-14 shrink-0 items-center justify-center gap-4 rounded-xl bg-primary px-6 font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/20"
+              className="group inline-flex min-h-14 shrink-0 items-center justify-center gap-4 rounded-xl bg-primary px-6 font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/20"
             >
               Continue to next step{" "}
               <span
                 aria-hidden="true"
-                className="text-xl"
+                className="text-xl transition-transform duration-200 group-hover:translate-x-1"
               >
-                →
+                <HugeiconsIcon
+                  size="100%"
+                  className="h-4 w-4"
+                  icon={ArrowRight01Icon}
+                />
               </span>
             </button>
           </section>
