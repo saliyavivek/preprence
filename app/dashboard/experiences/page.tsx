@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { DashboardExperienceRowCard } from "@/components/DashboardExperienceRowCard";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Edit01Icon } from "@hugeicons/core-free-icons";
 
 async function getExperiences(userId: string) {
   return prisma.experience.findMany({
@@ -46,14 +48,12 @@ export default async function MyExperiencesPage() {
           </div>
           <Link
             href="/experience/new"
-            className="inline-flex min-h-12 items-center justify-center rounded-md bg-primary px-5 font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/30"
+            className="inline-flex min-h-12 items-center justify-center rounded-md bg-primary px-5 font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/30 gap-2"
           >
-            <span
-              aria-hidden="true"
-              className="mr-2 text-xl leading-none"
-            >
-              +
-            </span>{" "}
+            <HugeiconsIcon
+              icon={Edit01Icon}
+              className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
+            />
             Share an experience
           </Link>
         </header>

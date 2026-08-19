@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { CompanyMarkLarge } from "@/components/CompanyMark";
 import { NormalExperienceRowCard } from "@/components/NormalExperienceRowCard";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight01Icon, Edit01Icon, File02Icon, Globe02Icon, World } from "@hugeicons/core-free-icons";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -47,23 +49,35 @@ export default async function CompanyPage({ params }: Props) {
 
         <section className="rounded-lg border border-border bg-card">
           <div className="flex flex-col gap-7 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
-            <div className="flex items-center gap-6">
-              <div className="flex size-32 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border bg-background">
+            <div className="flex flex-col items-center gap-5 sm:flex-row sm:gap-6">
+              <div className="flex size-24 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border bg-background sm:size-32">
                 <CompanyMarkLarge company={company} />
               </div>
-              <div className="flex flex-col gap-3">
-                <h1 className="text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{company.name}</h1>
+              <div className="flex min-w-0 flex-col items-center gap-3 text-center sm:items-start sm:text-left">
+                <h1 className="max-w-full break-words text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{company.name}</h1>
                 {company.websiteUrl && (
-                  <a
-                    href={company.websiteUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-fit text-sm font-medium text-primary underline-offset-4 hover:underline"
-                  >
-                    {company.websiteUrl.split("//")[1]}
-                  </a>
+                  <span className="flex max-w-full items-center gap-1">
+                    <HugeiconsIcon
+                      icon={Globe02Icon}
+                      className="w-4 h-4"
+                    />
+                    <a
+                      href={company.websiteUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="max-w-full break-all text-left text-sm font-medium text-primary underline-offset-4 hover:underline"
+                    >
+                      {company.websiteUrl.split("//")[1] ?? company.websiteUrl}
+                    </a>
+                  </span>
                 )}
-                <p className="text-sm text-muted-foreground">{count === 0 ? "No interview experiences yet" : `${count} ${count === 1 ? "experience" : "experiences"}`} shared</p>
+                <p className="flex items-center gap-1 text-center text-sm text-muted-foreground sm:text-left">
+                  <HugeiconsIcon
+                    icon={File02Icon}
+                    className="w-4 h-4"
+                  />
+                  {count === 0 ? "No interview experiences yet" : `${count} interview ${count === 1 ? "experience" : "experiences"}`} shared
+                </p>
               </div>
             </div>
           </div>
@@ -98,15 +112,13 @@ export default async function CompanyPage({ params }: Props) {
             <p className="text-muted-foreground">Be the first student to share what your interview was like.</p>
             <Link
               href="/experience/new"
-              className="mx-auto mt-2 inline-flex min-h-11 items-center rounded-md bg-primary px-5 font-medium text-primary-foreground"
+              className="group mx-auto mt-2 inline-flex min-h-11 items-center rounded-md bg-primary px-5 font-medium text-primary-foreground gap-2"
             >
-              Share your experience{" "}
-              <span
-                className="ml-2"
-                aria-hidden="true"
-              >
-                →
-              </span>
+              Share your experience
+              <HugeiconsIcon
+                icon={ArrowRight01Icon}
+                className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
+              />
             </Link>
           </section>
         )}
@@ -119,9 +131,13 @@ export default async function CompanyPage({ params }: Props) {
             </div>
             <Link
               href="/experience/new"
-              className="inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-5 font-medium text-primary-foreground"
+              className="inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-5 font-medium text-primary-foreground gap-2"
             >
-              Share your experience{" "}
+              <HugeiconsIcon
+                icon={Edit01Icon}
+                className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
+              />
+              Share your experience
             </Link>
           </section>
         )}

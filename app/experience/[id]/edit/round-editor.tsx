@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { createRound, deleteRound, updateRound } from "./actions";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ChartNoAxesColumnIcon, Clock01Icon } from "@hugeicons/core-free-icons";
 
 type Round = {
   id: string;
@@ -121,8 +123,26 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
           <div className="min-w-0 flex-1">
             <h3 className="text-lg font-semibold tracking-tight">{roundLabels[round.roundType] ?? round.roundType}</h3>
             <div className="mt-3 flex flex-wrap gap-2 text-sm text-muted-foreground">
-              {round.difficulty && <span className="rounded-full border border-border px-3 py-1">Difficulty · {difficultyLabels[round.difficulty] ?? round.difficulty}</span>}
-              {round.durationMinutes && <span className="rounded-full border border-border px-3 py-1">Duration · {round.durationMinutes} min</span>}
+              {round.difficulty && (
+                <span className="rounded-full border border-border px-3 py-1 flex items-center gap-1">
+                  <HugeiconsIcon
+                    icon={ChartNoAxesColumnIcon}
+                    className="w-4 h-4"
+                  />
+                  {difficultyLabels[round.difficulty] ?? round.difficulty}
+                </span>
+              )}
+              {round.durationMinutes && (
+                <span className="rounded-full border border-border px-3 py-1 flex items-center gap-1">
+                  <span>
+                    <HugeiconsIcon
+                      icon={Clock01Icon}
+                      className="w-4 h-4"
+                    />
+                  </span>
+                  {round.durationMinutes} min
+                </span>
+              )}
             </div>
             {round.questionsAsked && (
               <div className="pt-4 text-sm leading-6 text-muted-foreground">

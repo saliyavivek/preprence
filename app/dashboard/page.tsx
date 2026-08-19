@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Edit02Icon, FileIcon, Tick03Icon } from "@hugeicons/core-free-icons";
+import { ArrowRight01Icon, Edit02Icon, FileIcon, Tick03Icon } from "@hugeicons/core-free-icons";
 
 import { DashboardExperienceRowCard } from "@/components/DashboardExperienceRowCard";
 
@@ -78,13 +78,17 @@ export default async function DashboardPage() {
       <section className="mt-10 flex flex-col gap-6 rounded-2xl border border-[#d6f0ea] bg-white/60 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
         <div className="flex-1">
           <h2 className="text-[1.3rem] font-semibold tracking-tight text-foreground">Share your interview experience</h2>
-          <p className="mt-1.5 max-w-[420px] text-[0.95rem] leading-relaxed text-muted-foreground">Help the next student know what to expect by sharing your interview journey.</p>
+          <p className="mt-1.5 max-w-[420px] text-[0.95rem] leading-relaxed text-muted-foreground">Help your juniors know what to expect by sharing your interview journey.</p>
         </div>
         <Link
           href="/experience/new"
-          className="inline-flex items-center justify-center rounded-lg bg-[#0a6f63] px-6 py-3.5 text-[0.95rem] font-medium text-white transition-opacity hover:opacity-90"
+          className="group inline-flex gap-2 items-center justify-center rounded-lg bg-[#0a6f63] px-6 py-3.5 text-[0.95rem] font-medium text-white transition-opacity hover:opacity-90"
         >
           Share experience
+          <HugeiconsIcon
+            icon={ArrowRight01Icon}
+            className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
+          />
         </Link>
       </section>
 

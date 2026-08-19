@@ -5,6 +5,8 @@ import { HomeExperienceRowCard } from "@/components/HomeExperienceRowCard";
 import { InterviewFlow } from "@/components/InterviewFlow";
 import { createClient } from "@/lib/supabase/server";
 import OnboardingDetailsModal from "../components/OnboardingDetailsModal";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 
 async function getLandingData() {
   return Promise.all([
@@ -228,9 +230,13 @@ export default async function HomePage() {
             <div className="shrink-0">
               <Link
                 href="/experience/new"
-                className="inline-flex min-h-12 w-full items-center justify-center rounded-md bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 sm:w-auto"
+                className="group inline-flex min-h-12 w-full items-center justify-center rounded-md bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 sm:w-auto gap-2"
               >
                 Share your experience
+                <HugeiconsIcon
+                  icon={ArrowRight01Icon}
+                  className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
+                />
               </Link>
             </div>
           </section>
