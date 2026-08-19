@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { unstable_cache } from "next/cache";
 
 import { Footer, SiteHeader } from "@/components/layout";
 import { prisma } from "@/lib/prisma";
@@ -17,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Preprence — Real interview experiences",
+  title: "Preprence - Real interview experiences",
   description: "Explore real interview experiences, rounds, questions, and advice shared by candidates.",
 };
 
@@ -31,10 +32,17 @@ async function getCurrentUserHeaderData() {
     return { isLoggedIn: false, userName: null, userEmail: null };
   }
 
-  const profile = await prisma.user.findUnique({
-    where: { id: user.id },
-    select: { name: true, email: true },
-  });
+  const getProfile = unstable_cache(
+    async () =>
+      prisma.user.findUnique({
+        where: { id: user.id },
+        select: { name: true, email: true },
+      }),
+    ["header-profile", user.id],
+    { revalidate: 300 },
+  );
+
+  const profile = await getProfile();
 
   return {
     isLoggedIn: true,

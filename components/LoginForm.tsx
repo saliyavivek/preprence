@@ -50,17 +50,17 @@ export function LoginForm({ initialMessage, nextPath }: LoginFormProps) {
   const sent = message === successMessage;
 
   return (
-    <main className="flex min-h-[calc(100vh-8rem)] items-center justify-center px-5 py-12 sm:px-8 sm:py-16">
-      <section className="w-full max-w-[30rem] rounded-xl border border-border bg-card px-6 py-8 shadow-[0_12px_40px_rgba(32,37,34,0.04)] sm:px-10 sm:py-10">
+    <main className="flex min-h-svh w-full items-center justify-center px-4 py-8 sm:min-h-screen sm:px-8 sm:py-16">
+      <section className="w-full max-w-120 rounded-xl border border-border bg-card px-4 py-6 shadow-[0_12px_40px_rgba(32,37,34,0.04)] sm:px-10 sm:py-10">
         <div className="flex flex-col gap-4 sm:gap-6">
           <header className="flex flex-col items-center gap-4 text-center">
-            <p className="hidden text-2xl font-semibold tracking-[-0.05em] text-foreground sm:block">
+            <p className="hidden text-2xl font-semibold tracking-tighter text-foreground sm:block">
               preprence<span className="text-primary">.</span>
             </p>
             <div className="flex flex-col gap-3">
-              <h1 className="flex items-center justify-center gap-2 text-2xl font-semibold tracking-[-0.04em] text-foreground sm:text-4xl">
-                Sign in to
-                <span className="text-3xl font-semibold tracking-[-0.05em] text-foreground">
+              <h1 className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-x-2 gap-y-1 text-2xl font-semibold tracking-[-0.04em] text-foreground sm:flex-nowrap sm:text-4xl">
+                <span>Sign in to</span>
+                <span className="text-3xl font-semibold tracking-tighter text-foreground sm:text-4xl">
                   preprence<span className="text-primary">.</span>
                 </span>
               </h1>
@@ -168,7 +168,7 @@ export function LoginForm({ initialMessage, nextPath }: LoginFormProps) {
               <div className="flex flex-col gap-2">
                 <h2 className="font-semibold text-foreground">Why a college email?</h2>
                 <p className="text-sm leading-6 text-muted-foreground">
-                  <span className="font-semibold tracking-[-0.05em] text-foreground">
+                  <span className="font-semibold tracking-tighter text-foreground">
                     preprence<span className="text-primary">.</span>
                   </span>{" "}
                   is built around real interview experiences from students. Using a college email helps keep the community focused on students and their experiences.
