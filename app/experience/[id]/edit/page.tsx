@@ -24,10 +24,10 @@ export default async function EditExperiencePage({ params }: Props) {
 
   return (
     <main className="min-h-screen">
-      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8 sm:gap-8 sm:px-8 sm:py-14 lg:px-12">
         <nav
           aria-label="Breadcrumb"
-          className="flex items-center gap-3 text-sm text-muted-foreground"
+          className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground"
         >
           <Link
             href="/"
@@ -45,20 +45,20 @@ export default async function EditExperiencePage({ params }: Props) {
           <span aria-hidden="true">›</span>
           <span className="font-medium text-primary">Complete experience</span>
         </nav>
-        <header className="flex flex-col gap-3">
-          <h1 className="text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">Add your interview rounds</h1>
-          <p className="text-lg leading-7 text-muted-foreground">Tell the next student what actually happened during each round.</p>
+        <header className="flex flex-col gap-1">
+          <h1 className="text-[2rem] font-semibold tracking-[-0.045em] sm:text-5xl">Add your interview rounds</h1>
+          <p className="text-[1.05rem] leading-7 text-muted-foreground sm:text-lg">Tell the next student what actually happened during each round.</p>
         </header>
 
         <AddExperienceTimeline active={2} />
 
-        <section className="flex flex-col gap-5 rounded-xl border border-border bg-card p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
-          <div className="flex items-center gap-5">
+        <section className="flex flex-col gap-5 rounded-xl border border-border bg-card p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div className="min-w-0">
             <ExperienceHeader experience={experience} />
           </div>
           <Link
             href="/experience/new"
-            className="rounded-md border border-input px-4 py-2 text-center text-sm font-medium hover:bg-muted"
+            className="order-last inline-flex min-h-10 w-full items-center justify-center rounded-md border border-input px-4 py-2 text-center text-sm font-medium hover:bg-muted sm:order-none sm:w-auto"
           >
             Edit interview details
           </Link>
@@ -70,7 +70,7 @@ export default async function EditExperiencePage({ params }: Props) {
               <h2 className="text-2xl font-semibold tracking-tight">Interview rounds</h2>
               <p className="mt-1 text-sm text-muted-foreground">Add the rounds you went through in the order they happened.</p>
             </div>
-            <p className="text-sm text-muted-foreground">You can add, edit, or remove rounds before publishing.</p>
+            <p className="text-sm leading-6 text-muted-foreground sm:text-right">You can add, edit, or remove rounds before publishing.</p>
           </div>
           {experience.rounds.length ? (
             <div className="flex flex-col gap-3">
@@ -97,16 +97,19 @@ export default async function EditExperiencePage({ params }: Props) {
           }}
         />
         {isDraft && (
-          <section className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <section className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
             <div>
               <h2 className="text-xl font-semibold">Ready to share?</h2>
               <p className="mt-1 max-w-xl text-sm leading-6 text-muted-foreground">Make sure your interview rounds and details are accurate before publishing.</p>
             </div>
-            <form action={publishExperience.bind(null, experience.id)}>
+            <form
+              action={publishExperience.bind(null, experience.id)}
+              className="w-full sm:w-auto"
+            >
               <button
                 type="submit"
                 disabled={!experience.rounds.length}
-                className="rounded-md bg-primary px-5 py-3 font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                className="min-h-11 w-full rounded-md bg-primary px-5 py-3 font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
               >
                 Publish experience
               </button>

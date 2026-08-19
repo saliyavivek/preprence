@@ -20,7 +20,7 @@ export function NormalExperienceRowCard({ experience, showCompanyMark = true }: 
   return (
     <Link
       href={`/experiences/${experience.id}`}
-      className="group relative flex gap-3 border-b border-border p-4 pr-11 transition-colors hover:bg-muted/20 sm:gap-5 sm:p-6"
+      className="group relative flex gap-3 border-b border-border p-4 pr-10 transition-colors hover:bg-muted/20 sm:gap-5 sm:p-6 sm:pr-6"
     >
       {showCompanyMark ? <CompanyMarkMedium company={experience.company} /> : null}
       <div className="min-w-0 flex-1">
@@ -32,8 +32,8 @@ export function NormalExperienceRowCard({ experience, showCompanyMark = true }: 
                 <VerdictBadge verdict={experience.verdict} />
               </div>
             </div>
-            <p className="mt-1 text-md font-medium text-foreground">{experience.company.name}</p>
-            <p className="mt-1 flex gap-2 flex-wrap text-sm text-muted-foreground">
+            <p className="mt-1 truncate text-base font-medium text-foreground">{experience.company.name}</p>
+            <p className="mt-1 flex flex-wrap gap-x-2 gap-y-1 text-sm text-muted-foreground">
               <span className="flex items-center gap-1">
                 <HugeiconsIcon
                   className="w-4 h-4"
@@ -66,7 +66,12 @@ export function NormalExperienceRowCard({ experience, showCompanyMark = true }: 
             />
             {experience.interviewDate.toLocaleDateString("en-US", { month: "short", year: "numeric" })}
           </span>
-          <span className="text-xs text-gray-200">|</span>
+          <span
+            aria-hidden="true"
+            className="text-xs text-gray-200 sm:inline"
+          >
+            |
+          </span>
           <span className="flex items-center gap-1">
             <HugeiconsIcon
               icon={Layers01Icon}

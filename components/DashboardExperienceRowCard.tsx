@@ -27,59 +27,60 @@ export function DashboardExperienceRowCard({ experience, className = "" }: { exp
   const actionLabel = experience.status === "draft" ? "Continue editing" : "View";
 
   return (
-    <article className={`flex flex-col gap-1 border border-border bg-card p-5 shadow-[0_2px_10px_rgba(32,37,34,0.04)] sm:p-6 ${className}`}>
-      <div
-        key={experience.id}
-        className="flex flex-col gap-4 sm:flex-row sm:items-center"
-      >
-        <div className="flex size-20 items-center justify-center overflow-hidden rounded-lg border border-border bg-background">
-          <CompanyMarkMedium company={experience.company} />
-        </div>
+    <article className={`border border-border rounded-sm bg-card p-4 shadow-[0_2px_10px_rgba(32,37,34,0.04)] sm:p-6 ${className}`}>
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-6">
+        <div className="flex min-w-0 flex-1 items-start gap-4">
+          <div className="flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-background">
+            <CompanyMarkMedium company={experience.company} />
+          </div>
 
-        <div className="min-w-0 flex-1">
-          <h3 className="text-[1.05rem] font-semibold tracking-tight text-foreground">{experience.company.name}</h3>
-          <p className="mt-0.5 text-[0.95rem] text-muted-foreground">{experience.roleTitle}</p>
-          <div className="mt-2.5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[0.85rem] text-muted-foreground/80">
-            <span className="flex gap-1 items-center">
-              <HugeiconsIcon
-                className="w-4 h-4"
-                size="100%"
-                icon={GraduationCapIcon}
-              />
-              {experience.degree}
-            </span>
-            <span className="flex gap-1 items-center">
-              <HugeiconsIcon
-                className="w-4 h-4"
-                size="100%"
-                icon={School01Icon}
-              />
-              Class of {experience.graduationYear}
-            </span>
-            <span className="flex items-center gap-1">
-              <HugeiconsIcon
-                icon={Layers01Icon}
-                size="100%"
-                className="w-4 h-4"
-              />
-              {experience.rounds.length} {experience.rounds.length === 1 ? "Round" : "Rounds"}
-            </span>
-            <span className="flex gap-1 items-center">
-              <HugeiconsIcon
-                className="w-4 h-4"
-                size="100%"
-                icon={Calendar03Icon}
-              />
-              {formatInterviewDate(experience.interviewDate)}
-            </span>
+          <div className="min-w-0 flex-1">
+            <h3 className="truncate text-[1.05rem] font-semibold tracking-tight text-foreground sm:text-lg">{experience.company.name}</h3>
+            <p className="mt-0.5 truncate text-[0.95rem] text-muted-foreground">{experience.roleTitle}</p>
+            <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-[0.8rem] sm:text-[0.9rem] text-muted-foreground/80 sm:flex sm:flex-wrap sm:items-center sm:gap-x-5">
+              <span className="flex min-w-0 items-center gap-1">
+                <HugeiconsIcon
+                  className="w-4 h-4"
+                  size="100%"
+                  icon={GraduationCapIcon}
+                />
+                <span className="truncate">{experience.degree}</span>
+              </span>
+              <span className="flex min-w-0 items-center gap-1">
+                <HugeiconsIcon
+                  className="w-4 h-4"
+                  size="100%"
+                  icon={School01Icon}
+                />
+                <span className="truncate">Class of {experience.graduationYear}</span>
+              </span>
+              <span className="flex min-w-0 items-center gap-1">
+                <HugeiconsIcon
+                  icon={Layers01Icon}
+                  size="100%"
+                  className="w-4 h-4"
+                />
+                <span className="truncate">
+                  {experience.rounds.length} {experience.rounds.length === 1 ? "Round" : "Rounds"}
+                </span>
+              </span>
+              <span className="flex min-w-0 items-center gap-1">
+                <HugeiconsIcon
+                  className="w-4 h-4"
+                  size="100%"
+                  icon={Calendar03Icon}
+                />
+                <span className="truncate">{formatInterviewDate(experience.interviewDate)}</span>
+              </span>
+            </div>
           </div>
         </div>
 
-        <div className="flex gap-2 items-center">
+        <div className="flex w-full items-center gap-2 sm:w-auto">
           <Status status={status} />
           <Link
             href={href}
-            className="inline-flex items-center justify-center rounded-md border border-primary px-3 py-1.5 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
+            className="inline-flex min-h-9 flex-1 items-center justify-center rounded-md border border-primary px-3 py-1.5 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 sm:flex-none"
           >
             {actionLabel}
           </Link>

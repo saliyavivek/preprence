@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { ReportButton } from "./report-button";
 import ExperienceHeader from "@/components/ExperienceHeader";
+import { DeleteConfirmationModal } from "@/components/DeleteConfirmationModal";
 import { VerdictBadge } from "@/components/VerdictBadge";
 import { createClient } from "@/lib/supabase/server";
 import { deleteExperience } from "./actions";
@@ -30,15 +31,15 @@ function formatRoundType(type: string) {
 
 function RoundSummary({ round, index }: { round: ExperienceRound; index: number }) {
   return (
-    <div className="flex w-full flex-col justify-between gap-5 rounded-xl border border-border bg-card px-5 py-4 shadow-sm">
+    <div className="flex w-full flex-col justify-between gap-4 rounded-xl border border-border bg-card px-4 py-4 shadow-sm sm:gap-5 sm:px-5">
       <div className="flex items-center gap-4">
-        <span className="flex size-12 shrink-0 items-center justify-center rounded-full border-[2px] border-[#8ed8d7] bg-[#eaf9f8] text-lg font-semibold text-[#1d7f7b]">
+        <span className="flex size-12 shrink-0 items-center justify-center rounded-full border-2 border-primary bg-primary/10 text-lg font-semibold text-[#1d7f7b]">
           {String(index + 1).padStart(2, "0")}
         </span>
         <h3 className="min-w-0 text-[1.1rem] font-semibold leading-6 text-foreground sm:text-[1.1rem]">{formatRoundType(round.roundType)}</h3>
       </div>
 
-      <div className="flex items-center gap-3 text-base text-muted-foreground">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-muted-foreground sm:text-base">
         <span className="flex items-center gap-1">
           <HugeiconsIcon
             icon={Clock01Icon}
@@ -48,7 +49,7 @@ function RoundSummary({ round, index }: { round: ExperienceRound; index: number 
         </span>
         <span
           aria-hidden="true"
-          className="text-border"
+          className="text-border sm:inline"
         >
           |
         </span>
@@ -67,8 +68,8 @@ function RoundSummary({ round, index }: { round: ExperienceRound; index: number 
 function RoundDetail({ round, isLast = false }: { round: ExperienceRound; isLast?: boolean }) {
   return (
     <article className="relative grid gap-4 sm:grid-cols-[3.5rem_minmax(0,1fr)] sm:gap-5">
-      <div className="relative flex items-start justify-center">
-        <span className="z-10 flex size-10 items-center justify-center rounded-full border border-primary/30 bg-background text-sm font-semibold text-primary">
+      <div className="relative flex items-start justify-start sm:justify-center">
+        <span className="z-10 flex size-10 items-center justify-center rounded-full border  bg-primary/10 border-primary text-sm font-semibold text-primary">
           {String(round.roundNumber).padStart(2, "0")}
         </span>
         {!isLast && (
@@ -78,11 +79,11 @@ function RoundDetail({ round, isLast = false }: { round: ExperienceRound; isLast
           />
         )}
       </div>
-      <div className="rounded-lg border border-border bg-card p-5 shadow-sm sm:p-6">
-        <div className="flex items-start gap-4">
-          <h3 className="text-lg font-semibold tracking-tight text-foreground">{formatRoundType(round.roundType)}</h3>
+      <div className="rounded-lg border border-border bg-card shadow-sm">
+        <div className="flex items-start gap-4 rounded-t-lg bg-primary/10 px-4 py-3 sm:px-6">
+          <h3 className="w-full text-lg font-semibold tracking-tight text-foreground">{formatRoundType(round.roundType)}</h3>
         </div>
-        <dl className="mt-5 grid border-b border-border pb-5 sm:grid-cols-3">
+        <dl className="mx-4 mt-5 grid gap-3 border-b border-border pb-5 sm:mx-6 sm:grid-cols-3 sm:gap-0">
           <div>
             <dt className="text-sm text-muted-foreground">Type</dt>
             <dd className="mt-1 text-md font-medium capitalize">{formatRoundType(round.roundType)}</dd>
@@ -97,7 +98,7 @@ function RoundDetail({ round, isLast = false }: { round: ExperienceRound; isLast
           </div>
         </dl>
         {round.questionsAsked && (
-          <div className="flex flex-col gap-1 pt-4">
+          <div className="mx-4 flex flex-col gap-1 pb-4 pt-4 sm:mx-6 sm:pb-6">
             <h4 className="text-sm font-semibold">Questions asked</h4>
             <p className="whitespace-pre-line text-md leading-6 text-foreground">{round.questionsAsked}</p>
           </div>
@@ -142,23 +143,27 @@ export default async function ExperiencePage({ params }: Props) {
 
   return (
     <main>
-      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-12 sm:px-8 sm:py-16 lg:px-10">
-        <section className="flex justify-between items-start border-b border-border pb-7">
+      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-8 sm:gap-10 sm:px-8 sm:py-16 lg:px-10">
+        <section className="flex flex-col gap-5 border-b border-border pb-7 sm:flex-row sm:items-start sm:justify-between">
           <ExperienceHeader experience={{ ...experience, author }} />
-          <div className="flex flex-col b px-4 py-3">{verdict && <VerdictBadge verdict={verdict} />}</div>
+          {verdict && (
+            <div className="hidden sm:flex shrink-0 sm:px-4 sm:py-3">
+              <VerdictBadge verdict={verdict} />
+            </div>
+          )}
         </section>
 
         <section className="flex flex-col gap-5 border-b border-border pb-8">
           <h2 className="text-2xl font-semibold tracking-[-0.03em] text-foreground">Interview process</h2>
 
-          <div className="flex w-full overflow-x-auto pb-4 pt-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <div className="scrollbar-none flex w-full overflow-x-auto pb-4 pt-2 [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             <div className="flex items-center gap-3">
               {experience.rounds.map((round, index) => (
                 <div
                   key={round.id}
                   className="flex shrink-0 items-center gap-3"
                 >
-                  <div className="w-[270px]">
+                  <div className="w-64 sm:w-68">
                     <RoundSummary
                       round={round}
                       index={index}
@@ -178,7 +183,7 @@ export default async function ExperiencePage({ params }: Props) {
 
         <section className="flex flex-col gap-5">
           <h2 className="text-xl font-semibold tracking-tight">Interview rounds (detailed)</h2>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-8 sm:gap-4">
             {experience.rounds.map((round, index) => (
               <RoundDetail
                 key={round.id}
@@ -191,18 +196,21 @@ export default async function ExperiencePage({ params }: Props) {
 
         <section className="flex flex-col gap-4">
           <h2 className="text-xl font-semibold tracking-tight">Overall tips</h2>
-          <div className="rounded-lg border border-primary/15 bg-primary/5 px-5 py-4 flex gap-4">
-            <HugeiconsIcon icon={QuoteUpIcon} />
-            <p className="whitespace-pre-line text-md leading-6 text-foreground">{experience.overallTips || "No tips provided."}</p>
+          <div className="flex items-start gap-3 rounded-lg border border-primary/15 bg-primary/5 px-4 py-4 sm:gap-4 sm:px-5">
+            <HugeiconsIcon
+              icon={QuoteUpIcon}
+              className="mt-0.5 shrink-0"
+            />
+            <p className="whitespace-pre-line text-sm leading-6 text-foreground sm:text-base">{experience.overallTips || "No tips provided."}</p>
           </div>
         </section>
 
         <div className="flex flex-col gap-5 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-muted-foreground">Published on {experience.createdAt.toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}</p>
           {user?.id === experience.authorId ? (
-            <form action={deleteExperience.bind(null, experience.id, user.id)}>
-              <button className="rounded-md bg-destructive/20 px-3 py-2 font-sm text-destructive hover:bg-destructive/30">Delete</button>
-            </form>
+            <div className="w-full sm:w-auto">
+              <DeleteConfirmationModal action={deleteExperience.bind(null, experience.id, user.id)} />
+            </div>
           ) : (
             <ReportButton experienceId={experience.id} />
           )}

@@ -44,7 +44,7 @@ export default function EditableSummary({ experience }: { experience: Experience
 
   return (
     <section className="rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6">
-      <div className="mb-4 flex items-start justify-between gap-3">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h2 className="text-xl font-semibold">Overall tips</h2>
           <p className="mt-1 text-sm text-muted-foreground">What would you tell another student preparing for a similar interview?</p>
@@ -54,7 +54,7 @@ export default function EditableSummary({ experience }: { experience: Experience
           <button
             type="button"
             onClick={handleEdit}
-            className="rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
+            className="min-h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted sm:w-auto"
           >
             Edit details
           </button>
@@ -92,17 +92,17 @@ export default function EditableSummary({ experience }: { experience: Experience
             <p className="mt-2 pl-8 text-sm text-muted-foreground">Your name won&apos;t be shown with this experience.</p>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row">
             <button
               type="submit"
-              className="rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+              className="min-h-10 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 sm:w-fit"
             >
               Save
             </button>
             <button
               type="button"
               onClick={() => setIsEditing(false)}
-              className="rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
+              className="min-h-10 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted sm:w-fit"
             >
               Cancel
             </button>

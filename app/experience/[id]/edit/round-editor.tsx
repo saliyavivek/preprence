@@ -35,7 +35,7 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
 
   if (isEditing) {
     return (
-      <article className="rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6">
+      <article className="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-6">
         <form
           action={updateRound.bind(null, experienceId, round.id)}
           className="space-y-4"
@@ -93,17 +93,17 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
               className="rounded-md border border-input bg-card px-3 py-2 font-normal"
             />
           </label>
-          <div className="flex gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row">
             <button
               type="submit"
-              className="rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground"
+              className="min-h-10 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground sm:w-fit"
             >
               Save changes
             </button>
             <button
               type="button"
               onClick={() => setIsEditing(false)}
-              className="rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
+              className="min-h-10 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted sm:w-fit"
             >
               Cancel
             </button>
@@ -114,7 +114,7 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
   }
 
   return (
-    <article className="rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6">
+    <article className="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-6">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex min-w-0 gap-4">
           <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-primary/30 bg-primary/5 text-sm font-semibold text-primary">
@@ -124,7 +124,7 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
             <h3 className="text-lg font-semibold tracking-tight">{roundLabels[round.roundType] ?? round.roundType}</h3>
             <div className="mt-3 flex flex-wrap gap-2 text-sm text-muted-foreground">
               {round.difficulty && (
-                <span className="rounded-full border border-border px-3 py-1 flex items-center gap-1">
+                <span className="inline-flex items-center gap-1 rounded-full border border-border px-3 py-1">
                   <HugeiconsIcon
                     icon={ChartNoAxesColumnIcon}
                     className="w-4 h-4"
@@ -133,13 +133,11 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
                 </span>
               )}
               {round.durationMinutes && (
-                <span className="rounded-full border border-border px-3 py-1 flex items-center gap-1">
-                  <span>
-                    <HugeiconsIcon
-                      icon={Clock01Icon}
-                      className="w-4 h-4"
-                    />
-                  </span>
+                <span className="inline-flex items-center gap-1 rounded-full border border-border px-3 py-1">
+                  <HugeiconsIcon
+                    icon={Clock01Icon}
+                    className="h-4 w-4"
+                  />
                   {round.durationMinutes} min
                 </span>
               )}
@@ -152,18 +150,18 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
             )}
           </div>
         </div>
-        <div className="flex shrink-0 gap-2 sm:pt-1">
+        <div className="flex w-full gap-2 sm:w-auto sm:pt-1">
           <button
             type="button"
             onClick={() => setIsEditing(true)}
-            className="rounded-md border border-input px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
+            className="min-h-10 flex-1 rounded-md border border-input px-3 py-2 text-sm font-medium text-foreground hover:bg-muted sm:flex-none"
           >
             Edit round
           </button>
           <form action={deleteRound.bind(null, experienceId, round.id)}>
             <button
               type="submit"
-              className="rounded-md border border-destructive/40 px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/5"
+              className="min-h-10 w-full rounded-md border border-destructive/40 px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/5 sm:w-auto"
             >
               Delete
             </button>
@@ -183,7 +181,7 @@ export function AddRoundForm({ experienceId }: { experienceId: string }) {
 
   if (isAdding) {
     return (
-      <div className="rounded-xl border border-dashed border-primary/40 bg-primary/[0.03] p-5">
+      <div className="rounded-xl border border-dashed border-primary/40 bg-primary/3 p-4 sm:p-5">
         <form
           action={createRound.bind(null, experienceId)}
           className="space-y-4"
@@ -244,17 +242,17 @@ export function AddRoundForm({ experienceId }: { experienceId: string }) {
               className="rounded-md border border-input bg-card px-3 py-2 font-normal"
             />
           </label>
-          <div className="flex gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row">
             <button
               type="submit"
-              className="w-fit rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground"
+              className="min-h-11 rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground sm:w-fit"
             >
               Add round
             </button>
             <button
               type="button"
               onClick={() => setIsAdding(false)}
-              className="w-fit rounded-md border border-input bg-background px-5 py-3 text-sm font-medium text-foreground hover:bg-muted"
+              className="min-h-11 rounded-md border border-input bg-background px-5 py-3 text-sm font-medium text-foreground hover:bg-muted sm:w-fit"
             >
               Cancel
             </button>
@@ -268,7 +266,7 @@ export function AddRoundForm({ experienceId }: { experienceId: string }) {
     <button
       type="button"
       onClick={() => setIsAdding(true)}
-      className="rounded-xl border border-dashed border-primary/40 bg-primary/[0.03] p-5 text-left transition-colors hover:bg-primary/[0.08]"
+      className="w-full rounded-xl border border-dashed border-primary/40 bg-primary/3 p-4 text-left transition-colors hover:bg-primary/8 sm:p-5"
     >
       <div className="flex items-center gap-4 text-primary">
         <span className="flex size-9 items-center justify-center rounded-full border border-primary/40 text-xl">+</span>

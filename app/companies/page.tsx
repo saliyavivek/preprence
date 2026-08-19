@@ -1,13 +1,6 @@
-import Link from "next/link";
 import { CompanyCard } from "@/components/CompanyCard";
+import { CompanyGrid } from "@/components/CompanyGrid";
 import { prisma } from "@/lib/prisma";
-import { CompanyMarkLarge } from "@/components/CompanyMark";
-
-type CompaniesPageProps = {
-  searchParams: Promise<{ showAll?: string }>;
-};
-
-type Company = Awaited<ReturnType<typeof getCompanies>>[number];
 
 async function getCompanies() {
   return prisma.company.findMany({
@@ -35,31 +28,12 @@ function EmptyState() {
   );
 }
 
-// Custom Square Card designed for the "All companies" grid
-function SquareCompanyCard({ company }: { company: Company }) {
-  return (
-    <Link
-      href={`/companies/${company.slug}`}
-      className="group flex flex-col items-center justify-center gap-4"
-    >
-      <CompanyMarkLarge company={company} />
-      <h3 className="line-clamp-2 text-[0.9rem] md:text-[1.1rem] font-semibold leading-tight tracking-tight text-gray-900 text-center">{company.name}</h3>
-    </Link>
-  );
-}
-
-export default async function CompaniesPage({ searchParams }: CompaniesPageProps) {
-  const params = await searchParams;
+export default async function CompaniesPage() {
   const companies = await getCompanies();
-  const showAllCompanies = params.showAll === "true" || params.showAll === "1";
   const popularCompanies = [...companies]
     .filter((company) => company._count.experiences > 0)
     .sort((a, b) => b._count.experiences - a._count.experiences || a.name.localeCompare(b.name))
     .slice(0, 3);
-  const initialCompanyCount = 8;
-  const hasMoreCompanies = companies.length > initialCompanyCount;
-  const companiesToDisplay = showAllCompanies ? companies : companies.slice(0, initialCompanyCount);
-
   return (
     <main className="min-h-[calc(100vh-8rem)]">
       <div className="mx-auto flex max-w-6xl flex-col gap-12 px-5 py-14 sm:px-8 sm:py-16 lg:px-12">
@@ -110,42 +84,12 @@ export default async function CompaniesPage({ searchParams }: CompaniesPageProps
                   >
                     All companies
                   </h2>
-                  <span className="text-[0.95rem] text-gray-500">{companies.length} listed</span>
+                  <span className="hidden sm:block text-[0.95rem] text-gray-500">{companies.length} companies found</span>
                 </div>
                 <p className="text-[0.95rem] text-gray-500">Browse companies and read real interview experiences shared by students.</p>
               </div>
 
-              {/* 4-Column Grid */}
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6 mt-2">
-                {companiesToDisplay.map((company) => (
-                  <SquareCompanyCard
-                    key={company.id}
-                    company={company}
-                  />
-                ))}
-              </div>
-
-              {/* Footer Actions */}
-              <div className="mt-8 flex flex-col items-center gap-6">
-                {hasMoreCompanies ? (
-                  <Link
-                    href={showAllCompanies ? "/companies" : "/companies?showAll=1"}
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[#1c7b6d] px-6 py-3 text-[0.95rem] font-medium text-[#1c7b6d] shadow-sm transition-colors hover:bg-[#1c7b6d]/5 sm:w-auto"
-                  >
-                    {showAllCompanies ? "Show fewer companies" : "View all companies"}
-                  </Link>
-                ) : null}
-                <p className="text-[0.95rem] text-gray-500 text-center">
-                  Can&apos;t find the company you&apos;re looking for?{" "}
-                  <Link
-                    href="/experience/new"
-                    className="font-semibold text-[#1c7b6d] hover:underline"
-                  >
-                    Share an experience
-                  </Link>{" "}
-                  to help others.
-                </p>
-              </div>
+              <CompanyGrid companies={companies} />
             </section>
           </div>
         )}

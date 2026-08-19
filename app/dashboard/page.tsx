@@ -77,7 +77,7 @@ export default async function DashboardPage() {
 
       <section className="mt-10 flex flex-col gap-6 rounded-2xl border border-[#d6f0ea] bg-white/60 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
         <div className="flex-1">
-          <h2 className="text-[1.3rem] font-semibold tracking-tight text-foreground">Share your interview experience</h2>
+          <h2 className="text-[1.2rem] sm:text-[1.3rem] font-semibold tracking-tight text-foreground">Share your interview experience</h2>
           <p className="mt-1.5 max-w-[420px] text-[0.95rem] leading-relaxed text-muted-foreground">Help your juniors know what to expect by sharing your interview journey.</p>
         </div>
         <Link
@@ -93,7 +93,7 @@ export default async function DashboardPage() {
       </section>
 
       <section className="mt-12">
-        <h2 className="text-[1.15rem] font-semibold tracking-tight text-foreground">Your activity</h2>
+        <h2 className="text-[1.3rem] sm:text-[1.4rem] font-semibold tracking-tight text-foreground">Your activity</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <div className="flex items-center gap-5 rounded-2xl border border-border bg-card p-6 shadow-sm">
             <span className="flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center rounded-full bg-[#e1ecf5] text-[#094770] text-xl">
@@ -102,7 +102,7 @@ export default async function DashboardPage() {
             <div>
               <p className="text-2xl font-semibold leading-none tracking-tight text-foreground">{stats.total}</p>
               <p className="mt-1.5 text-[0.95rem] font-medium text-foreground">Experiences shared</p>
-              <p className="mt-1.5 text-[0.95rem] font-medium text-muted-foreground">Keep contributing!</p>
+              <p className="mt-1.5 text-[0.95rem] font-medium text-muted-foreground">Keep contributing</p>
             </div>
           </div>
 
@@ -131,13 +131,13 @@ export default async function DashboardPage() {
       </section>
 
       <section className="mt-12 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-        <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-4 px-6 py-5">
+        <div className="flex flex-row items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-5">
           <h2 className="text-[1.15rem] font-semibold tracking-tight text-foreground">Your recent experiences</h2>
           <Link
             href="/dashboard/experiences"
-            className="text-[0.9rem] font-medium text-[#0a6f63] transition-colors hover:text-[#0a6f63]/80"
+            className="text-[0.9rem] font-medium text-[#0a6f63] transition-colors hover:text-[#0a6f63]/80 hover:underline"
           >
-            View all experiences
+            View all
           </Link>
         </div>
 

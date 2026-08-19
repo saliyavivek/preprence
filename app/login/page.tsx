@@ -32,14 +32,14 @@ export default function LoginPage() {
   return (
     <main className="flex min-h-[calc(100vh-8rem)] items-center justify-center px-5 py-12 sm:px-8 sm:py-16">
       <section className="w-full max-w-[30rem] rounded-xl border border-border bg-card px-6 py-8 shadow-[0_12px_40px_rgba(32,37,34,0.04)] sm:px-10 sm:py-10">
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4 sm:gap-6">
           <header className="flex flex-col items-center gap-4 text-center">
-            <p className="text-2xl font-semibold tracking-[-0.05em] text-foreground">
+            <p className="hidden sm:block text-2xl font-semibold tracking-[-0.05em] text-foreground">
               preprence<span className="text-primary">.</span>
             </p>
             <div className="flex flex-col gap-3">
-              <h1 className="text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-4xl">Sign in to Preprence</h1>
-              <p className="text-base leading-7 text-muted-foreground sm:text-lg">Read and share real interview experiences from your college.</p>
+              <h1 className="text-2xl font-semibold tracking-[-0.04em] text-foreground sm:text-4xl">Sign in to Preprence</h1>
+              <p className="text-sm leading-7 text-muted-foreground sm:text-lg">Read and share real interview experiences from your college.</p>
             </div>
           </header>
 
@@ -92,7 +92,7 @@ export default function LoginPage() {
                   id="email-help"
                   className="text-sm leading-6 text-muted-foreground"
                 >
-                  Use your college email address. We&apos;ll send you a secure sign-in link. No password required.
+                  We&apos;ll send you a secure sign-in link. No password required.
                 </p>
               </div>
 

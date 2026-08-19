@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { createExperience } from "./actions";
 import AddExperienceTimeline from "@/components/AddExperienceTimeline";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { ArrowDown01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 
 function Field({ label, htmlFor, required = false, children }: { label: string; htmlFor: string; required?: boolean; children: React.ReactNode }) {
   return (
@@ -21,6 +21,34 @@ function Field({ label, htmlFor, required = false, children }: { label: string; 
 
 const fieldClassName =
   "min-h-14 w-full rounded-xl border border-input bg-background px-4 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10";
+
+const selectClassName = `${fieldClassName} appearance-none pr-12`;
+
+function SelectField({ id, name, defaultValue, required = false, children }: { id: string; name: string; defaultValue: string; required?: boolean; children: React.ReactNode }) {
+  return (
+    <div className="relative">
+      <select
+        id={id}
+        name={name}
+        required={required}
+        className={selectClassName}
+        defaultValue={defaultValue}
+      >
+        {children}
+      </select>
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground"
+      >
+        <HugeiconsIcon
+          icon={ArrowDown01Icon}
+          size="100%"
+          className="h-5 w-5"
+        />
+      </span>
+    </div>
+  );
+}
 
 export default async function NewExperiencePage() {
   const companies = await prisma.company.findMany({
@@ -71,11 +99,10 @@ export default async function NewExperiencePage() {
                   htmlFor="companyId"
                   required
                 >
-                  <select
+                  <SelectField
                     id="companyId"
                     name="companyId"
                     required
-                    className={fieldClassName}
                     defaultValue=""
                   >
                     <option value="">Select company</option>
@@ -87,7 +114,7 @@ export default async function NewExperiencePage() {
                         {company.name}
                       </option>
                     ))}
-                  </select>
+                  </SelectField>
                 </Field>
                 <Field
                   label="Role / Designation"
@@ -146,16 +173,15 @@ export default async function NewExperiencePage() {
                   label="Verdict"
                   htmlFor="verdict"
                 >
-                  <select
+                  <SelectField
                     id="verdict"
                     name="verdict"
-                    className={fieldClassName}
                     defaultValue="not_disclosed"
                   >
                     <option value="not_disclosed">Prefer not to say</option>
                     <option value="selected">Selected</option>
                     <option value="rejected">Rejected</option>
-                  </select>
+                  </SelectField>
                   <p className="text-sm text-muted-foreground">You can choose to keep this private.</p>
                 </Field>
               </div>

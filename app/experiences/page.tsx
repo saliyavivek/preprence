@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { DirectoryFilters, DirectorySidebar, ShareCta } from "@/components/experience-directory";
+import { ExperienceDirectory, ShareCta } from "@/components/experience-directory";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Edit02Icon } from "@hugeicons/core-free-icons";
-import { NormalExperienceRowCard } from "@/components/NormalExperienceRowCard";
 
 async function getExperiences() {
   return prisma.experience.findMany({
@@ -17,15 +16,15 @@ export default async function ExperiencesPage() {
   const experiences = await getExperiences();
   return (
     <main>
-      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-12 sm:px-8 sm:py-16">
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8 sm:gap-8 sm:px-8 sm:py-16">
         <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">All Interview Experiences</h1>
-            <p className="mt-2 text-muted-foreground">Real interview experiences shared by students from our college community.</p>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground sm:text-base">Real interview experiences shared by students from our college community.</p>
           </div>
           <Link
             href="/experience/new"
-            className="rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-white flex items-center gap-2"
+            className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-white sm:w-auto"
           >
             <HugeiconsIcon
               icon={Edit02Icon}
@@ -35,29 +34,7 @@ export default async function ExperiencesPage() {
             Share your experience
           </Link>
         </header>
-        <DirectoryFilters />
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_17rem]">
-          <section
-            className="min-w-0 overflow-hidden rounded-lg border border-border bg-card"
-            aria-label="Interview experiences"
-          >
-            <div className="border-b border-border px-5 py-4 text-sm text-muted-foreground">
-              {experiences.length} {experiences.length === 1 ? "experience" : "experiences"} found
-            </div>
-            {experiences.length ? (
-              experiences.map((experience) => (
-                <NormalExperienceRowCard
-                  key={experience.id}
-                  experience={experience}
-                  showCompanyMark={true}
-                />
-              ))
-            ) : (
-              <div className="p-10 text-center text-sm text-muted-foreground">No published interview experiences yet.</div>
-            )}
-          </section>
-          <DirectorySidebar experiences={experiences} />
-        </div>
+        <ExperienceDirectory experiences={experiences} />
         <ShareCta />
       </div>
     </main>
