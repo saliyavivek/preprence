@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth/admin";
 import { takeDownExperience } from "./actions";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 type Props = {
   params: Promise<{
@@ -54,6 +55,7 @@ export default async function AdminExperiencePage({ params }: Props) {
 
   return (
     <main>
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Admin", href: "/admin/experiences" }, { label: "Review experience" }]} />
       <h1>Review Experience</h1>
 
       <section>

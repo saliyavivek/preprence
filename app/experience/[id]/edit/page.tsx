@@ -7,6 +7,7 @@ import { AddRoundForm, RoundCard } from "./round-editor";
 import EditableSummary from "./editable-summary";
 import AddExperienceTimeline from "@/components/AddExperienceTimeline";
 import ExperienceHeader from "@/components/ExperienceHeader";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -25,26 +26,7 @@ export default async function EditExperiencePage({ params }: Props) {
   return (
     <main className="min-h-screen">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8 sm:gap-8 sm:px-8 sm:py-14 lg:px-12">
-        <nav
-          aria-label="Breadcrumb"
-          className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground"
-        >
-          <Link
-            href="/"
-            className="hover:text-foreground"
-          >
-            Home
-          </Link>
-          <span aria-hidden="true">›</span>
-          <Link
-            href="/experience/new"
-            className="hover:text-foreground"
-          >
-            Share experience
-          </Link>
-          <span aria-hidden="true">›</span>
-          <span className="font-medium text-primary">Complete experience</span>
-        </nav>
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Share experience", href: "/experience/new" }, { label: "Complete experience" }]} />
         <header className="flex flex-col gap-1">
           <h1 className="text-[2rem] font-semibold tracking-[-0.045em] sm:text-5xl">Add your interview rounds</h1>
           <p className="text-[1.05rem] leading-7 text-muted-foreground sm:text-lg">Tell the next student what actually happened during each round.</p>

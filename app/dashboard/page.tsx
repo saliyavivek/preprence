@@ -7,6 +7,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight01Icon, Edit02Icon, FileIcon, Tick03Icon } from "@hugeicons/core-free-icons";
 
 import { DashboardExperienceRowCard } from "@/components/DashboardExperienceRowCard";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 async function getDashboardData(userId: string) {
   const [profile, experiences] = await Promise.all([
@@ -54,19 +55,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-[1100px] px-5 py-10">
-      <nav
-        aria-label="Breadcrumb"
-        className="flex items-center gap-2 text-[0.85rem] text-muted-foreground"
-      >
-        <Link
-          href="/"
-          className="transition-colors hover:text-foreground"
-        >
-          Home
-        </Link>
-        <span aria-hidden="true">›</span>
-        <span className="text-foreground">Dashboard</span>
-      </nav>
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Dashboard" }]} />
 
       <header className="mt-8">
         <h1 className="text-[2rem] font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">

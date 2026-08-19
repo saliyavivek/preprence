@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth/admin";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export default async function AdminPage() {
   await requireAdmin();
@@ -42,6 +43,7 @@ export default async function AdminPage() {
 
   return (
     <main>
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Admin" }, { label: "Experiences" }]} />
       <h1>Admin Dashboard</h1>
 
       <section>

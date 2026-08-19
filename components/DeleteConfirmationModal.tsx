@@ -24,6 +24,21 @@ function DeleteSubmitButton() {
   );
 }
 
+function CancelButton({ onClick }: { onClick: () => void }) {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={pending}
+      className="min-h-10 rounded-md border border-input px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-60"
+    >
+      Cancel
+    </button>
+  );
+}
+
 export function DeleteConfirmationModal({ action }: { action: (formData: FormData) => Promise<void> }) {
   const [isOpen, setIsOpen] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -103,13 +118,7 @@ export function DeleteConfirmationModal({ action }: { action: (formData: FormDat
               action={action}
               className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end"
             >
-              <button
-                type="button"
-                onClick={closeModal}
-                className="min-h-10 rounded-md border border-input px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-primary/20"
-              >
-                Cancel
-              </button>
+              <CancelButton onClick={closeModal} />
               <DeleteSubmitButton />
             </form>
           </div>

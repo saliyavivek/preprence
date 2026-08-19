@@ -184,7 +184,7 @@ export function DirectoryFilters({
           type="button"
           onClick={onReset}
           disabled={!hasActiveFilters}
-          className="col-span-2 min-h-10 justify-self-end rounded-md border border-input px-4 py-2 text-sm font-medium text-primary transition-colors hover:border-primary/45 hover:bg-muted/40 disabled:cursor-not-allowed disabled:opacity-45 sm:col-span-1 sm:ml-auto"
+          className="col-span-2 min-h-10 w-full justify-self-end rounded-md border border-input px-4 py-2 text-sm font-medium text-primary transition-colors hover:border-primary/45 hover:bg-muted/40 disabled:cursor-not-allowed disabled:opacity-45 sm:col-span-1 sm:ml-auto sm:w-auto"
         >
           Clear filters
         </button>
@@ -238,26 +238,29 @@ export function ExperienceDirectory({ experiences }: { experiences: Experience[]
         onReset={() => setFilters(defaultFilters)}
         hasActiveFilters={hasActiveFilters}
       />
-      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_17rem]">
-        <section
-          className="min-w-0 overflow-hidden rounded-lg border border-border bg-card"
-          aria-label="Interview experiences"
-        >
-          <div className="border-b border-border px-5 py-4 text-sm text-muted-foreground">
-            {filteredExperiences.length} {filteredExperiences.length === 1 ? "experience" : "experiences"} found
-          </div>
-          {filteredExperiences.length ? (
-            filteredExperiences.map((experience) => (
-              <NormalExperienceRowCard
-                key={experience.id}
-                experience={experience}
-                showCompanyMark={true}
-              />
-            ))
-          ) : (
-            <div className="p-10 text-center text-sm text-muted-foreground">No experiences match these filters.</div>
-          )}
-        </section>
+      <div className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_17rem]">
+        <div className="flex min-w-0 flex-col gap-6">
+          <section
+            className="h-fit min-w-0 overflow-hidden rounded-lg border border-border bg-card"
+            aria-label="Interview experiences"
+          >
+            <div className="border-b border-border px-5 py-4 text-sm text-muted-foreground">
+              {filteredExperiences.length} {filteredExperiences.length === 1 ? "experience" : "experiences"} found
+            </div>
+            {filteredExperiences.length ? (
+              filteredExperiences.map((experience) => (
+                <NormalExperienceRowCard
+                  key={experience.id}
+                  experience={experience}
+                  showCompanyMark={true}
+                />
+              ))
+            ) : (
+              <div className="p-10 text-center text-sm text-muted-foreground">No experiences match these filters.</div>
+            )}
+          </section>
+          <ShareCta />
+        </div>
         <DirectorySidebar experiences={experiences} />
       </div>
     </>

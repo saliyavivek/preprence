@@ -1,6 +1,7 @@
 import { CompanyCard } from "@/components/CompanyCard";
 import { CompanyGrid } from "@/components/CompanyGrid";
 import { prisma } from "@/lib/prisma";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 async function getCompanies() {
   return prisma.company.findMany({
@@ -37,6 +38,7 @@ export default async function CompaniesPage() {
   return (
     <main className="min-h-[calc(100vh-8rem)]">
       <div className="mx-auto flex max-w-6xl flex-col gap-12 px-5 py-14 sm:px-8 sm:py-16 lg:px-12">
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Companies" }]} />
         <header className="flex max-w-3xl flex-col gap-3">
           <h1 className="text-4xl font-semibold tracking-[-0.045em] text-gray-900 sm:text-5xl">Companies</h1>
           <p className="text-base leading-7 text-gray-500 sm:text-lg">Find interview experiences shared by students from your college.</p>

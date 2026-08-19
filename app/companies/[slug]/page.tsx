@@ -5,6 +5,7 @@ import { CompanyMarkLarge } from "@/components/CompanyMark";
 import { NormalExperienceRowCard } from "@/components/NormalExperienceRowCard";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight01Icon, Edit01Icon, File02Icon, Globe02Icon, World } from "@hugeicons/core-free-icons";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -33,19 +34,7 @@ export default async function CompanyPage({ params }: Props) {
   return (
     <main className="min-h-screen">
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
-        <nav
-          aria-label="Breadcrumb"
-          className="flex items-center gap-3 text-sm text-muted-foreground"
-        >
-          <Link
-            href="/companies"
-            className="hover:text-foreground"
-          >
-            Companies
-          </Link>
-          <span aria-hidden="true">›</span>
-          <span className="text-foreground">{company.name}</span>
-        </nav>
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Companies", href: "/companies" }, { label: company.name }]} />
 
         <section className="rounded-lg border border-border bg-card">
           <div className="flex flex-col gap-7 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">

@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { deleteExperience } from "./actions";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ChartNoAxesColumnIcon, Clock01Icon, QuoteUpIcon } from "@hugeicons/core-free-icons";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 type Props = {
   params: Promise<{
@@ -144,6 +145,7 @@ export default async function ExperiencePage({ params }: Props) {
   return (
     <main>
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-8 sm:gap-10 sm:px-8 sm:py-16 lg:px-10">
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Interview experiences", href: "/experiences" }, { label: experience.company.name }]} />
         <section className="flex flex-col gap-5 border-b border-border pb-7 sm:flex-row sm:items-start sm:justify-between">
           <ExperienceHeader experience={{ ...experience, author }} />
           {verdict && (

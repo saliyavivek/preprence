@@ -7,6 +7,7 @@ import { ArrowDown01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { CompanyCombobox } from "@/components/CompanyCombobox";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 function Field({ label, htmlFor, required = false, children }: { label: string; htmlFor: string; required?: boolean; children: React.ReactNode }) {
   return (
@@ -76,24 +77,7 @@ export default async function NewExperiencePage() {
   return (
     <main className="min-h-[calc(100vh-10rem)]">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
-        <nav
-          aria-label="Breadcrumb"
-          className="flex items-center gap-3 text-sm text-muted-foreground"
-        >
-          <Link
-            href="/"
-            className="hover:text-foreground"
-          >
-            Home
-          </Link>
-          <span
-            aria-hidden="true"
-            className="text-lg"
-          >
-            ›
-          </span>
-          <span className="font-medium text-primary">Share experience</span>
-        </nav>
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Share experience" }]} />
 
         <header className="flex items-center gap-5 sm:gap-8">
           <div className="flex flex-col gap-2">

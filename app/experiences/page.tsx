@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { ExperienceDirectory, ShareCta } from "@/components/experience-directory";
+import { ExperienceDirectory } from "@/components/experience-directory";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Edit02Icon } from "@hugeicons/core-free-icons";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 async function getExperiences() {
   return prisma.experience.findMany({
@@ -17,6 +18,7 @@ export default async function ExperiencesPage() {
   return (
     <main>
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8 sm:gap-8 sm:px-8 sm:py-16">
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Interview experiences" }]} />
         <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">All Interview Experiences</h1>
@@ -35,7 +37,6 @@ export default async function ExperiencesPage() {
           </Link>
         </header>
         <ExperienceDirectory experiences={experiences} />
-        <ShareCta />
       </div>
     </main>
   );

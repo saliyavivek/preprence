@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { DashboardExperienceRowCard } from "@/components/DashboardExperienceRowCard";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Edit01Icon } from "@hugeicons/core-free-icons";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 async function getExperiences(userId: string) {
   return prisma.experience.findMany({
@@ -27,19 +28,7 @@ export default async function MyExperiencesPage() {
   return (
     <main className="min-h-[calc(100vh-8rem)]">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
-        <nav
-          aria-label="Breadcrumb"
-          className="flex items-center gap-3 text-sm text-muted-foreground"
-        >
-          <Link
-            href="/"
-            className="hover:text-foreground"
-          >
-            Home
-          </Link>
-          <span aria-hidden="true">›</span>
-          <span className="text-primary">Your experiences</span>
-        </nav>
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Dashboard", href: "/dashboard" }, { label: "Your experiences" }]} />
 
         <header className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div className="flex flex-col gap-2">
