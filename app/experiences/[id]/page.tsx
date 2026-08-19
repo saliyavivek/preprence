@@ -86,10 +86,6 @@ function RoundDetail({ round, isLast = false }: { round: ExperienceRound; isLast
         </div>
         <dl className="mx-4 mt-5 grid gap-3 border-b border-border pb-5 sm:mx-6 sm:grid-cols-3 sm:gap-0">
           <div>
-            <dt className="text-sm text-muted-foreground">Type</dt>
-            <dd className="mt-1 text-md font-medium capitalize">{formatRoundType(round.roundType)}</dd>
-          </div>
-          <div>
             <dt className="text-sm text-muted-foreground">Difficulty</dt>
             <dd className="mt-1 text-md font-medium capitalize">{round.difficulty?.toLowerCase() ?? "Not provided"}</dd>
           </div>

@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { ReportExperience } from "./actions";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Flag01Icon } from "@hugeicons/core-free-icons";
 
 type Props = { experienceId: string };
 
@@ -31,11 +33,20 @@ export function ReportButton({ experienceId }: Props) {
         type="button"
         // onClick={() => setIsOpen((value) => !value)}
         disabled
+        aria-disabled="true"
         title="Coming soon"
-        className="inline-flex min-h-10 items-center gap-2 rounded-md border border-input px-4 text-sm font-medium text-foreground transition-colors hover:border-destructive hover:text-destructive hover:bg-destructive/5 focus:outline-none focus:ring-2 focus:ring-destructive/20 cursor-not-allowed"
+        className="pointer-events-none min-h-10 w-full cursor-not-allowed rounded-md border border-destructive/40 px-3 py-2 text-sm font-medium text-destructive/60 opacity-60 transition-colors focus:outline-none focus:ring-2 focus:ring-destructive/20 sm:w-auto"
       >
-        <span aria-hidden="true">⚑</span>
-        Report this experience
+        <span
+          aria-hidden="true"
+          className="flex items-center gap-1 justify-center"
+        >
+          <HugeiconsIcon
+            icon={Flag01Icon}
+            className="w-4 h-4"
+          />
+          Report this experience
+        </span>
       </button>
       {isOpen && (
         <form

@@ -61,7 +61,7 @@ export function CompanyGrid({ companies }: { companies: Company[] }) {
         ))}
       </div>
 
-      <div className="mt-8 flex flex-col items-center gap-6">
+      <div className="flex flex-col items-center gap-6">
         {hasMoreCompanies ? (
           <button
             type="button"
