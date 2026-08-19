@@ -4,6 +4,9 @@ import { createExperience } from "./actions";
 import AddExperienceTimeline from "@/components/AddExperienceTimeline";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowDown01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { CompanyCombobox } from "@/components/CompanyCombobox";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
 function Field({ label, htmlFor, required = false, children }: { label: string; htmlFor: string; required?: boolean; children: React.ReactNode }) {
   return (
@@ -51,8 +54,23 @@ function SelectField({ id, name, defaultValue, required = false, children }: { i
 }
 
 export default async function NewExperiencePage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect(`/login?next=${encodeURIComponent("/experience/new")}`);
+
   const companies = await prisma.company.findMany({
     orderBy: { name: "asc" },
+    include: {
+      _count: {
+        select: {
+          experiences: {
+            where: { status: "published" },
+          },
+        },
+      },
+    },
   });
 
   return (
@@ -99,22 +117,7 @@ export default async function NewExperiencePage() {
                   htmlFor="companyId"
                   required
                 >
-                  <SelectField
-                    id="companyId"
-                    name="companyId"
-                    required
-                    defaultValue=""
-                  >
-                    <option value="">Select company</option>
-                    {companies.map((company) => (
-                      <option
-                        key={company.id}
-                        value={company.id}
-                      >
-                        {company.name}
-                      </option>
-                    ))}
-                  </SelectField>
+                  <CompanyCombobox companies={companies} />
                 </Field>
                 <Field
                   label="Role / Designation"

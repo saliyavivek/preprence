@@ -9,6 +9,12 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [nextPath] = useState(() => {
+    if (typeof window === "undefined") return "/";
+
+    const next = new URLSearchParams(window.location.search).get("next");
+    return next?.startsWith("/") && !next.startsWith("//") ? next : "/";
+  });
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -16,7 +22,7 @@ export default function LoginPage() {
     setLoading(true);
     setMessage("");
 
-    const result = await sendMagicLink(email);
+    const result = await sendMagicLink(email, nextPath);
 
     if (result.error) {
       setMessage(result.error);
@@ -38,8 +44,13 @@ export default function LoginPage() {
               preprence<span className="text-primary">.</span>
             </p>
             <div className="flex flex-col gap-3">
-              <h1 className="text-2xl font-semibold tracking-[-0.04em] text-foreground sm:text-4xl">Sign in to Preprence</h1>
-              <p className="text-sm leading-7 text-muted-foreground sm:text-lg">Read and share real interview experiences from your college.</p>
+              <h1 className="text-2xl font-semibold tracking-[-0.04em] text-foreground sm:text-4xl flex items-center gap-2 justify-center">
+                Sign in to
+                <span className="text-3xl font-semibold tracking-[-0.05em] text-foreground">
+                  preprence<span className="text-primary">.</span>
+                </span>
+              </h1>
+              <p className="text-sm leading-7 text-muted-foreground sm:text-[1.07rem]">Read and share real interview experiences from your college.</p>
             </div>
           </header>
 
@@ -121,7 +132,10 @@ export default function LoginPage() {
               <div className="flex flex-col gap-2">
                 <h2 className="font-semibold text-foreground">Why a college email?</h2>
                 <p className="text-sm leading-6 text-muted-foreground">
-                  Preprence is built around real interview experiences from students. Using a college email helps keep the community focused on students and their experiences.
+                  <span className="font-semibold tracking-[-0.05em] text-foreground">
+                    preprence<span className="text-primary">.</span>
+                  </span>{" "}
+                  is built around real interview experiences from students. Using a college email helps keep the community focused on students and their experiences.
                 </p>
               </div>
             </>

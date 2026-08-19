@@ -142,7 +142,8 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
         <Container className="flex min-h-18 items-center justify-between">
           <Link
             href="/"
-            className="font-mono text-lg font-bold tracking-tight text-foreground"
+            aria-label="preprence."
+            className="font-sans text-[1.65rem] tracking-[-0.04em] text-foreground font-semibold"
           >
             preprence<span className="text-primary">.</span>
           </Link>
@@ -165,7 +166,7 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
                 href="/login"
                 className="inline-flex min-h-10 items-center rounded-full bg-muted px-4 text-sm font-semibold text-primary"
               >
-                Login
+                Sign in
               </Link>
             )}
           </div>
@@ -283,7 +284,7 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
                           icon={Logout01Icon}
                           className="h-4 w-4"
                         />
-                        Log out
+                        Sign out
                       </button>
                     </div>
                   </div>
@@ -401,7 +402,7 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
                   className="w-full rounded-md px-2 text-left text-base text-foreground transition-colors hover:bg-foreground/4 flex gap-2 items-center"
                 >
                   <HugeiconsIcon icon={Logout01Icon} />
-                  Log out
+                  Sign out
                 </button>
               </nav>
             </div>
@@ -415,10 +416,12 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
 export function Footer() {
   const pathname = usePathname();
   return (
-    <footer className={`mt-auto bg-white/60 border-t border-border py-8 ${pathname === "/login" ? "hidden" : ""}`}>
+    <footer className={`mt-auto bg-white/60 border-t border-border py-5 ${pathname === "/login" ? "hidden" : ""}`}>
       <Container className="flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <span className="font-mono font-semibold text-foreground">preprence.</span>
-        <span>Real interviews. Better preparation.</span>
+        <span className="font-sans text-[1.25rem] tracking-[-0.04em] text-foreground font-semibold">
+          preprence<span className="text-primary">.</span>
+        </span>
+        <span>Interview experiences from students. For students.</span>
       </Container>
     </footer>
   );

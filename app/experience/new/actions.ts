@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { Verdict as VerdictEnum } from "@/app/generated/prisma/enums";
 import type { Verdict as VerdictType } from "@/app/generated/prisma/enums";
 import { redirect } from "next/navigation";
+import { companySimilarity, isCloseCompanyMatch, normalizeCompanyName, slugifyCompanyName } from "@/lib/company-matching";
 
 export async function createExperience(formData: FormData): Promise<void> {
     const supabase = await createClient();
@@ -31,6 +32,7 @@ export async function createExperience(formData: FormData): Promise<void> {
 
     // 3. Read form data
     const companyId = formData.get("companyId")?.toString();
+    const companyName = formData.get("companyName")?.toString().trim();
     const degree = formData.get("degree")?.toString().trim();
     const graduationYearValue = formData.get("graduationYear")?.toString();
     const roleTitle = formData.get("roleTitle")?.toString().trim();
@@ -39,7 +41,7 @@ export async function createExperience(formData: FormData): Promise<void> {
 
     // 4. Basic validation
     if (
-        !companyId ||
+        (!companyId && !companyName) ||
         !degree ||
         !graduationYearValue ||
         !roleTitle ||
@@ -54,16 +56,38 @@ export async function createExperience(formData: FormData): Promise<void> {
         throw new Error("Invalid graduation year.");
     }
 
-    // 5. Check that company exists
-    const company = await prisma.company.findUnique({
-        where: {
-            id: companyId,
-        },
-    });
+    // 5. Resolve a selected company, or canonicalize/create a deliberate new company.
+    const company = await prisma.$transaction(async (transaction) => {
+        if (companyId) {
+            const selectedCompany = await transaction.company.findUnique({ where: { id: companyId } });
+            if (!selectedCompany) throw new Error("Company not found.");
+            return selectedCompany;
+        }
 
-    if (!company) {
-        throw new Error("Company not found.");
-    }
+        const normalizedInput = normalizeCompanyName(companyName ?? "");
+        if (!normalizedInput) throw new Error("Please select or enter a company.");
+
+        const existingCompanies = await transaction.company.findMany({ select: { id: true, name: true, slug: true, logoUrl: true } });
+        const exactCompany = existingCompanies.find((existing) => normalizeCompanyName(existing.name) === normalizedInput);
+        if (exactCompany) return exactCompany;
+
+        const closeCompany = existingCompanies
+            .filter((existing) => isCloseCompanyMatch(companyName ?? "", existing.name))
+            .sort((left, right) => companySimilarity(companyName ?? "", right.name) - companySimilarity(companyName ?? "", left.name))[0];
+        if (closeCompany) return closeCompany;
+
+        const baseSlug = slugifyCompanyName(companyName ?? "");
+        let slug = baseSlug;
+        let suffix = 2;
+        while (await transaction.company.findUnique({ where: { slug } })) {
+            slug = `${baseSlug}-${suffix}`;
+            suffix += 1;
+        }
+
+        return transaction.company.create({
+            data: { name: companyName!.replace(/\s+/g, " "), slug },
+        });
+    });
 
     // 6. Validate verdict
     let verdict: VerdictType | undefined;

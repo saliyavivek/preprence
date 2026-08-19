@@ -20,7 +20,7 @@ export default async function MyExperiencesPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  if (!user) redirect(`/login?next=${encodeURIComponent("/dashboard/experiences")}`);
 
   const experiences = await getExperiences(user.id);
 
