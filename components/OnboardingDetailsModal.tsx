@@ -1,6 +1,8 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { addOnboardingDetails } from "../app/actions";
 
 type Props = {
@@ -36,27 +38,6 @@ export default function OnboardingDetailsModal({ onComplete }: Props) {
     setLoading(false);
   }
 
-  async function handleSkip() {
-    setLoading(true);
-    setError("");
-
-    const formData = new FormData();
-
-    formData.append("name", "");
-    formData.append("branch", "");
-
-    const result = await addOnboardingDetails(formData);
-
-    if (result.error) {
-      setError(result.error);
-      setLoading(false);
-      return;
-    }
-
-    onComplete?.();
-    setLoading(false);
-  }
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 backdrop-blur-[2px]">
       <div className="w-full max-w-[440px] rounded-[1.25rem] border border-border bg-card p-8 shadow-xl sm:p-10">
@@ -71,7 +52,7 @@ export default function OnboardingDetailsModal({ onComplete }: Props) {
         <div className="mb-8 text-center">
           <h1 className="text-[1.75rem] font-semibold leading-tight tracking-tight text-foreground">Tell us a little about yourself</h1>
 
-          <p className="mt-3 px-2 text-[0.95rem] leading-relaxed text-muted-foreground">A few optional details help make your experiences more useful to other students.</p>
+          <p className="mt-3 px-2 text-[0.95rem] leading-relaxed text-muted-foreground">These details help make your experiences more useful to other students.</p>
         </div>
 
         <div className="mb-8 h-px bg-border" />
@@ -96,6 +77,7 @@ export default function OnboardingDetailsModal({ onComplete }: Props) {
               placeholder="Your name"
               value={name}
               onChange={(event) => setName(event.target.value)}
+              required
               disabled={loading}
               className="h-12 w-full rounded-md border border-input bg-background px-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-60"
             />
@@ -110,16 +92,28 @@ export default function OnboardingDetailsModal({ onComplete }: Props) {
               Branch
             </label>
 
-            <input
-              id="branch"
-              name="branch"
-              type="text"
-              placeholder="e.g. Computer Applications"
-              value={branch}
-              onChange={(event) => setBranch(event.target.value)}
-              disabled={loading}
-              className="h-12 w-full rounded-md border border-input bg-background px-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-60"
-            />
+            <div className="relative">
+              <select
+                id="branch"
+                name="branch"
+                value={branch}
+                onChange={(event) => setBranch(event.target.value)}
+                required
+                disabled={loading}
+                className="h-12 w-full appearance-none rounded-md border border-input bg-background px-4 pr-10 text-sm text-foreground outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                <option value="">Select your branch</option>
+                <option value="AI/ML">AI/ML</option>
+                <option value="Computer Engineering">Computer Engineering</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="MCA">MCA</option>
+              </select>
+              <HugeiconsIcon
+                icon={ArrowDown01Icon}
+                aria-hidden="true"
+                className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              />
+            </div>
           </div>
 
           {/* Error */}
@@ -132,23 +126,16 @@ export default function OnboardingDetailsModal({ onComplete }: Props) {
             </p>
           )}
 
+          <p className="text-sm leading-relaxed text-muted-foreground">You will not be able to modify this information after submitting, so please enter it carefully.</p>
+
           {/* Actions */}
-          <div className="flex flex-col gap-4 pt-2">
+          <div className="pt-2">
             <button
               type="submit"
               disabled={loading}
               className="h-12 w-full rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? "Saving..." : "Continue"}
-            </button>
-
-            <button
-              type="button"
-              onClick={handleSkip}
-              disabled={loading}
-              className="w-full text-center text-sm font-medium text-muted-foreground transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              Skip for now
             </button>
           </div>
         </form>

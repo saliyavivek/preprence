@@ -33,16 +33,19 @@ export async function addOnboardingDetails(formData: FormData) {
     const nameValue = formData.get("name")?.toString().trim();
     const branchValue = formData.get("branch")?.toString().trim();
 
-    const name = nameValue || null;
-    const branch = branchValue || null;
+    if (!nameValue || !branchValue) {
+        return {
+            error: "Name and branch are required.",
+        };
+    }
 
     await prisma.user.update({
         where: {
             id: user.id,
         },
         data: {
-            name,
-            branch,
+            name: nameValue,
+            branch: branchValue,
             onboardingCompleted: true,
         },
     });

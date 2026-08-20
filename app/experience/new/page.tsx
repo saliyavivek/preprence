@@ -111,7 +111,7 @@ export default async function NewExperiencePage() {
                   <input
                     id="roleTitle"
                     name="roleTitle"
-                    placeholder="e.g. Systems Engineer"
+                    placeholder="e.g. Backend Developer"
                     required
                     className={fieldClassName}
                   />
