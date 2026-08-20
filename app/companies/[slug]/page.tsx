@@ -65,7 +65,7 @@ export default async function CompanyPage({ params }: Props) {
                     icon={File02Icon}
                     className="w-4 h-4"
                   />
-                  {count === 0 ? "No interview experiences yet" : `${count} interview ${count === 1 ? "experience" : "experiences"}`} shared
+                  {count === 0 ? "No interview experiences yet" : `${count} interview ${count === 1 ? "experience" : "experiences"} shared`}
                 </p>
               </div>
             </div>

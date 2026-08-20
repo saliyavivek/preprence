@@ -1,36 +1,138 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Preprence
 
-## Getting Started
+Preprence is a student interview-experience platform for browsing and sharing real interview experiences from the college community.
 
-First, run the development server:
+Built with Next.js, TypeScript, Tailwind CSS, Supabase Auth, PostgreSQL, and Prisma.
+
+## Setup
+
+Requirements: Node.js 22+, pnpm, PostgreSQL, and a Supabase project with email magic-link authentication enabled.
+
+1. Install dependencies:
+
+   ```bash
+   pnpm install
+   ```
+
+2. Create `.env` in the project root:
+
+   ```env
+   NEXT_PUBLIC_SITE_URL=http://localhost:3000
+   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-supabase-publishable-key
+   DATABASE_URL="postgresql://postgres.<project-ref>:<password>@aws-0-<region>.pooler.supabase.com:6543/postgres?pgbouncer=true"
+   COLLEGE_EMAIL_DOMAIN=ldce.ac.in
+   ```
+
+3. Generate Prisma Client and apply migrations:
+
+   ```bash
+   pnpm prisma generate
+   pnpm prisma migrate deploy
+   ```
+
+4. Seed the company directory if needed:
+
+   ```bash
+   pnpm prisma db seed
+   ```
+
+5. Start the app:
+
+   ```bash
+   pnpm dev
+   ```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+## Environment Variables
+
+| Variable                               | Purpose                               |
+| -------------------------------------- | ------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`                 | Site URL used for auth callbacks.     |
+| `NEXT_PUBLIC_SUPABASE_URL`             | Supabase project URL.                 |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase publishable key.             |
+| `DATABASE_URL`                         | PostgreSQL connection used by Prisma. |
+| `COLLEGE_EMAIL_DOMAIN`                 | Allowed college email domain.         |
+
+The app reads `DATABASE_URL` directly. `DIRECT_URL` is not currently used by the runtime. For Supabase, use the transaction pooler on port `6543` with `?pgbouncer=true`, or a reachable session/direct connection on port `5432`.
+
+Configure `<site-url>/auth/callback` as a Supabase redirect URL. Never commit database passwords or private credentials.
+
+## Routes
+
+| Route                                 | Purpose                                                     |
+| ------------------------------------- | ----------------------------------------------------------- |
+| `/`                                   | Landing page with popular companies and recent experiences. |
+| `/login`                              | College-email magic-link login.                             |
+| `/companies`                          | Company directory.                                          |
+| `/companies/[slug]`                   | Experiences for a company.                                  |
+| `/experiences`                        | Published experience directory.                             |
+| `/experiences/[id]`                   | Experience details.                                         |
+| `/dashboard`                          | User dashboard.                                             |
+| `/dashboard/experiences`              | Manage submitted experiences.                               |
+| `/experience/new`                     | Start a new experience.                                     |
+| `/experience/[id]/edit`               | Add rounds and publish an experience.                       |
+| `/admin/experiences`                  | Admin moderation dashboard.                                 |
+| `/admin/experiences/[id]`             | Review or take down an experience.                          |
+| `GET /api/companies/search?q=<query>` | Search companies with published experiences.                |
+
+## Database Commands
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm prisma migrate dev --name describe-change
+pnpm prisma migrate deploy
+pnpm prisma generate
+pnpm prisma studio
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The Prisma schema is in `prisma/schema.prisma`. Migrations are in `prisma/migrations`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command      | Purpose                                   |
+| ------------ | ----------------------------------------- |
+| `pnpm dev`   | Start development server.                 |
+| `pnpm build` | Generate Prisma Client and build the app. |
+| `pnpm start` | Start the production server.              |
+| `pnpm lint`  | Run ESLint.                               |
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+For Vercel:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Add all environment variables to the Vercel project.
+2. Set `NEXT_PUBLIC_SITE_URL` to the deployed URL.
+3. Add the deployed URL and `/auth/callback` to Supabase redirect settings.
+4. Deploy with `pnpm build`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Troubleshooting
 
-## Deploy on Vercel
+### `P1001: Can't reach database server`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Check that:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `DATABASE_URL` is configured in Vercel.
+- The Supabase host, port, password, and project reference are correct.
+- Port `6543` uses `?pgbouncer=true`.
+- The database allows connections from the deployment environment.
+- You redeployed after changing environment variables.
+
+The login page can work while other routes fail because most other pages query PostgreSQL during server rendering.
+
+### Magic-link redirect failure
+
+Check `NEXT_PUBLIC_SITE_URL` and the Supabase allowed redirect URLs.
+
+## Project Structure
+
+```text
+app/          Routes, pages, server actions, and API handlers
+components/   Reusable UI components
+lib/          Prisma, Supabase, auth, and shared utilities
+prisma/       Schema, migrations, and seed data
+public/       Static assets
+proxy.ts      Protected-route session handling
+```
+
+See [DESIGN.md](DESIGN.md) for the interface guidelines.

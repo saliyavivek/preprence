@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight01Icon, Search01Icon } from "@hugeicons/core-free-icons";
+import { Search01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { CompanyMarkSmall } from "./CompanyMark";
+import { CompanySearchItem } from "./CompanySearchItem";
 
 type SearchCompany = {
   id: string;
@@ -13,39 +12,6 @@ type SearchCompany = {
   logoUrl: string | null;
   _count: { experiences: number };
 };
-
-function SearchResultItem({ company }: { company: SearchCompany }) {
-  const count = company._count.experiences;
-
-  return (
-    <Link
-      href={`/companies/${company.slug}`}
-      className="flex items-center gap-3 border-b border-border/70 px-3 py-2.5 transition-colors last:border-b-0 hover:bg-muted/60 focus-visible:bg-muted/60 focus-visible:outline-none sm:px-4"
-    >
-      <span className="flex size-11 shrink-0 items-center justify-center overflow-hidden">
-        <span className="scale-75">
-          <CompanyMarkSmall company={company} />
-        </span>
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="block truncate text-sm font-semibold text-foreground">{company.name}</span>
-        <span className="mt-0.5 block text-xs text-muted-foreground">
-          {count} interview {count === 1 ? "experience" : "experiences"}
-        </span>
-      </span>
-      <span
-        aria-hidden="true"
-        className="shrink-0 text-muted-foreground"
-      >
-        <HugeiconsIcon
-          icon={ArrowRight01Icon}
-          size="100%"
-          className="h-4 w-4"
-        />
-      </span>
-    </Link>
-  );
-}
 
 export function CompanySearch() {
   const [query, setQuery] = useState("");
@@ -142,9 +108,10 @@ export function CompanySearch() {
                 <p className="px-4 py-3 text-sm text-muted-foreground">Searching...</p>
               ) : companies.length ? (
                 companies.map((company) => (
-                  <SearchResultItem
+                  <CompanySearchItem
                     key={company.id}
                     company={company}
+                    href={`/companies/${company.slug}`}
                   />
                 ))
               ) : (

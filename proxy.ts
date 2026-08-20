@@ -21,14 +21,27 @@ export async function proxy(request: NextRequest) {
         },
     );
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
+    let user = null;
+
+    try {
+        const result = await supabase.auth.getUser();
+        user = result.data.user;
+    } catch {
+        request.cookies.getAll().forEach(({ name }) => {
+            if (name.startsWith("sb-") && name.includes("auth-token")) {
+                response.cookies.delete(name);
+            }
+        });
+    }
 
     if (!user) {
         const loginUrl = new URL("/login", request.url);
         loginUrl.searchParams.set("next", `${request.nextUrl.pathname}${request.nextUrl.search}`);
-        return NextResponse.redirect(loginUrl);
+        const loginResponse = NextResponse.redirect(loginUrl);
+        response.cookies.getAll().forEach(({ name, value, ...options }) => {
+            loginResponse.cookies.set(name, value, options);
+        });
+        return loginResponse;
     }
 
     return response;

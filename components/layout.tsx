@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/client";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Building03Icon, FileIcon, FilePlusIcon, Folder01Icon, Logout01Icon, User03Icon } from "@hugeicons/core-free-icons";
+import { Alert02Icon, Building03Icon, CopyrightIcon, FileIcon, FilePlusIcon, Folder01Icon, Logout01Icon, User03Icon } from "@hugeicons/core-free-icons";
 
 function cx(...classes: Array<string | false | undefined>) {
   return classes.filter(Boolean).join(" ");
@@ -233,7 +233,7 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
                 {desktopProfileMenuOpen && (
                   <div
                     role="menu"
-                    className="absolute right-0 top-full z-50 mt-3 w-[280px] overflow-hidden rounded-xl border border-border bg-background shadow-xl"
+                    className="absolute right-0 top-full z-50 mt-3 w-70 overflow-hidden rounded-xl border border-border bg-background shadow-xl"
                   >
                     <div className="flex items-center gap-3 border-b border-border bg-primary/10 px-4 py-3.5">
                       <UserAvatar name={userName} />
@@ -309,14 +309,14 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
             type="button"
             aria-label="Close profile menu"
             onClick={() => setMobileProfileMenuOpen(false)}
-            className="fixed inset-0 z-[60] bg-foreground/35 md:hidden"
+            className="fixed inset-0 z-60 bg-foreground/35 md:hidden"
           />
 
           <aside
             id="mobile-profile-drawer"
             role="dialog"
             aria-label="Profile menu"
-            className="fixed right-0 top-0 z-[70] h-dvh w-[min(78vw,380px)] overflow-y-auto border-l border-border bg-background text-left shadow-xl md:hidden"
+            className="fixed right-0 top-0 z-70 h-dvh w-[min(78vw,380px)] overflow-y-auto border-l border-border bg-background text-left shadow-xl md:hidden"
           >
             <div className="flex items-center gap-3 border-b border-border bg-primary/10 px-5 py-3.5">
               <UserAvatar name={userName} />
@@ -416,12 +416,69 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
 export function Footer() {
   const pathname = usePathname();
   return (
-    <footer className={`mt-auto bg-white/60 border-t border-border py-5 ${pathname === "/login" ? "hidden" : ""}`}>
-      <Container className="flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <span className="font-sans text-[1.25rem] tracking-[-0.04em] text-foreground font-semibold">
-          preprence<span className="text-primary">.</span>
-        </span>
-        <span>Interview experiences from students. For students.</span>
+    <footer className={`mt-auto border-t border-border bg-white/60 ${pathname === "/login" ? "hidden" : ""}`}>
+      <Container className="flex flex-col gap-2 text-sm text-muted-foreground">
+        <div className="flex w-full flex-col gap-8 py-10 sm:gap-10 sm:py-12 lg:py-14">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+            <div className="max-w-sm space-y-3">
+              <Link
+                href="/"
+                aria-label="preprence."
+                className="inline-block font-sans text-[1.8rem] font-semibold tracking-[-0.055em] text-foreground"
+              >
+                preprence<span className="text-primary">.</span>
+              </Link>
+              <p className="max-w-sm text-sm leading-6 text-muted-foreground">Interview experiences from students. For students.</p>
+            </div>
+
+            <nav
+              aria-label="Footer navigation"
+              className="hidden flex-wrap gap-x-7 gap-y-3 text-sm text-foreground md:flex lg:justify-end"
+            >
+              <Link
+                href="/companies"
+                className="transition-colors hover:text-primary"
+              >
+                Companies
+              </Link>
+              <Link
+                href="/experiences"
+                className="transition-colors hover:text-primary"
+              >
+                Experiences
+              </Link>
+              <Link
+                href="/experience/new"
+                className="transition-colors hover:text-primary"
+              >
+                Share Experience
+              </Link>
+            </nav>
+          </div>
+
+          <div className="flex flex-col gap-5 border-t border-border pt-6 text-sm text-muted-foreground sm:pt-8 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
+            <div className="flex max-w-xl items-start gap-2 leading-6">
+              <HugeiconsIcon
+                icon={Alert02Icon}
+                size={16}
+                strokeWidth={1.8}
+                className="mt-1 shrink-0"
+                aria-hidden="true"
+              />
+              <p>Preprence is an independent student platform and is not affiliated with or endorsed by any of the companies mentioned on this website.</p>
+            </div>
+            <div className="flex items-start gap-2 leading-6 lg:shrink-0">
+              <HugeiconsIcon
+                icon={CopyrightIcon}
+                size={16}
+                strokeWidth={1.8}
+                className="mt-0.5 shrink-0"
+                aria-hidden="true"
+              />
+              <span>2026 Preprence. All rights reserved.</span>
+            </div>
+          </div>
+        </div>
       </Container>
     </footer>
   );

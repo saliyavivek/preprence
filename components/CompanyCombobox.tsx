@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowDown01Icon, PlusSignIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { companySimilarity, isCloseCompanyMatch, normalizeCompanyName } from "@/lib/company-matching";
+import { CompanySearchItem } from "@/components/CompanySearchItem";
 
 type Company = {
   id: string;
@@ -15,18 +16,10 @@ type Company = {
 
 function CompanyOption({ company, onSelect }: { company: Company; onSelect: () => void }) {
   return (
-    <button
-      type="button"
-      onClick={onSelect}
-      className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-muted focus:bg-muted focus:outline-none"
-    >
-      <span className="min-w-0">
-        <span className="block truncate text-sm font-medium text-foreground">{company.name}</span>
-        <span className="block text-xs text-muted-foreground">
-          {company._count?.experiences ?? 0} interview {(company._count?.experiences ?? 0) === 1 ? "experience" : "experiences"}
-        </span>
-      </span>
-    </button>
+    <CompanySearchItem
+      company={company}
+      onSelect={onSelect}
+    />
   );
 }
 
@@ -40,10 +33,23 @@ export function CompanyCombobox({ companies }: { companies: Company[] }) {
     const value = query.trim();
     if (!value || selectedCompany) return [];
 
+    const normalizedQuery = normalizeCompanyName(value);
+
     return companies
-      .map((company) => ({ company, score: companySimilarity(value, company.name) }))
-      .filter(({ company, score }) => score >= 0.28 || normalizeCompanyName(company.name).includes(normalizeCompanyName(value)))
-      .sort((left, right) => right.score - left.score)
+      .map((company) => {
+        const normalizedName = normalizeCompanyName(company.name);
+        const startsWithQuery = normalizedName.startsWith(normalizedQuery) || normalizedName.split(" ").some((word) => word.startsWith(normalizedQuery));
+        const containsQuery = normalizedName.includes(normalizedQuery);
+        const score = companySimilarity(value, company.name);
+
+        return { company, containsQuery, startsWithQuery, score };
+      })
+      .filter(({ containsQuery, startsWithQuery, score }) => startsWithQuery || (normalizedQuery.length >= 3 && (containsQuery || score >= 0.28)))
+      .sort((left, right) => {
+        if (left.startsWithQuery !== right.startsWithQuery) return left.startsWithQuery ? -1 : 1;
+        if (left.containsQuery !== right.containsQuery) return left.containsQuery ? -1 : 1;
+        return right.score - left.score;
+      })
       .slice(0, 6)
       .map(({ company }) => company);
   }, [companies, query, selectedCompany]);
