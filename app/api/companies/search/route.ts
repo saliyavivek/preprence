@@ -14,9 +14,6 @@ export async function GET(request: Request) {
                 contains: query,
                 mode: "insensitive",
             },
-            experiences: {
-                some: { status: "published" },
-            },
         },
         orderBy: { name: "asc" },
         take: 6,

@@ -467,7 +467,7 @@ export function Footer() {
               />
               <p>Preprence is an independent student platform and is not affiliated with or endorsed by any of the companies mentioned on this website.</p>
             </div>
-            <div className="flex items-start gap-2 leading-6 lg:shrink-0">
+            <div className="flex items-center gap-2 leading-6 lg:shrink-0">
               <HugeiconsIcon
                 icon={CopyrightIcon}
                 size={16}
