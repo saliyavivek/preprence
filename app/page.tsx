@@ -6,37 +6,42 @@ import { InterviewFlow } from "@/components/InterviewFlow";
 import { CompanySearch } from "@/components/CompanySearch";
 import { createClient } from "@/lib/supabase/server";
 import OnboardingDetailsModal from "../components/OnboardingDetailsModal";
+import { unstable_cache } from "next/cache";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 
-async function getLandingData() {
-  return Promise.all([
-    prisma.company.findMany({
-      where: {
-        experiences: {
-          some: {
-            status: "published",
-          },
-        },
-      },
-      orderBy: [
-        {
+const getLandingData = unstable_cache(
+  async () => {
+    return Promise.all([
+      prisma.company.findMany({
+        where: {
           experiences: {
-            _count: "desc",
+            some: {
+              status: "published",
+            },
           },
         },
-      ],
-      take: 6,
-      include: { _count: { select: { experiences: { where: { status: "published" } } } } },
-    }),
-    prisma.experience.findMany({
-      where: { status: "published" },
-      include: { company: true, rounds: true },
-      orderBy: { createdAt: "desc" },
-      take: 6,
-    }),
-  ]).then(([companies, experiences]) => ({ companies, experiences }));
-}
+        orderBy: [
+          {
+            experiences: {
+              _count: "desc",
+            },
+          },
+        ],
+        take: 6,
+        include: { _count: { select: { experiences: { where: { status: "published" } } } } },
+      }),
+      prisma.experience.findMany({
+        where: { status: "published" },
+        include: { company: true, rounds: true },
+        orderBy: { createdAt: "desc" },
+        take: 6,
+      }),
+    ]).then(([companies, experiences]) => ({ companies, experiences }));
+  },
+  ["landing-data"],
+  { revalidate: 300 },
+);
 
 export default async function HomePage() {
   const { companies, experiences } = await getLandingData();

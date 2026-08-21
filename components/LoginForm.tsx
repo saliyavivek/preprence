@@ -24,10 +24,12 @@ export function LoginForm({ initialMessage, nextPath }: LoginFormProps) {
     setMessage("");
 
     const supabase = createClient();
+    const callbackUrl = new URL("/auth/callback", window.location.origin);
+    callbackUrl.searchParams.set("next", nextPath);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
+        redirectTo: callbackUrl.toString(),
       },
     });
 

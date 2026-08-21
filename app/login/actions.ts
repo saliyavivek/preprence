@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { isCollegeEmail } from "@/lib/auth/college-email";
+import { getSiteUrl } from "@/lib/site-url";
 
 export async function sendMagicLink(email: string, nextPath = "/") {
     const normalizedEmail = email.trim().toLowerCase();
@@ -15,7 +16,7 @@ export async function sendMagicLink(email: string, nextPath = "/") {
     const supabase = await createClient();
 
     const safeNextPath = nextPath.startsWith("/") && !nextPath.startsWith("//") ? nextPath : "/";
-    const callbackUrl = new URL(`${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`);
+    const callbackUrl = new URL(`${getSiteUrl()}/auth/callback`);
     callbackUrl.searchParams.set("next", safeNextPath);
 
     const { error } = await supabase.auth.signInWithOtp({
