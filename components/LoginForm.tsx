@@ -5,6 +5,7 @@ import { GoogleIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { createClient } from "@/lib/supabase/client";
 import { sendMagicLink } from "@/app/login/actions";
+import Logo from "./Logo";
 
 const successMessage = "Check your email for the sign-in link.";
 
@@ -57,14 +58,12 @@ export function LoginForm({ initialMessage, nextPath }: LoginFormProps) {
         <div className="flex flex-col gap-4 sm:gap-6">
           <header className="flex flex-col items-center gap-4 text-center">
             <p className="hidden text-2xl font-semibold tracking-tighter text-foreground sm:block">
-              preprence<span className="text-primary">.</span>
+              <Logo className="w-28 h-auto" />
             </p>
             <div className="flex flex-col gap-3">
               <h1 className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-x-2 gap-y-1 text-2xl font-semibold tracking-[-0.04em] text-foreground sm:flex-nowrap sm:text-4xl">
-                <span>Sign in to</span>
-                <span className="text-3xl font-semibold tracking-tighter text-foreground sm:text-4xl">
-                  preprence<span className="text-primary">.</span>
-                </span>
+                <span className="pb-2">Sign in to</span>
+                <Logo className="w-38 h-auto" />
               </h1>
               <p className="text-sm leading-7 text-muted-foreground sm:text-[1.07rem]">Read and share real interview experiences from your college.</p>
             </div>
@@ -102,7 +101,7 @@ export function LoginForm({ initialMessage, nextPath }: LoginFormProps) {
               </button>
             </div>
           ) : (
-            <>
+            <div className="flex flex-col gap-2 sm:items-center">
               <button
                 type="button"
                 onClick={handleGoogleSignIn}
@@ -116,6 +115,7 @@ export function LoginForm({ initialMessage, nextPath }: LoginFormProps) {
                 />
                 {googleLoading ? "Loading..." : "Continue with Google"}
               </button>
+              <p className="text-sm text-muted-foreground sm:text-[1rem]">Use your @ldce.ac.in college email address to sign in.</p>
 
               {/* <div className="flex items-center gap-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 <span className="h-px flex-1 bg-border" />
@@ -170,7 +170,7 @@ export function LoginForm({ initialMessage, nextPath }: LoginFormProps) {
                   {loading ? "Sending..." : "Continue with email"}
                 </button>
               </form> */}
-            </>
+            </div>
           )}
 
           {!sent && (
@@ -179,10 +179,8 @@ export function LoginForm({ initialMessage, nextPath }: LoginFormProps) {
               <div className="flex flex-col gap-2">
                 <h2 className="font-semibold text-foreground">Why a college email?</h2>
                 <p className="text-sm leading-6 text-muted-foreground">
-                  <span className="font-semibold tracking-tighter text-foreground">
-                    preprence<span className="text-primary">.</span>
-                  </span>{" "}
-                  is built around real interview experiences from students. Using a college email helps keep the community focused on students and their experiences.
+                  <Logo className="w-17 h-auto inline-block" /> is built around real interview experiences from students. Using a college email helps keep the community focused on students and their
+                  experiences.
                 </p>
               </div>
             </>

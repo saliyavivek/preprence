@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Alert02Icon, Building03Icon, CopyrightIcon, FileIcon, FilePlusIcon, Folder01Icon, Logout01Icon, User03Icon } from "@hugeicons/core-free-icons";
+import Logo from "./Logo";
 
 function cx(...classes: Array<string | false | undefined>) {
   return classes.filter(Boolean).join(" ");
@@ -146,9 +147,8 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
           <Link
             href="/"
             aria-label="preprence."
-            className="font-sans text-[1.65rem] tracking-[-0.04em] text-foreground font-semibold"
           >
-            preprence<span className="text-primary">.</span>
+            <Logo className="w-32 h-auto" />
           </Link>
 
           {/* Mobile profile trigger */}
@@ -427,9 +427,8 @@ export function Footer() {
               <Link
                 href="/"
                 aria-label="preprence."
-                className="inline-block font-sans text-[1.8rem] font-semibold tracking-[-0.055em] text-foreground"
               >
-                preprence<span className="text-primary">.</span>
+                <Logo className="w-30 h-auto" />
               </Link>
               <p className="max-w-sm text-sm leading-6 text-muted-foreground">Interview experiences from students. For students.</p>
             </div>
@@ -468,7 +467,7 @@ export function Footer() {
                 className="mt-1 shrink-0"
                 aria-hidden="true"
               />
-              <p>Preprence is an independent student platform and is not affiliated with or endorsed by any of the companies mentioned on this website.</p>
+              <p>preprence is an independent student platform and is not affiliated with or endorsed by any of the companies mentioned on this website.</p>
             </div>
             <div className="flex items-center gap-2 md:gap-[0.7] leading-6 lg:shrink-0">
               <HugeiconsIcon
@@ -478,7 +477,7 @@ export function Footer() {
                 className="mt-0.4 shrink-0"
                 aria-hidden="true"
               />
-              <span>2026 Preprence. All rights reserved.</span>
+              <span>2026 preprence. All rights reserved.</span>
             </div>
           </div>
         </div>

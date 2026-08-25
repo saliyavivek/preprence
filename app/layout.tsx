@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Preprence - Real interview experiences",
-  description: "Explore real interview experiences, rounds, questions, and advice shared by candidates.",
+  description: "Explore real interview experiences, rounds, questions, and advice shared by students from your college.",
 };
 
 async function getCurrentUserHeaderData() {

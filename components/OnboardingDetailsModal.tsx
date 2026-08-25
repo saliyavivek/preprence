@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { addOnboardingDetails } from "../app/actions";
+import Logo from "./Logo";
 
 type Props = {
   onComplete?: () => void;
@@ -41,13 +42,6 @@ export default function OnboardingDetailsModal({ onComplete }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 backdrop-blur-[2px]">
       <div className="w-full max-w-[440px] rounded-[1.25rem] border border-border bg-card p-8 shadow-xl sm:p-10">
-        {/* Logo */}
-        <div className="mb-6 flex justify-center">
-          <span className="text-xl font-bold tracking-tight text-foreground">
-            preprence<span className="text-primary">.</span>
-          </span>
-        </div>
-
         {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="text-[1.75rem] font-semibold leading-tight tracking-tight text-foreground">Tell us a little about yourself</h1>
