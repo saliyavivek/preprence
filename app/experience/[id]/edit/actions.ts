@@ -12,7 +12,6 @@ export async function createRound(
     experienceId: string,
     formData: FormData
 ): Promise<void> {
-    // 1. Authenticate user
     const supabase = await createClient();
 
     const {
@@ -23,7 +22,6 @@ export async function createRound(
         throw new Error("You must be logged in.");
     }
 
-    // 2. Load experience
     const experience = await prisma.experience.findUnique({
         where: {
             id: experienceId,
@@ -34,32 +32,23 @@ export async function createRound(
         throw new Error("Experience not found.");
     }
 
-    // 3. Make sure this user owns the experience
     if (experience.authorId !== user.id) {
         throw new Error("You are not allowed to edit this experience.");
     }
 
-    if (experience.status !== "draft") {
-        throw new Error("This experience can no longer be edited.");
-    }
-
-    // 4. Read form data
     const roundTypeValue = formData.get("roundType")?.toString();
     const difficultyValue = formData.get("difficulty")?.toString();
     const questionsAsked = formData.get("questionsAsked")?.toString().trim();
     const durationValue = formData.get("durationMinutes")?.toString();
 
-    // 5. Validate required field
     if (!roundTypeValue) {
         throw new Error("Please select a round type.");
     }
 
-    // 6. Validate round type
     if (!Object.values(RoundTypeEnum).includes(roundTypeValue as RoundType)) {
         throw new Error("Invalid round type.");
     }
 
-    // 7. Validate difficulty if provided
     let difficulty: DifficultyType | undefined;
 
     if (difficultyValue) {
@@ -70,7 +59,6 @@ export async function createRound(
         difficulty = difficultyValue as DifficultyType;
     }
 
-    // 8. Validate duration if provided
     let durationMinutes: number | undefined;
 
     if (durationValue) {
@@ -84,7 +72,6 @@ export async function createRound(
         }
     }
 
-    // 9. Determine next round number
     const lastRound = await prisma.round.findFirst({
         where: {
             experienceId,
@@ -96,7 +83,6 @@ export async function createRound(
 
     const roundNumber = lastRound ? lastRound.roundNumber + 1 : 1;
 
-    // 10. Create round
     await prisma.round.create({
         data: {
             experienceId,
@@ -108,7 +94,6 @@ export async function createRound(
         },
     });
 
-    // Redirect back to the edit page to refresh data
     redirect(`/experience/${experienceId}/edit`);
 }
 
@@ -139,10 +124,6 @@ export async function updateRound(
 
     if (experience.authorId !== user.id) {
         throw new Error("You are not allowed to edit this experience.");
-    }
-
-    if (experience.status !== "draft") {
-        throw new Error("This experience can no longer be edited.");
     }
 
     const round = await prisma.round.findUnique({
@@ -234,10 +215,6 @@ export async function deleteRound(
         throw new Error("You are not allowed to edit this experience.");
     }
 
-    if (experience.status !== "draft") {
-        throw new Error("This experience can no longer be edited.");
-    }
-
     const round = await prisma.round.findUnique({
         where: {
             id: roundId,
@@ -254,7 +231,6 @@ export async function deleteRound(
         },
     });
 
-    // Re-number remaining rounds.
     const remainingRounds = await prisma.round.findMany({
         where: {
             experienceId,
@@ -306,17 +282,10 @@ export async function publishExperience(
         throw new Error("Experience not found.");
     }
 
-    // Ownership check
     if (experience.authorId !== user.id) {
         throw new Error("You are not allowed to submit this experience.");
     }
 
-    // Only drafts can be submitted.
-    if (experience.status !== "draft") {
-        throw new Error("Only draft experiences can be submitted for review.");
-    }
-
-    // An experience should have at least one round.
     if (experience.rounds.length === 0) {
         throw new Error("Please add at least one interview round.");
     }
@@ -356,13 +325,8 @@ export async function updateExperience(experienceId: string,
         throw new Error("Experience not found.");
     }
 
-    // 3. Make sure this user owns the experience
     if (experience.authorId !== user.id) {
         throw new Error("You are not allowed to edit this experience.");
-    }
-
-    if (experience.status !== "draft") {
-        throw new Error("This experience can no longer be edited.");
     }
 
     const overallTips = formData.get("overallTips")?.toString().trim();

@@ -169,7 +169,7 @@ export default async function NewExperiencePage() {
                     <option value="selected">Selected</option>
                     <option value="rejected">Rejected</option>
                   </SelectField>
-                  <p className="text-sm text-muted-foreground">You can choose to keep this private.</p>
+                  {/* <p className="text-sm text-muted-foreground">You can choose to keep this private.</p> */}
                 </Field>
               </div>
               <p className="text-sm text-muted-foreground">

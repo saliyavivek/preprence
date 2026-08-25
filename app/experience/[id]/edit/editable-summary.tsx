@@ -13,7 +13,6 @@ type ExperienceSummary = {
 };
 
 export default function EditableSummary({ experience }: { experience: ExperienceSummary }) {
-  const isDraft = experience.status === "draft";
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [overallTips, setOverallTips] = useState(experience.overallTips ?? "");
@@ -30,16 +29,6 @@ export default function EditableSummary({ experience }: { experience: Experience
     setOverallTips(experience.overallTips ?? "");
     setIsAnonymous(experience.isAnonymous);
     setIsEditing(true);
-  }
-
-  if (!isDraft) {
-    return (
-      <section className="rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6">
-        <h2 className="text-xl font-semibold">Overall tips</h2>
-        <p className="mt-1 text-sm text-muted-foreground">What would you tell another student preparing for a similar interview?</p>
-        <p className="mt-4 whitespace-pre-line text-sm leading-6 text-muted-foreground">{experience.overallTips || "No tips added yet."}</p>
-      </section>
-    );
   }
 
   return (

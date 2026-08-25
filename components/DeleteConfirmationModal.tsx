@@ -5,7 +5,7 @@ import { Alert02Icon, Cancel01Icon, Delete02Icon } from "@hugeicons/core-free-ic
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useFormStatus } from "react-dom";
 
-function DeleteSubmitButton() {
+function DeleteSubmitButton({ buttonText, pendingText }: { buttonText: string; pendingText: string }) {
   const { pending } = useFormStatus();
 
   return (
@@ -19,7 +19,7 @@ function DeleteSubmitButton() {
         size="100%"
         className="h-4 w-4"
       />
-      {pending ? "Deleting..." : "Delete experience"}
+      {pending ? pendingText : buttonText}
     </button>
   );
 }
@@ -39,7 +39,21 @@ function CancelButton({ onClick }: { onClick: () => void }) {
   );
 }
 
-export function DeleteConfirmationModal({ action }: { action: (formData: FormData) => Promise<void> }) {
+interface DeleteConfirmationModalProps {
+  action: (formData: FormData) => Promise<void>;
+  title?: string;
+  description?: string;
+  buttonText?: string;
+  pendingText?: string;
+}
+
+export function DeleteConfirmationModal({
+  action,
+  title = "Delete this experience?",
+  description = "This action is permanent. The experience, its interview rounds, and reports will be deleted.",
+  buttonText = "Delete experience",
+  pendingText = "Deleting...",
+}: DeleteConfirmationModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -90,7 +104,7 @@ export function DeleteConfirmationModal({ action }: { action: (formData: FormDat
                     id="delete-experience-title"
                     className="text-lg font-semibold text-foreground"
                   >
-                    Delete this experience?
+                    {title}
                   </h2>
                   <button
                     type="button"
@@ -109,7 +123,7 @@ export function DeleteConfirmationModal({ action }: { action: (formData: FormDat
                   id="delete-experience-description"
                   className="mt-2 text-sm leading-6 text-muted-foreground"
                 >
-                  This action is permanent. The experience, its interview rounds, and reports will be deleted.
+                  {description}
                 </p>
               </div>
             </div>
@@ -119,7 +133,10 @@ export function DeleteConfirmationModal({ action }: { action: (formData: FormDat
               className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end"
             >
               <CancelButton onClick={closeModal} />
-              <DeleteSubmitButton />
+              <DeleteSubmitButton
+                buttonText={buttonText}
+                pendingText={pendingText}
+              />
             </form>
           </div>
         </dialog>

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
@@ -8,6 +7,7 @@ import EditableSummary from "./editable-summary";
 import AddExperienceTimeline from "@/components/AddExperienceTimeline";
 import ExperienceHeader from "@/components/ExperienceHeader";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { PublishButton } from "@/components/PublishButton";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -28,7 +28,7 @@ export default async function EditExperiencePage({ params }: Props) {
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8 sm:gap-8 sm:px-8 sm:py-14 lg:px-12">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Share experience", href: "/experience/new" }, { label: "Complete experience" }]} />
         <header className="flex flex-col gap-1">
-          <h1 className="text-[2rem] font-semibold tracking-[-0.045em] sm:text-5xl">Add your interview rounds</h1>
+          <h1 className="text-[2rem] font-semibold tracking-[-0.045em] sm:text-5xl">{isDraft ? "Add your interview rounds" : "Edit your interview rounds"}</h1>
           <p className="text-[1.05rem] leading-7 text-muted-foreground sm:text-lg">Tell the next student what actually happened during each round.</p>
         </header>
 
@@ -38,12 +38,6 @@ export default async function EditExperiencePage({ params }: Props) {
           <div className="min-w-0">
             <ExperienceHeader experience={experience} />
           </div>
-          <Link
-            href="/experience/new"
-            className="order-last inline-flex min-h-10 w-full items-center justify-center rounded-md border border-input px-4 py-2 text-center text-sm font-medium hover:bg-muted sm:order-none sm:w-auto"
-          >
-            Edit interview details
-          </Link>
         </section>
 
         <section className="flex flex-col gap-5">
@@ -67,7 +61,7 @@ export default async function EditExperiencePage({ params }: Props) {
           ) : (
             <div className="rounded-xl border border-dashed border-border p-8 text-center text-muted-foreground">No rounds yet. Add your first round below.</div>
           )}
-          {isDraft && <AddRoundForm experienceId={experience.id} />}
+          <AddRoundForm experienceId={experience.id} />
         </section>
 
         <EditableSummary
@@ -78,27 +72,24 @@ export default async function EditExperiencePage({ params }: Props) {
             status: experience.status,
           }}
         />
-        {isDraft && (
-          <section className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
-            <div>
-              <h2 className="text-xl font-semibold">Ready to share?</h2>
-              <p className="mt-1 max-w-xl text-sm leading-6 text-muted-foreground">Make sure your interview rounds and details are accurate before publishing.</p>
-            </div>
-            <form
-              action={publishExperience.bind(null, experience.id)}
-              className="w-full sm:w-auto"
-            >
-              <button
-                type="submit"
-                disabled={!experience.rounds.length}
-                className="min-h-11 w-full rounded-md bg-primary px-5 py-3 font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
-              >
-                Publish experience
-              </button>
-            </form>
-          </section>
-        )}
-        {!isDraft && <p className="text-sm text-muted-foreground">This experience is published and can no longer be edited.</p>}
+
+        <section className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div>
+            <h2 className="text-xl font-semibold">{isDraft ? "Ready to share?" : "Done editing?"}</h2>
+            <p className="mt-1 max-w-xl text-sm leading-6 text-muted-foreground">
+              {isDraft ? "Make sure your interview rounds and details are accurate before publishing." : "Review your changes and finalize the update."}
+            </p>
+          </div>
+          <form
+            action={publishExperience.bind(null, experience.id)}
+            className="w-full sm:w-auto"
+          >
+            <PublishButton
+              disabled={!experience.rounds.length}
+              isDraft={isDraft}
+            />
+          </form>
+        </section>
       </div>
     </main>
   );

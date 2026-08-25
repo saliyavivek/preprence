@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useFormStatus } from "react-dom";
 import { createRound, deleteRound, updateRound } from "./actions";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ChartNoAxesColumnIcon, Clock01Icon } from "@hugeicons/core-free-icons";
+import { DeleteConfirmationModal } from "@/components/DeleteConfirmationModal"; // Adjust path to where DeleteConfirmationModal is stored
 
 type Round = {
   id: string;
@@ -25,6 +27,20 @@ const roundLabels: Record<string, string> = {
 };
 
 const difficultyLabels: Record<string, string> = { easy: "Easy", medium: "Medium", hard: "Hard" };
+
+function UpdateRoundSubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="min-h-10 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground sm:w-fit disabled:cursor-not-allowed disabled:opacity-60"
+    >
+      {pending ? "Updating..." : "Save changes"}
+    </button>
+  );
+}
 
 export function RoundCard({ experienceId, round }: { experienceId: string; round: Round }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -94,12 +110,7 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
             />
           </label>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <button
-              type="submit"
-              className="min-h-10 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground sm:w-fit"
-            >
-              Save changes
-            </button>
+            <UpdateRoundSubmitButton />
             <button
               type="button"
               onClick={() => setIsEditing(false)}
@@ -158,17 +169,30 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
           >
             Edit round
           </button>
-          <form action={deleteRound.bind(null, experienceId, round.id)}>
-            <button
-              type="submit"
-              className="min-h-10 w-full whitespace-nowrap rounded-md border border-destructive/40 px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/5 sm:w-auto"
-            >
-              Delete
-            </button>
-          </form>
+          <DeleteConfirmationModal
+            action={deleteRound.bind(null, experienceId, round.id)}
+            title="Delete this round?"
+            description="This action is permanent. This interview round will be deleted."
+            buttonText="Delete round"
+            pendingText="Deleting..."
+          />
         </div>
       </div>
     </article>
+  );
+}
+
+function AddRoundSubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="min-h-11 rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground sm:w-fit disabled:cursor-not-allowed disabled:opacity-60"
+    >
+      {pending ? "Adding..." : "Add round"}
+    </button>
   );
 }
 
@@ -243,12 +267,7 @@ export function AddRoundForm({ experienceId }: { experienceId: string }) {
             />
           </label>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <button
-              type="submit"
-              className="min-h-11 rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground sm:w-fit"
-            >
-              Add round
-            </button>
+            <AddRoundSubmitButton />
             <button
               type="button"
               onClick={() => setIsAdding(false)}
