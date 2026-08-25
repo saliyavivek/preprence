@@ -206,26 +206,27 @@ export default async function ExperiencePage({ params }: Props) {
 
         <div className="flex flex-col gap-5 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-muted-foreground">Published on {experience.createdAt.toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}</p>
-          <div className="flex items-center gap-2">
-            <Link
-              href={`/experience/${experience.id}/edit`}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary hover:bg-primary/90 px-3 py-2 text-sm font-medium text-primary-foreground sm:w-auto"
-            >
-              <HugeiconsIcon
-                icon={Edit03Icon}
-                size="100%"
-                className="w-4 h-4"
-              />
-              Edit
-            </Link>
-            {user?.id === experience.authorId ? (
+
+          {user?.id === experience.authorId ? (
+            <div className="flex items-center gap-2">
+              <Link
+                href={`/experience/${experience.id}/edit`}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary hover:bg-primary/90 px-3 py-2 text-sm font-medium text-primary-foreground sm:w-auto"
+              >
+                <HugeiconsIcon
+                  icon={Edit03Icon}
+                  size="100%"
+                  className="w-4 h-4"
+                />
+                Edit
+              </Link>
               <div className="w-full sm:w-auto">
                 <DeleteConfirmationModal action={deleteExperience.bind(null, experience.id, user.id)} />
               </div>
-            ) : (
-              <ReportButton experienceId={experience.id} />
-            )}
-          </div>
+            </div>
+          ) : (
+            <ReportButton experienceId={experience.id} />
+          )}
         </div>
       </div>
     </main>
