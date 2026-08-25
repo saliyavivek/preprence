@@ -9,7 +9,7 @@ export async function sendMagicLink(email: string, nextPath = "/") {
 
     if (!isCollegeEmail(normalizedEmail)) {
         return {
-            error: "Please use your college email address.",
+            error: "Sign in failed. Please use your @ldce.ac.in college email address.",
         };
     }
 

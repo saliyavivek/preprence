@@ -9,7 +9,7 @@ function getSafeNextPath(next: string | undefined) {
 }
 
 function getErrorMessage(error: string | undefined) {
-  if (error === "college_email") return "Preprence is currently available only to students of LD College of Engineering using a verified college email.";
+  if (error === "college_email") return "Sign in failed. Please use your @ldce.ac.in college email address.";
   if (error === "auth") return "We couldn't complete sign in. Please try again.";
   return "";
 }

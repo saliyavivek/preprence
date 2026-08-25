@@ -72,6 +72,15 @@ export function LoginForm({ initialMessage, nextPath }: LoginFormProps) {
 
           <div className="h-px bg-border" />
 
+          {message && !sent && (
+            <p
+              role="alert"
+              className="rounded-md border border-destructive/25 bg-destructive/5 px-4 py-3 text-sm leading-6 text-destructive"
+            >
+              {message}
+            </p>
+          )}
+
           {sent ? (
             <div
               className="flex flex-col gap-6"
