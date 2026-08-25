@@ -9,6 +9,7 @@ import OnboardingDetailsModal from "../components/OnboardingDetailsModal";
 import { unstable_cache } from "next/cache";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { TrustStats } from "@/components/TrustStats";
 
 const getLandingData = unstable_cache(
   async () => {
@@ -37,14 +38,31 @@ const getLandingData = unstable_cache(
         orderBy: { createdAt: "desc" },
         take: 6,
       }),
-    ]).then(([companies, experiences]) => ({ companies, experiences }));
+      prisma.user.count(),
+      prisma.experience.count({
+        where: { status: "published" },
+      }),
+      prisma.company.count({
+        where: {
+          experiences: {
+            some: { status: "published" },
+          },
+        },
+      }),
+    ]).then(([companies, experiences, totalUsers, totalExperiences, totalCompanies]) => ({
+      companies,
+      experiences,
+      totalUsers,
+      totalExperiences,
+      totalCompanies,
+    }));
   },
   ["landing-data"],
   { revalidate: 300 },
 );
 
 export default async function HomePage() {
-  const { companies, experiences } = await getLandingData();
+  const { companies, experiences, totalUsers, totalExperiences, totalCompanies } = await getLandingData();
 
   const supabase = await createClient();
 
@@ -81,8 +99,8 @@ export default async function HomePage() {
             aria-hidden="true"
             className="pointer-events-none absolute right-[10%] top-4 size-[30rem] rounded-full bg-primary/[0.06] blur-3xl"
           />
-          <div className="relative mx-auto flex max-w-6xl items-center gap-10 px-5 pb-14 pt-10 sm:px-8 sm:pb-24 sm:pt-20 lg:px-12">
-            <div className="flex max-w-2xl flex-1 flex-col">
+          <div className="relative mx-auto flex max-w-6xl flex-col items-stretch gap-10 px-5 pb-14 pt-10 sm:px-8 sm:pb-24 sm:pt-20 lg:flex-row lg:items-center lg:px-12">
+            <div className="flex w-full max-w-2xl flex-1 flex-col">
               <h1 className="mt-4 max-w-[19rem] text-balance text-[2.5rem] font-semibold leading-[1.02] tracking-[-0.05em] sm:mt-5 sm:max-w-2xl sm:text-6xl lg:text-[4.1rem]">
                 Know the interview
                 <br className="hidden sm:block" /> <span className="text-primary">before</span> you face it.
@@ -91,10 +109,18 @@ export default async function HomePage() {
 
               <div className="mt-7 w-full max-w-[560px] sm:mt-8">
                 <CompanySearch />
+                <TrustStats
+                  totalUsers={totalUsers}
+                  totalExperiences={totalExperiences}
+                  totalCompanies={totalCompanies}
+                  className="mt-6 w-full sm:mt-7"
+                />
               </div>
             </div>
 
-            <InterviewFlow />
+            <div className="hidden w-full shrink-0 lg:block lg:w-[42%]">
+              <InterviewFlow />
+            </div>
           </div>
         </section>
 
