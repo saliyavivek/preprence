@@ -54,6 +54,7 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
   const [mobileProfileMenuOpen, setMobileProfileMenuOpen] = useState(false);
   const [desktopProfileMenuOpen, setDesktopProfileMenuOpen] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(isLoggedIn);
 
   const pathname = usePathname();
   const lastScrollY = useRef(0);
@@ -124,11 +125,13 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
   const handleLogout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
+    setIsAuthenticated(false);
     closeMenus();
-    router.replace("/login");
+    router.replace("/");
+    router.refresh();
   };
 
-  const isMobileMenuOpen = isLoggedIn && mobileProfileMenuOpen;
+  const isMobileMenuOpen = isAuthenticated && mobileProfileMenuOpen;
 
   return (
     <>
@@ -150,7 +153,7 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
 
           {/* Mobile profile trigger */}
           <div className="md:hidden">
-            {isLoggedIn ? (
+            {isAuthenticated ? (
               <button
                 type="button"
                 onClick={() => setMobileProfileMenuOpen((current) => !current)}
@@ -203,7 +206,7 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
             </Link>
 
             <Link
-              href={!isLoggedIn ? "/login" : "/experience/new"}
+              href={!isAuthenticated ? "/login" : "/experience/new"}
               className={cx(
                 "relative block py-2 text-sm transition-colors hover:text-foreground",
                 pathname === "/experience/new"
@@ -214,7 +217,7 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
               Share your experience
             </Link>
 
-            {isLoggedIn ? (
+            {isAuthenticated ? (
               <div
                 ref={desktopProfileMenuRef}
                 className="relative"

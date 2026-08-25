@@ -3,13 +3,12 @@ import { NextResponse } from "next/server";
 import { isCollegeEmail } from "@/lib/auth/college-email";
 import { prisma } from "@/lib/prisma";
 
-async function removeNewIneligibleProfile(userId: string, email: string, exchangeStartedAt: Date) {
+async function removeIneligibleProfile(userId: string, email: string) {
     const profile = await prisma.user.findUnique({
         where: { id: userId },
         select: {
             id: true,
             email: true,
-            createdAt: true,
             _count: {
                 select: {
                     experiences: true,
@@ -22,7 +21,6 @@ async function removeNewIneligibleProfile(userId: string, email: string, exchang
     if (
         profile &&
         profile.email.toLowerCase() === email.toLowerCase() &&
-        profile.createdAt >= exchangeStartedAt &&
         profile._count.experiences === 0 &&
         profile._count.reports === 0
     ) {
@@ -32,7 +30,6 @@ async function removeNewIneligibleProfile(userId: string, email: string, exchang
 
 export async function GET(request: Request) {
     const { searchParams, origin } = new URL(request.url);
-    const exchangeStartedAt = new Date();
 
     const code = searchParams.get("code");
     const next = searchParams.get("next");
@@ -66,7 +63,7 @@ export async function GET(request: Request) {
 
     if (!user || !eligible) {
         if (user?.email) {
-            await removeNewIneligibleProfile(user.id, user.email, exchangeStartedAt);
+            await removeIneligibleProfile(user.id, user.email);
         }
         await supabase.auth.signOut();
         return NextResponse.redirect(`${origin}/login?error=college_email&next=${encodeURIComponent(destination)}`);
