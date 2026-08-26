@@ -72,7 +72,7 @@ export function DeleteConfirmationModal({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="min-h-10 w-full rounded-md border border-destructive/40 px-3 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/5 focus:outline-none focus:ring-2 focus:ring-destructive/20 sm:w-auto"
+        className="min-h-10 flex-1 rounded-md border border-destructive/40 px-3 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/5 focus:outline-none focus:ring-2 focus:ring-destructive/20 sm:w-auto"
       >
         Delete
       </button>

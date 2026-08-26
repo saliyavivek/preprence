@@ -67,7 +67,7 @@ export function CompanyGrid({ companies }: { companies: Company[] }) {
             type="button"
             aria-expanded={showAllCompanies}
             onClick={() => setShowAllCompanies((current) => !current)}
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-primary px-6 py-3 text-[0.95rem] font-medium text-primary transition-colors hover:bg-card/70 sm:w-auto"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-primary px-6 py-3 text-[0.95rem] font-medium bg-primary text-primary-foreground transition-opacity hover:opacity-90 sm:w-auto"
           >
             {showAllCompanies ? "Show fewer companies" : "View all companies"}
           </button>
@@ -76,7 +76,7 @@ export function CompanyGrid({ companies }: { companies: Company[] }) {
           Can&apos;t find the company you&apos;re looking for?{" "}
           <Link
             href="/experience/new"
-            className="font-semibold text-[#1c7b6d] hover:underline"
+            className="font-semibold text-primary hover:underline"
           >
             Share an experience
           </Link>{" "}

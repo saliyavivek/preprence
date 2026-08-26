@@ -26,7 +26,7 @@ export default async function ExperiencesPage() {
           </div>
           <Link
             href="/experience/new"
-            className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-white sm:w-auto"
+            className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-md border border-primary px-4 py-2 text-sm font-medium bg-primary text-primary-foreground transition-opacity hover:opacity-90 sm:w-auto"
           >
             <HugeiconsIcon
               icon={Edit02Icon}
