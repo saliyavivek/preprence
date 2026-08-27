@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { CompanyMarkLarge } from "@/components/CompanyMark";
 import { NormalExperienceRowCard } from "@/components/NormalExperienceRowCard";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowRight01Icon, Edit01Icon, File02Icon, Globe02Icon, World } from "@hugeicons/core-free-icons";
+import { ArrowRight01Icon, Edit01Icon, ExternalLinkIcon, File02Icon, Globe02Icon, World } from "@hugeicons/core-free-icons";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -45,7 +45,7 @@ export default async function CompanyPage({ params }: Props) {
               <div className="flex min-w-0 flex-col items-center gap-3 text-center sm:items-start sm:text-left">
                 <h1 className="max-w-full break-words text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{company.name}</h1>
                 {company.websiteUrl && (
-                  <span className="flex max-w-full items-center gap-1">
+                  <span className="flex max-w-full items-center gap-2">
                     <HugeiconsIcon
                       icon={Globe02Icon}
                       className="w-4 h-4"
@@ -54,9 +54,13 @@ export default async function CompanyPage({ params }: Props) {
                       href={company.websiteUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="max-w-full break-all text-left text-sm font-medium text-primary underline-offset-4 hover:underline"
+                      className="max-w-full break-all flex items-center gap-1 text-left text-sm font-medium text-primary underline-offset-4 hover:underline"
                     >
                       {company.websiteUrl.split("//")[1] ?? company.websiteUrl}
+                      <HugeiconsIcon
+                        icon={ExternalLinkIcon}
+                        className="h-4 w-4"
+                      />
                     </a>
                   </span>
                 )}

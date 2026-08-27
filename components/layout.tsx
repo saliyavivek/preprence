@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/client";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Alert02Icon, Building03Icon, CopyrightIcon, FileIcon, FilePlusIcon, Folder01Icon, Logout01Icon, User03Icon } from "@hugeicons/core-free-icons";
+import { Alert02Icon, Building03Icon, CopyrightIcon, FileIcon, FilePlusIcon, Folder01Icon, IdeaIcon, Linkedin01Icon, Logout01Icon, Mail01Icon, User03Icon } from "@hugeicons/core-free-icons";
 import Logo from "./Logo";
 
 function cx(...classes: Array<string | false | undefined>) {
@@ -183,7 +183,7 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
               href="/companies"
               aria-current={pathname === "/companies" ? "page" : undefined}
               className={cx(
-                "relative block py-2 text-sm transition-colors hover:text-foreground",
+                "relative block py-2 text-sm transition-colors hover:text-primary",
                 pathname === "/companies"
                   ? "font-semibold text-primary after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-7 after:-translate-x-1/2 after:bg-primary after:content-['']"
                   : "text-muted-foreground",
@@ -196,25 +196,25 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
               href="/experiences"
               aria-current={pathname === "/experiences" ? "page" : undefined}
               className={cx(
-                "relative block py-2 text-sm transition-colors hover:text-foreground",
+                "relative block py-2 text-sm transition-colors hover:text-primary",
                 pathname === "/experiences"
                   ? "font-semibold text-primary after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-7 after:-translate-x-1/2 after:bg-primary after:content-['']"
                   : "text-muted-foreground",
               )}
             >
-              Interview experiences
+              Read experiences
             </Link>
 
             <Link
               href={!isAuthenticated ? "/login" : "/experience/new"}
               className={cx(
-                "relative block py-2 text-sm transition-colors hover:text-foreground",
+                "relative block py-2 text-sm transition-colors hover:text-primary",
                 pathname === "/experience/new"
                   ? "font-semibold text-primary after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-7 after:-translate-x-1/2 after:bg-primary after:content-['']"
                   : "text-muted-foreground",
               )}
             >
-              Share your experience
+              Share experience
             </Link>
 
             {isAuthenticated ? (
@@ -418,6 +418,7 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
 
 export function Footer() {
   const pathname = usePathname();
+
   return (
     <footer className={`mt-auto border-t border-border bg-white/60 ${pathname === "/login" ? "hidden" : ""}`}>
       <Container className="flex flex-col gap-2 text-sm text-muted-foreground">
@@ -453,23 +454,63 @@ export function Footer() {
                 href="/experience/new"
                 className="transition-colors hover:text-primary"
               >
-                Share Experience
+                Share experience
               </Link>
             </nav>
           </div>
 
-          <div className="flex flex-col gap-5 border-t border-border pt-6 text-sm text-muted-foreground sm:pt-8 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
-            <div className="flex max-w-xl items-start gap-2 leading-6">
-              <HugeiconsIcon
-                icon={Alert02Icon}
-                size={16}
-                strokeWidth={1.8}
-                className="mt-1 shrink-0"
-                aria-hidden="true"
-              />
-              <p>preprence is an independent student platform and is not affiliated with or endorsed by any of the companies mentioned on this website.</p>
+          <div className="flex flex-col gap-4 border-t border-border pt-6 text-sm text-muted-foreground sm:pt-8 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
+            {/* Left Side: Disclaimer + Feedback */}
+            <div className="flex max-w-xl flex-col gap-4">
+              <div className="flex items-start gap-2 leading-6">
+                <HugeiconsIcon
+                  icon={Alert02Icon}
+                  size={16}
+                  strokeWidth={1.8}
+                  className="mt-1 shrink-0"
+                  aria-hidden="true"
+                />
+                <p>preprence is an independent student platform and is not affiliated with or endorsed by any of the companies mentioned on this website.</p>
+              </div>
+
+              {/* Bug / Feedback section - FIXED */}
+              <div className="pl-6 text-muted-foreground/80 leading-6">
+                Found a bug or have a suggestion? Reach out on{" "}
+                <a
+                  href="https://www.linkedin.com/in/viveksaliya"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-baseline gap-[0.8] font-medium underline decoration-border underline-offset-2 transition-colors hover:text-primary whitespace-nowrap"
+                >
+                  <HugeiconsIcon
+                    icon={Linkedin01Icon}
+                    size={14}
+                    strokeWidth={1.8}
+                    className="shrink-0 translate-y-0.5"
+                    aria-hidden="true"
+                  />
+                  <span>LinkedIn</span>
+                </a>{" "}
+                or{" "}
+                <a
+                  href="mailto:viveksaliya007@gmail.com"
+                  className="inline-flex items-baseline gap-1 font-medium underline decoration-border underline-offset-2 transition-colors hover:text-primary whitespace-nowrap"
+                >
+                  <HugeiconsIcon
+                    icon={Mail01Icon}
+                    size={14}
+                    strokeWidth={1.8}
+                    className="shrink-0 translate-y-0.5"
+                    aria-hidden="true"
+                  />
+                  <span>Email</span>
+                </a>
+                .
+              </div>
             </div>
-            <div className="flex items-center gap-2 md:gap-[0.7] leading-6 lg:shrink-0">
+
+            {/* Right Side: Copyright */}
+            {/* <div className="mt-2 text-xs flex items-center gap-[0.8] leading-6 md:gap-[0.7] lg:mt-0 lg:shrink-0 justify-center border-t border-border pt-6 sm:pt-0 sm:border-0">
               <HugeiconsIcon
                 icon={CopyrightIcon}
                 size={14}
@@ -478,7 +519,7 @@ export function Footer() {
                 aria-hidden="true"
               />
               <span>2026 preprence. All rights reserved.</span>
-            </div>
+            </div> */}
           </div>
         </div>
       </Container>

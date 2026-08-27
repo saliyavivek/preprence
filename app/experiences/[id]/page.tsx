@@ -211,7 +211,7 @@ export default async function ExperiencePage({ params }: Props) {
             <div className="flex items-center gap-2">
               <Link
                 href={`/experience/${experience.id}/edit`}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary hover:bg-primary/90 px-3 py-2 text-sm font-medium text-primary-foreground sm:w-auto"
+                className="inline-flex flex-1 w-full items-center justify-center gap-2 rounded-md bg-primary hover:bg-primary/90 px-3 py-2 text-sm font-medium text-primary-foreground sm:w-auto"
               >
                 <HugeiconsIcon
                   icon={Edit03Icon}
