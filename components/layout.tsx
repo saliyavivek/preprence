@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/client";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Alert02Icon, Building03Icon, CopyrightIcon, FileIcon, FilePlusIcon, Folder01Icon, IdeaIcon, Linkedin01Icon, Logout01Icon, Mail01Icon, User03Icon } from "@hugeicons/core-free-icons";
+import { Alert02Icon, Building03Icon, FileIcon, FilePlusIcon, Folder01Icon, Linkedin01Icon, Logout01Icon, Mail01Icon, User03Icon } from "@hugeicons/core-free-icons";
 import Logo from "./Logo";
 
 function cx(...classes: Array<string | false | undefined>) {
