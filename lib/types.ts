@@ -3,7 +3,7 @@ import { statusLabels } from "@/components/StatusBadge";
 export type Experience = {
     id: string;
     status?: ExperienceStatus | string;
-    roleTitle: string;
+    role: { id: string; name: string } | null;
     degree: string;
     graduationYear: number;
     interviewDate: Date;

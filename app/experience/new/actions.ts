@@ -7,6 +7,16 @@ import type { Verdict as VerdictType } from "@/app/generated/prisma/enums";
 import { redirect } from "next/navigation";
 import { companySimilarity, isCloseCompanyMatch, normalizeCompanyName, slugifyCompanyName } from "@/lib/company-matching";
 
+function slugifyRole(text: string) {
+    return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-');
+}
+
 export async function createExperience(formData: FormData): Promise<void> {
     const supabase = await createClient();
 
@@ -35,7 +45,7 @@ export async function createExperience(formData: FormData): Promise<void> {
     const companyName = formData.get("companyName")?.toString().trim();
     const degree = formData.get("degree")?.toString().trim();
     const graduationYearValue = formData.get("graduationYear")?.toString();
-    const roleTitle = formData.get("roleTitle")?.toString().trim();
+    const roleName = formData.get("roleName")?.toString().trim();
     const interviewDate = formData.get("interviewDate")?.toString();
     const verdictValue = formData.get("verdict")?.toString();
 
@@ -44,7 +54,7 @@ export async function createExperience(formData: FormData): Promise<void> {
         (!companyId && !companyName) ||
         !degree ||
         !graduationYearValue ||
-        !roleTitle ||
+        !roleName ||
         !interviewDate
     ) {
         throw new Error("Please fill in all required fields.");
@@ -101,14 +111,22 @@ export async function createExperience(formData: FormData): Promise<void> {
         verdict = verdictValue as VerdictType;
     }
 
-    // 7. Create experience
+    // 7. Find or create role
+    const roleSlug = slugifyRole(roleName);
+    const role = await prisma.role.upsert({
+        where: { slug: roleSlug },
+        update: { name: roleName },
+        create: { name: roleName, slug: roleSlug },
+    });
+
+    // 8. Create experience
     const experience = await prisma.experience.create({
         data: {
             authorId: profile.id,
             companyId: company.id,
             degree,
             graduationYear,
-            roleTitle,
+            roleId: role.id,
             interviewDate: new Date(interviewDate),
             verdict,
         },

@@ -22,7 +22,7 @@ export default function ExperienceHeader({ experience }: { experience: Experienc
             </div>
           )}
         </div>
-        <p className="text-base text-muted-foreground sm:text-[1.15rem] sm:leading-tight md:text-[1.25rem]">{experience.roleTitle}</p>
+        <p className="text-base text-muted-foreground sm:text-[1.15rem] sm:leading-tight md:text-[1.25rem]">{experience.role?.name || "N/A"}</p>
         {authorLabel && (
           <p className="flex items-center gap-1 text-base text-muted-foreground sm:text-[0.9rem] sm:leading-tight">
             {experience.isAnonymous ? (

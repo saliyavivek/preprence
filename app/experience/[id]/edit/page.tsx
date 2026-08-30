@@ -19,7 +19,7 @@ export default async function EditExperiencePage({ params }: Props) {
   } = await supabase.auth.getUser();
   if (!user) redirect(`/login?next=${encodeURIComponent(`/experience/${id}/edit`)}`);
 
-  const experience = await prisma.experience.findUnique({ where: { id }, include: { company: true, rounds: { orderBy: { roundNumber: "asc" } } } });
+  const experience = await prisma.experience.findUnique({ where: { id }, include: { company: true, rounds: { orderBy: { roundNumber: "asc" } }, role: true } });
   if (!experience || experience.authorId !== user.id) notFound();
   const isDraft = experience.status === "draft";
 

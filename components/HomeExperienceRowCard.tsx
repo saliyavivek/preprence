@@ -7,7 +7,10 @@ import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 interface ExperienceRowProps {
   experience: {
     id: string;
-    roleTitle: string;
+    role: {
+      name: string;
+      id: string;
+    } | null;
     degree: string;
     graduationYear: number;
     verdict: "selected" | "rejected" | "not_disclosed" | null | undefined;
@@ -37,7 +40,7 @@ export function HomeExperienceRowCard({ experience }: ExperienceRowProps) {
               <VerdictBadge verdict={experience.verdict} />
             </div>
           </div>
-          <p className="truncate text-sm leading-5 text-muted-foreground">{experience.roleTitle}</p>
+          <p className="truncate text-sm leading-5 text-muted-foreground">{experience.role?.name}</p>
           <p className="text-sm leading-5 text-muted-foreground sm:hidden">
             {rounds} {rounds === 1 ? "round" : "rounds"}
           </p>

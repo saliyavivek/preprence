@@ -82,7 +82,9 @@ model Experience {
   degree         String
   graduationYear Int
 
-  roleTitle     String
+  roleId String? @db.Uuid
+  role   Role?   @relation(fields: [roleId], references: [id])
+
   interviewDate DateTime
   verdict       Verdict?
 
@@ -117,6 +119,15 @@ model Round {
   durationMinutes Int?
 
   @@unique([experienceId, roundNumber])
+}
+
+model Role {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+
+  experiences Experience[]
 }
 
 model Report {
