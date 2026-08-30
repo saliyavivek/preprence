@@ -5,6 +5,7 @@ import AddExperienceTimeline from "@/components/AddExperienceTimeline";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowDown01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { CompanyCombobox } from "@/components/CompanyCombobox";
+import { RoleCombobox } from "@/components/RoleCombobox";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
@@ -61,18 +62,23 @@ export default async function NewExperiencePage() {
   } = await supabase.auth.getUser();
   if (!user) redirect(`/login?next=${encodeURIComponent("/experience/new")}`);
 
-  const companies = await prisma.company.findMany({
-    orderBy: { name: "asc" },
-    include: {
-      _count: {
-        select: {
-          experiences: {
-            where: { status: "published" },
+  const [companies, roles] = await Promise.all([
+    prisma.company.findMany({
+      orderBy: { name: "asc" },
+      include: {
+        _count: {
+          select: {
+            experiences: {
+              where: { status: "published" },
+            },
           },
         },
       },
-    },
-  });
+    }),
+    prisma.role.findMany({
+      orderBy: { name: "asc" },
+    }),
+  ]);
 
   return (
     <main className="min-h-[calc(100vh-10rem)]">
@@ -105,16 +111,10 @@ export default async function NewExperiencePage() {
                 </Field>
                 <Field
                   label="Role / Designation"
-                  htmlFor="roleTitle"
+                  htmlFor="roleId"
                   required
                 >
-                  <input
-                    id="roleTitle"
-                    name="roleTitle"
-                    placeholder="e.g. Backend Developer"
-                    required
-                    className={fieldClassName}
-                  />
+                  <RoleCombobox roles={roles} />
                 </Field>
                 <Field
                   label="Degree"

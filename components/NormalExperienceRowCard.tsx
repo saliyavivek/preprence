@@ -27,7 +27,7 @@ export function NormalExperienceRowCard({ experience, showCompanyMark = true }: 
         <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
           <div className="min-w-0">
             <div className="flex min-w-0 items-start justify-between gap-3">
-              <h2 className="min-w-0 truncate text-lg font-semibold tracking-tight group-hover:text-primary">{experience.roleTitle}</h2>
+              <h2 className="min-w-0 truncate text-lg font-semibold tracking-tight group-hover:text-primary">{experience.role?.name || "N/A"}</h2>
               <div className="shrink-0 sm:hidden">
                 <VerdictBadge verdict={experience.verdict} />
               </div>

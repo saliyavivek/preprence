@@ -33,6 +33,7 @@ export default async function AdminPage() {
           roundNumber: "asc",
         },
       },
+      role: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -58,7 +59,7 @@ export default async function AdminPage() {
                 <h3>{experience.company.name}</h3>
 
                 <p>
-                  {experience.degree} · {experience.roleTitle}
+                  {experience.degree} · {experience.role?.name || "N/A"}
                 </p>
 
                 <p>Submitted by: {experience.isAnonymous ? "Anonymous" : (experience.author.name ?? experience.author.email)}</p>
@@ -88,7 +89,7 @@ export default async function AdminPage() {
                 <h3>{experience.company.name}</h3>
 
                 <p>
-                  {experience.degree} · {experience.roleTitle}
+                  {experience.degree} · {experience.role?.name || "N/A"}
                 </p>
 
                 <p>{experience.reports.length} report(s) received</p>

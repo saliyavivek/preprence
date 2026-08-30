@@ -101,7 +101,7 @@ export function CompanyCombobox({ companies }: { companies: Company[] }) {
         placeholder="Search or select a company..."
         autoComplete="off"
         required
-        className="min-h-14 w-full rounded-xl border border-input bg-background px-4 pr-12 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10"
+        className="min-h-14 w-full rounded-xl border border-input bg-background px-4 pr-12 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10 cursor-pointer"
       />
       <HugeiconsIcon
         icon={ArrowDown01Icon}

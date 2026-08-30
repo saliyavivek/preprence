@@ -10,7 +10,7 @@ import { ExperienceStatus } from "@/lib/types";
 export type DashboardExperienceRow = {
   id: string;
   status?: ExperienceStatus | string;
-  roleTitle: string;
+  role: { id: string; name: string } | null;
   degree: string;
   graduationYear: number;
   interviewDate: Date | string;
@@ -36,7 +36,7 @@ export function DashboardExperienceRowCard({ experience, className = "" }: { exp
 
           <div className="min-w-0 flex-1">
             <h3 className="truncate text-[1.05rem] font-semibold tracking-tight text-foreground sm:text-lg">{experience.company.name}</h3>
-            <p className="mt-0.5 truncate text-[0.95rem] text-muted-foreground">{experience.roleTitle}</p>
+            <p className="mt-0.5 truncate text-[0.95rem] text-muted-foreground">{experience.role?.name || "N/A"}</p>
             <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-[0.8rem] sm:text-[0.9rem] text-muted-foreground/80 sm:flex sm:flex-wrap sm:items-center sm:gap-x-5">
               <span className="flex min-w-0 items-center gap-1">
                 <HugeiconsIcon

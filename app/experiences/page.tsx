@@ -9,7 +9,7 @@ async function getExperiences() {
   return prisma.experience.findMany({
     where: { status: "published" },
     orderBy: { interviewDate: "desc" },
-    include: { company: true, rounds: { orderBy: { roundNumber: "asc" } } },
+    include: { company: true, rounds: { orderBy: { roundNumber: "asc" } }, role: true },
   });
 }
 

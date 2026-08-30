@@ -42,6 +42,7 @@ export default async function AdminExperiencePage({ params }: Props) {
           roundNumber: "asc",
         },
       },
+      role: true,
     },
   });
 
@@ -64,7 +65,7 @@ export default async function AdminExperiencePage({ params }: Props) {
         <p>Company: {experience.company.name}</p>
         <p>Degree: {experience.degree}</p>
         <p>Graduation Year: {experience.graduationYear}</p>
-        <p>Role: {experience.roleTitle}</p>
+        <p>Role: {experience.role?.name || "N/A"}</p>
         <p>Interview Date: {experience.interviewDate.toLocaleDateString()}</p>
         <p>Verdict: {experience.verdict ?? "Not provided"}</p>
         <p>Status: {experience.status}</p>
