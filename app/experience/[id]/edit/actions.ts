@@ -8,6 +8,17 @@ import type { Difficulty as DifficultyType } from "@/app/generated/prisma/enums"
 import { RoundType as RoundTypeEnum } from "@/app/generated/prisma/enums";
 import type { RoundType } from "@/app/generated/prisma/enums";
 
+
+function slugifySkill(text: string) {
+    return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-');
+}
+
 export async function createRound(
     experienceId: string,
     formData: FormData
@@ -341,4 +352,126 @@ export async function updateExperience(experienceId: string,
             isAnonymous
         }
     })
+}
+
+export async function addSkillsToExperience(
+    experienceId: string,
+    formData: FormData
+): Promise<void> {
+    const supabase = await createClient();
+
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("You must be logged in.");
+    }
+
+    const experience = await prisma.experience.findUnique({
+        where: {
+            id: experienceId,
+        },
+    });
+
+    if (!experience) {
+        throw new Error("Experience not found.");
+    }
+
+    if (experience.authorId !== user.id) {
+        throw new Error("You are not allowed to edit this experience.");
+    }
+
+    // Read skills from form
+    const skillIds = formData.getAll("skillIds")?.map((id) => id.toString()) ?? [];
+    const skillNames = formData.getAll("skillNames")?.map((name) => name.toString()) ?? [];
+
+    if (skillIds.length === 0) {
+        throw new Error("Please select at least one skill.");
+    }
+
+    // Find or create skills and prepare experience data
+    const experienceSkillIds = await Promise.all(
+        skillNames.map(async (skillName, index) => {
+            const skillId = skillIds[index];
+
+            // Check if it's a new skill (IDs starting with 'new-')
+            if (skillId?.startsWith('new-')) {
+                const skillSlug = slugifySkill(skillName);
+                const createdSkill = await prisma.skill.upsert({
+                    where: { slug: skillSlug },
+                    update: { name: skillName },
+                    create: { name: skillName, slug: skillSlug },
+                });
+                return createdSkill.id;
+            }
+
+            // Existing skill
+            return skillId;
+        })
+    );
+
+    // Add skills to experience (avoiding duplicates)
+    await prisma.experience.update({
+        where: { id: experienceId },
+        data: {
+            experienceSkills: {
+                connectOrCreate: experienceSkillIds.map((skillId) => ({
+                    where: { experienceId_skillId: { experienceId, skillId } },
+                    create: { skillId },
+                })),
+            },
+        },
+    });
+}
+
+export async function removeSkillFromExperience(
+    experienceId: string,
+    formData: FormData
+): Promise<void> {
+    const supabase = await createClient();
+
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("You must be logged in.");
+    }
+
+    const experience = await prisma.experience.findUnique({
+        where: {
+            id: experienceId,
+        },
+    });
+
+    if (!experience) {
+        throw new Error("Experience not found.");
+    }
+
+    if (experience.authorId !== user.id) {
+        throw new Error("You are not allowed to edit this experience.");
+    }
+
+    // Extract the skill ID passed from the frontend
+    const skillId = formData.get("skillId")?.toString();
+
+    if (!skillId) {
+        throw new Error("Skill ID is required.");
+    }
+
+    // Delete the relationship using the composite key seen in addSkillsToExperience
+    await prisma.experience.update({
+        where: { id: experienceId },
+        data: {
+            experienceSkills: {
+                delete: {
+                    experienceId_skillId: {
+                        experienceId,
+                        skillId,
+                    },
+                },
+            },
+        },
+    });
 }

@@ -21,11 +21,16 @@ interface ExperienceRowProps {
     rounds: Array<{
       id: string;
     }>;
+    experienceSkills?: Array<{ skill: { id: string; name: string } }>;
   };
 }
 
 export function HomeExperienceRowCard({ experience }: ExperienceRowProps) {
   const rounds = experience.rounds.length;
+  const allSkills = (experience.experienceSkills ?? []).map((es) => es.skill.name);
+  const visibleSkills = allSkills.slice(0, 3);
+  const hiddenSkillsCount = Math.max(0, allSkills.length - 3);
+
   return (
     <Link
       href={`/experiences/${experience.id}`}
@@ -35,14 +40,22 @@ export function HomeExperienceRowCard({ experience }: ExperienceRowProps) {
         <CompanyMarkSmall company={experience.company} />
         <div className="min-w-0">
           <div className="flex min-w-0 items-center justify-between gap-3">
-            <p className="truncate text-sm font-semibold leading-5 text-foreground">{experience.company.name}</p>
+            <p className="truncate text-sm sm:text-md font-semibold leading-5 text-foreground">{experience.company.name}</p>
             <div className="shrink-0 sm:hidden">
               <VerdictBadge verdict={experience.verdict} />
             </div>
           </div>
           <p className="truncate text-sm leading-5 text-muted-foreground">{experience.role?.name}</p>
-          <p className="text-sm leading-5 text-muted-foreground sm:hidden">
-            {rounds} {rounds === 1 ? "round" : "rounds"}
+          <p className="text-[10px] sm:text-xs flex items-center gap-1 sm:mt-1 mt-2 leading-5 text-muted-foreground">
+            {visibleSkills.map((skill) => (
+              <span
+                key={skill}
+                className="max-w-full rounded-md border border-border px-1 py-0.2 sm:px-1.5 text-muted-foreground"
+              >
+                {skill}
+              </span>
+            ))}
+            {hiddenSkillsCount > 0 && <span className="max-w-full rounded-md border border-border px-1 py-0.2 sm:px-1.5  text-muted-foreground">+{hiddenSkillsCount}</span>}
           </p>
         </div>
       </div>

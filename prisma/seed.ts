@@ -1,62 +1,69 @@
 import { prisma } from "@/lib/prisma";
 
-const rolesToSeed = [
-    // Newly requested roles
-    "Software Engineer",
-    "Backend Developer",
-    "Full Stack Developer",
-    "Data Analyst",
-    "Data Scientist",
-    "QA Engineer",
-    "UI/UX Engineer",
-
-    // Existing roles to ensure full coverage 
-    "Java Developer",
-    "Python Developer",
-    "Prime Role",
-    "Machine Learning Engineer",
-    "Devops Engineer",
-    "Frontend Developer",
+const skillsToSeed = [
+    "Java",
+    "Python",
+    "JavaScript",
+    "TypeScript",
+    "C",
+    "C++",
+    "C#",
+    "React",
+    "Next.js",
+    "Angular",
+    "Vue.js",
+    "Node.js",
+    "Express.js",
+    "Spring Boot",
+    ".NET",
+    "Django",
+    "Flask",
+    "MongoDB",
+    "PostgreSQL",
+    "MySQL",
+    "SQL",
+    "Redis",
+    "Docker",
+    "Kubernetes",
+    "AWS",
+    "Azure",
+    "GCP",
+    "Git"
 ];
 
-function slugify(text: string) {
-    return text
-        .toString()
+// Custom slugifier to preserve specific tech syntax
+function generateSkillSlug(name: string) {
+    return name
         .toLowerCase()
-        .trim()
-        .replace(/\s+/g, '-')        // Replace spaces with -
-        .replace(/[^\w\-]+/g, '')    // Remove all non-word chars
-        .replace(/\-\-+/g, '-');     // Replace multiple - with single -
+        .replace(/\.net/g, 'dotnet') // .NET -> dotnet
+        .replace(/\+/g, 'p')         // C++ -> cpp
+        .replace(/#/g, 'sharp')      // C# -> csharp
+        .replace(/[^a-z0-9]+/g, '-') // Replace other non-alphanumeric with dashes (e.g., Vue.js -> vue-js)
+        .replace(/(^-|-$)+/g, '');   // Remove leading/trailing dashes
 }
 
 async function main() {
-    console.log(`Seeding ${rolesToSeed.length} roles...`);
+    console.log(`Seeding ${skillsToSeed.length} skills...`);
 
-    for (const title of rolesToSeed) {
-        const slug = slugify(title);
+    for (const skillName of skillsToSeed) {
+        const slug = generateSkillSlug(skillName);
 
-        // upsert ensures that if the slug already exists, it ignores the creation, 
-        // preventing duplicate errors when running the seed script multiple times.
-        await prisma.role.upsert({
-            where: {
-                slug: slug
-            },
-            update: {
-                name: title
-            },
+        await prisma.skill.upsert({
+            where: { slug: slug },
+            update: { name: skillName },
             create: {
-                name: title,
+                name: skillName,
                 slug: slug,
             },
         });
     }
 
-    console.log("Roles seeded successfully.");
+    console.log("Skills seeded successfully.");
 }
 
 main()
     .catch((error) => {
-        console.error("Error seeding roles:", error);
+        console.error("Error seeding skills:", error);
         process.exit(1);
     })
     .finally(async () => {

@@ -17,6 +17,16 @@ function slugifyRole(text: string) {
         .replace(/\-\-+/g, '-');
 }
 
+function slugifySkill(text: string) {
+    return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-');
+}
+
 export async function createExperience(formData: FormData): Promise<void> {
     const supabase = await createClient();
 
@@ -48,6 +58,10 @@ export async function createExperience(formData: FormData): Promise<void> {
     const roleName = formData.get("roleName")?.toString().trim();
     const interviewDate = formData.get("interviewDate")?.toString();
     const verdictValue = formData.get("verdict")?.toString();
+
+    // Read skills from form
+    const skillIds = formData.getAll("skillIds")?.map((id) => id.toString()) ?? [];
+    const skillNames = formData.getAll("skillNames")?.map((name) => name.toString()) ?? [];
 
     // 4. Basic validation
     if (
@@ -119,7 +133,28 @@ export async function createExperience(formData: FormData): Promise<void> {
         create: { name: roleName, slug: roleSlug },
     });
 
-    // 8. Create experience
+    // 8. Find or create skills and prepare experience data
+    const experienceSkills = await Promise.all(
+        skillNames.map(async (skillName, index) => {
+            const skillId = skillIds[index];
+
+            // Check if it's a new skill (IDs starting with 'new-')
+            if (skillId?.startsWith('new-')) {
+                const skillSlug = slugifySkill(skillName);
+                const createdSkill = await prisma.skill.upsert({
+                    where: { slug: skillSlug },
+                    update: { name: skillName },
+                    create: { name: skillName, slug: skillSlug },
+                });
+                return createdSkill.id;
+            }
+
+            // Existing skill
+            return skillId;
+        })
+    );
+
+    // 9. Create experience
     const experience = await prisma.experience.create({
         data: {
             authorId: profile.id,
@@ -129,6 +164,11 @@ export async function createExperience(formData: FormData): Promise<void> {
             roleId: role.id,
             interviewDate: new Date(interviewDate),
             verdict,
+            experienceSkills: {
+                create: experienceSkills.map((skillId) => ({
+                    skillId,
+                })),
+            },
         },
     });
 

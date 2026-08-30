@@ -19,7 +19,16 @@ export default async function EditExperiencePage({ params }: Props) {
   } = await supabase.auth.getUser();
   if (!user) redirect(`/login?next=${encodeURIComponent(`/experience/${id}/edit`)}`);
 
-  const experience = await prisma.experience.findUnique({ where: { id }, include: { company: true, rounds: { orderBy: { roundNumber: "asc" } }, role: true } });
+  const [experience, skills] = await Promise.all([
+    prisma.experience.findUnique({
+      where: { id },
+      include: { company: true, rounds: { orderBy: { roundNumber: "asc" } }, role: true, author: { select: { name: true, email: true } }, experienceSkills: { include: { skill: true } } },
+    }),
+    prisma.skill.findMany({
+      orderBy: { name: "asc" },
+    }),
+  ]);
+
   if (!experience || experience.authorId !== user.id) notFound();
   const isDraft = experience.status === "draft";
 
@@ -36,7 +45,11 @@ export default async function EditExperiencePage({ params }: Props) {
 
         <section className="flex flex-col gap-5 rounded-xl border border-border bg-card p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div className="min-w-0">
-            <ExperienceHeader experience={experience} />
+            <ExperienceHeader
+              experience={experience}
+              isEditing={true}
+              availableSkills={skills}
+            />
           </div>
         </section>
 

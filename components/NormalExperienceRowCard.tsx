@@ -5,18 +5,11 @@ import { CompanyMarkMedium } from "./CompanyMark";
 import { VerdictBadge } from "./VerdictBadge";
 import { HugeiconsIcon } from "@hugeicons/react";
 
-const roundLabels: Record<string, string> = {
-  aptitude: "Aptitude Test",
-  online_assessment: "Online Assessment",
-  coding: "Coding Interview",
-  technical: "Technical Interview",
-  managerial: "Managerial Interview",
-  hr: "HR Interview",
-  other: "Other Round",
-};
-
 export function NormalExperienceRowCard({ experience, showCompanyMark = true }: { experience: Experience; showCompanyMark?: boolean }) {
-  const labels = Array.from(new Set(experience.rounds.map((round) => roundLabels[round.roundType] ?? "Interview Round"))).slice(0, 3);
+  const allSkills = (experience.experienceSkills ?? []).map((es) => es.skill.name);
+  const visibleSkills = allSkills.slice(0, 3);
+  const hiddenSkillsCount = Math.max(0, allSkills.length - 3);
+
   return (
     <Link
       href={`/experiences/${experience.id}`}
@@ -81,15 +74,18 @@ export function NormalExperienceRowCard({ experience, showCompanyMark = true }: 
             {experience.rounds.length} {experience.rounds.length === 1 ? "Round" : "Rounds"}
           </span>
         </div>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {labels.map((label) => (
+        <div className="mt-3 flex flex-wrap gap-1 sm:gap-2">
+          {visibleSkills.map((skill) => (
             <span
-              key={label}
+              key={skill}
               className="max-w-full rounded-md border border-border px-2.5 py-1 text-[11px] md:text-[12px] text-muted-foreground sm:px-3"
             >
-              {label}
+              {skill}
             </span>
           ))}
+          {hiddenSkillsCount > 0 && (
+            <span className="hidden sm:block max-w-full rounded-md border border-border px-2.5 py-1 text-[11px] md:text-[12px] text-muted-foreground sm:px-3 ">+{hiddenSkillsCount}</span>
+          )}
         </div>
       </div>
       <span
