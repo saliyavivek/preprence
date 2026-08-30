@@ -72,16 +72,6 @@ export function CompanyGrid({ companies }: { companies: Company[] }) {
             {showAllCompanies ? "Show fewer companies" : "View all companies"}
           </button>
         ) : null}
-        <p className="text-center text-[0.95rem] text-gray-500">
-          Can&apos;t find the company you&apos;re looking for?{" "}
-          <Link
-            href="/experience/new"
-            className="font-semibold text-primary hover:underline"
-          >
-            Share an experience
-          </Link>{" "}
-          to help others.
-        </p>
       </div>
     </>
   );

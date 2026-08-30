@@ -119,31 +119,33 @@ export default function ExperienceHeader({
                   className="inline-flex items-center font-medium text-foreground/80 gap-1 rounded-md border border-border px-2.5 py-1 "
                 >
                   <span>{es.skill.name}</span>
-                  <form
-                    onSubmit={async (e) => {
-                      e.preventDefault();
-                      const formData = new FormData(e.currentTarget);
-                      await handleDeleteSkillSubmit(formData);
-                    }}
-                    className="flex flex-col gap-4"
-                  >
-                    {/* Add this hidden input to pass the skill ID */}
-                    <input
-                      type="hidden"
-                      name="skillId"
-                      value={es.skill.id}
-                    />
-                    <button
-                      type="submit"
-                      className="ml-1 inline-flex hover:opacity-70"
-                      title="Remove skill"
+                  {isEditing && (
+                    <form
+                      onSubmit={async (e) => {
+                        e.preventDefault();
+                        const formData = new FormData(e.currentTarget);
+                        await handleDeleteSkillSubmit(formData);
+                      }}
+                      className="flex flex-col gap-4"
                     >
-                      <HugeiconsIcon
-                        icon={Cancel01Icon}
-                        className="h-3 w-3"
+                      {/* Add this hidden input to pass the skill ID */}
+                      <input
+                        type="hidden"
+                        name="skillId"
+                        value={es.skill.id}
                       />
-                    </button>
-                  </form>
+                      <button
+                        type="submit"
+                        className="ml-1 inline-flex hover:opacity-70"
+                        title="Remove skill"
+                      >
+                        <HugeiconsIcon
+                          icon={Cancel01Icon}
+                          className="h-3 w-3"
+                        />
+                      </button>
+                    </form>
+                  )}
                 </div>
               ))}
               {hiddenSkillsCount > 0 && (
