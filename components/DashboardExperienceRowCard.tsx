@@ -46,6 +46,12 @@ export function DashboardExperienceRowCard({ experience, className = "" }: { exp
                 />
                 <span className="truncate">{experience.degree}</span>
               </span>
+              <span
+                aria-hidden="true"
+                className="hidden text-xs text-gray-200 sm:inline"
+              >
+                |
+              </span>
               <span className="flex min-w-0 items-center gap-1">
                 <HugeiconsIcon
                   className="w-4 h-4"
@@ -53,6 +59,12 @@ export function DashboardExperienceRowCard({ experience, className = "" }: { exp
                   icon={School01Icon}
                 />
                 <span className="truncate">Class of {experience.graduationYear}</span>
+              </span>
+              <span
+                aria-hidden="true"
+                className="hidden text-xs text-gray-200 sm:inline"
+              >
+                |
               </span>
               <span className="flex min-w-0 items-center gap-1">
                 <HugeiconsIcon
@@ -63,6 +75,12 @@ export function DashboardExperienceRowCard({ experience, className = "" }: { exp
                 <span className="truncate">
                   {experience.rounds.length} {experience.rounds.length === 1 ? "Round" : "Rounds"}
                 </span>
+              </span>
+              <span
+                aria-hidden="true"
+                className="hidden text-xs text-gray-200 sm:inline"
+              >
+                |
               </span>
               <span className="flex min-w-0 items-center gap-1">
                 <HugeiconsIcon

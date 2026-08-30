@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { createExperience } from "./actions";
 import AddExperienceTimeline from "@/components/AddExperienceTimeline";
@@ -6,6 +5,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowDown01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { CompanyCombobox } from "@/components/CompanyCombobox";
 import { RoleCombobox } from "@/components/RoleCombobox";
+import { SkillCombobox } from "@/components/SkillCombobox";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
@@ -62,7 +62,7 @@ export default async function NewExperiencePage() {
   } = await supabase.auth.getUser();
   if (!user) redirect(`/login?next=${encodeURIComponent("/experience/new")}`);
 
-  const [companies, roles] = await Promise.all([
+  const [companies, roles, skills] = await Promise.all([
     prisma.company.findMany({
       orderBy: { name: "asc" },
       include: {
@@ -76,6 +76,9 @@ export default async function NewExperiencePage() {
       },
     }),
     prisma.role.findMany({
+      orderBy: { name: "asc" },
+    }),
+    prisma.skill.findMany({
       orderBy: { name: "asc" },
     }),
   ]);
@@ -172,6 +175,12 @@ export default async function NewExperiencePage() {
                   {/* <p className="text-sm text-muted-foreground">You can choose to keep this private.</p> */}
                 </Field>
               </div>
+              <Field
+                label="Skills"
+                htmlFor="skillSearch"
+              >
+                <SkillCombobox skills={skills} />
+              </Field>
               <p className="text-sm text-muted-foreground">
                 <span className="text-destructive">*</span> Required fields
               </p>

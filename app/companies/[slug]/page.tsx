@@ -19,6 +19,7 @@ async function getCompany(slug: string) {
           company: true,
           rounds: { orderBy: { roundNumber: "asc" } },
           role: true,
+          experienceSkills: { include: { skill: true } },
         },
         orderBy: { interviewDate: "desc" },
       },

@@ -125,7 +125,7 @@ export default async function ExperiencePage({ params }: Props) {
   const { id } = await params;
   const experience = await prisma.experience.findFirst({
     where: { id, status: "published" },
-    include: { company: true, rounds: { orderBy: { roundNumber: "asc" } }, role: true },
+    include: { company: true, rounds: { orderBy: { roundNumber: "asc" } }, role: true, experienceSkills: { include: { skill: true } } },
   });
 
   if (!experience) notFound();
