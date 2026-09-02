@@ -22,7 +22,7 @@ export default async function ExperiencesPage() {
         <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">All Interview Experiences</h1>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground sm:text-base">Real interview experiences shared by students from our college community.</p>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground sm:text-base">Real interview experiences shared by students from your college community.</p>
           </div>
           <Link
             href="/experience/new"

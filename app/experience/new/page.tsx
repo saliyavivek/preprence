@@ -6,6 +6,7 @@ import { ArrowDown01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { CompanyCombobox } from "@/components/CompanyCombobox";
 import { RoleCombobox } from "@/components/RoleCombobox";
 import { SkillCombobox } from "@/components/SkillCombobox";
+import { VerdictCombobox } from "@/components/VerdictCombobox";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
@@ -163,21 +164,14 @@ export default async function NewExperiencePage() {
                   label="Verdict"
                   htmlFor="verdict"
                 >
-                  <SelectField
-                    id="verdict"
-                    name="verdict"
-                    defaultValue="not_disclosed"
-                  >
-                    <option value="not_disclosed">Prefer not to say</option>
-                    <option value="selected">Selected</option>
-                    <option value="rejected">Rejected</option>
-                  </SelectField>
+                  <VerdictCombobox defaultValue="not_disclosed" />
                   {/* <p className="text-sm text-muted-foreground">You can choose to keep this private.</p> */}
                 </Field>
               </div>
               <Field
                 label="Skills"
                 htmlFor="skillSearch"
+                required
               >
                 <SkillCombobox skills={skills} />
               </Field>

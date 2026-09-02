@@ -221,7 +221,7 @@ export function ExperienceDirectory({ experiences }: { experiences: Experience[]
       );
     })
     .sort((a, b) => {
-      const difference = new Date(b.interviewDate).getTime() - new Date(a.interviewDate).getTime();
+      const difference = new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime();
       return filters.sort === "newest" ? difference : -difference;
     });
 

@@ -206,7 +206,7 @@ export default function ExperienceHeader({
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
             <div className="relative flex max-h-[80vh] w-full max-w-md flex-col gap-4 rounded-xl border border-border bg-card p-6 shadow-xl">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold">Add Skills to Experience</h2>
+                <h2 className="text-lg font-semibold">Add skills to your experience</h2>
                 <button
                   onClick={() => setShowAddSkillsModal(false)}
                   className="rounded-lg p-2 hover:bg-muted transition-colors"
@@ -264,6 +264,33 @@ export default function ExperienceHeader({
                     className="inline-flex items-center text-[14px] sm:text-[16px] rounded-md border border-border bg-muted px-3 py-1.5 font-medium text-foreground"
                   >
                     {es.skill.name}
+                    {isEditing && (
+                      <form
+                        onSubmit={async (e) => {
+                          e.preventDefault();
+                          const formData = new FormData(e.currentTarget);
+                          await handleDeleteSkillSubmit(formData);
+                        }}
+                        className="flex flex-col gap-4"
+                      >
+                        {/* Add this hidden input to pass the skill ID */}
+                        <input
+                          type="hidden"
+                          name="skillId"
+                          value={es.skill.id}
+                        />
+                        <button
+                          type="submit"
+                          className="ml-1 inline-flex hover:opacity-70"
+                          title="Remove skill"
+                        >
+                          <HugeiconsIcon
+                            icon={Cancel01Icon}
+                            className="h-3 w-3"
+                          />
+                        </button>
+                      </form>
+                    )}
                   </span>
                 ))}
               </div>

@@ -13,6 +13,7 @@ export type Experience = {
     company: { name: string; slug: string; logoUrl: string | null };
     rounds: Array<{ roundType: string; roundNumber?: number }>;
     experienceSkills?: Array<{ skill: { id: string; name: string } }>;
+    createdAt?: Date;
 };
 
 export type ExperienceStatus = keyof typeof statusLabels;
