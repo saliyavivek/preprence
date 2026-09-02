@@ -34,7 +34,18 @@ const getLandingData = unstable_cache(
       }),
       prisma.experience.findMany({
         where: { status: "published" },
-        include: { company: true, rounds: true, role: true, experienceSkills: { include: { skill: true } } },
+        include: {
+          company: true,
+          author: {
+            select: {
+              degree: true,
+              graduationYear: true,
+            },
+          },
+          rounds: true,
+          role: true,
+          experienceSkills: { include: { skill: true } },
+        },
         orderBy: { createdAt: "desc" },
         take: 6,
       }),

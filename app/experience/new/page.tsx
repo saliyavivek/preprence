@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { createExperience } from "./actions";
 import AddExperienceTimeline from "@/components/AddExperienceTimeline";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowDown01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { ArrowDown01Icon, ArrowRight01Icon, Calendar01Icon } from "@hugeicons/core-free-icons";
 import { CompanyCombobox } from "@/components/CompanyCombobox";
 import { RoleCombobox } from "@/components/RoleCombobox";
 import { SkillCombobox } from "@/components/SkillCombobox";
@@ -27,34 +27,6 @@ function Field({ label, htmlFor, required = false, children }: { label: string; 
 
 const fieldClassName =
   "min-h-14 w-full rounded-xl border border-input bg-background px-4 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10";
-
-const selectClassName = `${fieldClassName} appearance-none pr-12`;
-
-function SelectField({ id, name, defaultValue, required = false, children }: { id: string; name: string; defaultValue: string; required?: boolean; children: React.ReactNode }) {
-  return (
-    <div className="relative">
-      <select
-        id={id}
-        name={name}
-        required={required}
-        className={selectClassName}
-        defaultValue={defaultValue}
-      >
-        {children}
-      </select>
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground"
-      >
-        <HugeiconsIcon
-          icon={ArrowDown01Icon}
-          size="100%"
-          className="h-5 w-5"
-        />
-      </span>
-    </div>
-  );
-}
 
 export default async function NewExperiencePage() {
   const supabase = await createClient();
@@ -121,45 +93,31 @@ export default async function NewExperiencePage() {
                   <RoleCombobox roles={roles} />
                 </Field>
                 <Field
-                  label="Degree"
-                  htmlFor="degree"
-                  required
-                >
-                  <input
-                    id="degree"
-                    name="degree"
-                    placeholder="e.g. MCA"
-                    required
-                    className={fieldClassName}
-                  />
-                </Field>
-                <Field
-                  label="Graduation year"
-                  htmlFor="graduationYear"
-                  required
-                >
-                  <input
-                    id="graduationYear"
-                    name="graduationYear"
-                    type="number"
-                    placeholder="e.g. 2027"
-                    required
-                    className={fieldClassName}
-                  />
-                </Field>
-                <Field
                   label="Interview date"
                   htmlFor="interviewDate"
                   required
                 >
-                  <input
-                    id="interviewDate"
-                    name="interviewDate"
-                    type="date"
-                    required
-                    className={fieldClassName}
-                  />
+                  <div className="relative">
+                    <input
+                      id="interviewDate"
+                      name="interviewDate"
+                      type="date"
+                      required
+                      className={`${fieldClassName} pr-2 [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer`}
+                    />
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground"
+                    >
+                      <HugeiconsIcon
+                        icon={Calendar01Icon}
+                        size="100%"
+                        className="h-5 w-5"
+                      />
+                    </span>
+                  </div>
                 </Field>
+
                 <Field
                   label="Verdict"
                   htmlFor="verdict"

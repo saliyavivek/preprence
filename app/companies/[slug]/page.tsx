@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { CompanyMarkLarge } from "@/components/CompanyMark";
 import { NormalExperienceRowCard } from "@/components/NormalExperienceRowCard";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowRight01Icon, Edit01Icon, ExternalLinkIcon, File02Icon, Globe02Icon, World } from "@hugeicons/core-free-icons";
+import { ArrowRight01Icon, Edit01Icon, ExternalLinkIcon, File02Icon, Globe02Icon } from "@hugeicons/core-free-icons";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -17,6 +17,7 @@ async function getCompany(slug: string) {
         where: { status: "published" },
         include: {
           company: true,
+          author: { select: { degree: true, graduationYear: true } },
           rounds: { orderBy: { roundNumber: "asc" } },
           role: true,
           experienceSkills: { include: { skill: true } },

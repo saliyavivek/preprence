@@ -4,12 +4,10 @@ export type Experience = {
     id: string;
     status?: ExperienceStatus | string;
     role: { id: string; name: string } | null;
-    degree: string;
-    graduationYear: number;
     interviewDate: Date;
     verdict: string | null;
     isAnonymous: boolean;
-    author?: { name: string | null; email: string } | null;
+    author?: { id?: string; name?: string | null; email?: string; degree?: string | null; graduationYear?: number | null } | null;
     company: { name: string; slug: string; logoUrl: string | null };
     rounds: Array<{ roundType: string; roundNumber?: number }>;
     experienceSkills?: Array<{ skill: { id: string; name: string } }>;

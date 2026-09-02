@@ -33,7 +33,7 @@ export function NormalExperienceRowCard({ experience, showCompanyMark = true }: 
                   size="100%"
                   icon={GraduationCapIcon}
                 />
-                {experience.degree}
+                {experience.author?.degree}
               </span>
               <span>·</span>
               <span className="flex items-center gap-1">
@@ -42,7 +42,7 @@ export function NormalExperienceRowCard({ experience, showCompanyMark = true }: 
                   size="100%"
                   icon={School01Icon}
                 />
-                Class of {experience.graduationYear}
+                Class of {experience.author?.graduationYear}
               </span>
             </p>
           </div>

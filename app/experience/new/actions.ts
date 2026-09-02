@@ -53,8 +53,6 @@ export async function createExperience(formData: FormData): Promise<void> {
     // 3. Read form data
     const companyId = formData.get("companyId")?.toString();
     const companyName = formData.get("companyName")?.toString().trim();
-    const degree = formData.get("degree")?.toString().trim();
-    const graduationYearValue = formData.get("graduationYear")?.toString();
     const roleName = formData.get("roleName")?.toString().trim();
     const interviewDate = formData.get("interviewDate")?.toString();
     const verdictValue = formData.get("verdict")?.toString();
@@ -66,18 +64,10 @@ export async function createExperience(formData: FormData): Promise<void> {
     // 4. Basic validation
     if (
         (!companyId && !companyName) ||
-        !degree ||
-        !graduationYearValue ||
         !roleName ||
         !interviewDate
     ) {
         throw new Error("Please fill in all required fields.");
-    }
-
-    const graduationYear = Number(graduationYearValue);
-
-    if (!Number.isInteger(graduationYear)) {
-        throw new Error("Invalid graduation year.");
     }
 
     // 5. Resolve a selected company, or canonicalize/create a deliberate new company.
@@ -159,8 +149,6 @@ export async function createExperience(formData: FormData): Promise<void> {
         data: {
             authorId: profile.id,
             companyId: company.id,
-            degree,
-            graduationYear,
             roleId: role.id,
             interviewDate: new Date(interviewDate),
             verdict,
