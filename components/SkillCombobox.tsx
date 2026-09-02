@@ -88,7 +88,7 @@ export function SkillCombobox({ skills }: { skills: Skill[] }) {
   }, [availableSkills, query]);
 
   const exactMatch = matches.find((skill) => normalizeQuery(skill.name) === normalizeQuery(query));
-  const visibleSkills = query.trim() ? matches : availableSkills.slice(0, 8);
+  const visibleSkills = query.trim() ? matches : availableSkills;
 
   useEffect(() => {
     function handleOutsidePointer(event: PointerEvent) {
@@ -185,7 +185,7 @@ export function SkillCombobox({ skills }: { skills: Skill[] }) {
 
         {/* Dropdown menu */}
         {isOpen && (
-          <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 overflow-hidden rounded-xl border border-border bg-card shadow-xl">
+          <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 max-h-50 overflow-y-scroll rounded-xl border border-border bg-card shadow-xl">
             {!query.trim() ? (
               visibleSkills.length > 0 ? (
                 visibleSkills.map((skill) => (
