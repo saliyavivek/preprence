@@ -32,10 +32,18 @@ export async function addOnboardingDetails(formData: FormData) {
 
     const nameValue = formData.get("name")?.toString().trim();
     const branchValue = formData.get("branch")?.toString().trim();
+    const graduationYearValue = formData.get("graduationYear")?.toString().trim();
 
-    if (!nameValue || !branchValue) {
+    if (!nameValue || !branchValue || !graduationYearValue) {
         return {
-            error: "Name and branch are required.",
+            error: "Name, branch, and graduation year are required.",
+        };
+    }
+
+    const graduationYear = Number(graduationYearValue);
+    if (!Number.isInteger(graduationYear) || graduationYear < 2000 || graduationYear > 2100) {
+        return {
+            error: "Please enter a valid graduation year.",
         };
     }
 
@@ -45,12 +53,14 @@ export async function addOnboardingDetails(formData: FormData) {
         },
         data: {
             name: nameValue,
-            branch: branchValue,
+            degree: branchValue,
+            graduationYear: graduationYear,
             onboardingCompleted: true,
         },
     });
 
     revalidatePath("/");
+    revalidatePath("/dashboard");
 
     return {
         success: true,

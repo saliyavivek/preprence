@@ -7,7 +7,7 @@ export type Experience = {
     interviewDate: Date;
     verdict: string | null;
     isAnonymous: boolean;
-    author?: { id?: string; name?: string | null; email?: string; degree: string; graduationYear: number } | null;
+    author?: { id?: string; name?: string | null; email?: string; degree?: string | null; graduationYear?: number | null } | null;
     company: { name: string; slug: string; logoUrl: string | null };
     rounds: Array<{ roundType: string; roundNumber?: number }>;
     experienceSkills?: Array<{ skill: { id: string; name: string } }>;

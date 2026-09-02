@@ -45,8 +45,8 @@ model User {
   email String  @unique
   name  String?
 
-  degree         String
-  graduationYear Int
+  degree         String?
+  graduationYear Int?
 
   isAdmin Boolean @default(false)
 

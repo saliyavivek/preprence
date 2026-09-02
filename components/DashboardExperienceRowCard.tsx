@@ -11,7 +11,7 @@ export type DashboardExperienceRow = {
   id: string;
   status?: ExperienceStatus | string;
   role: { id: string; name: string } | null;
-  author: { degree: string; graduationYear: number } | null;
+  author: { degree: string | null; graduationYear: number | null } | null;
   interviewDate: Date | string;
   rounds: Array<unknown>;
   company: {

@@ -28,34 +28,6 @@ function Field({ label, htmlFor, required = false, children }: { label: string; 
 const fieldClassName =
   "min-h-14 w-full rounded-xl border border-input bg-background px-4 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10";
 
-const selectClassName = `${fieldClassName} appearance-none pr-12`;
-
-function SelectField({ id, name, defaultValue, required = false, children }: { id: string; name: string; defaultValue: string; required?: boolean; children: React.ReactNode }) {
-  return (
-    <div className="relative">
-      <select
-        id={id}
-        name={name}
-        required={required}
-        className={selectClassName}
-        defaultValue={defaultValue}
-      >
-        {children}
-      </select>
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground"
-      >
-        <HugeiconsIcon
-          icon={ArrowDown01Icon}
-          size="100%"
-          className="h-5 w-5"
-        />
-      </span>
-    </div>
-  );
-}
-
 export default async function NewExperiencePage() {
   const supabase = await createClient();
   const {

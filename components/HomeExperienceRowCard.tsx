@@ -12,8 +12,8 @@ interface ExperienceRowProps {
       id: string;
     } | null;
     author: {
-      degree: string;
-      graduationYear: number;
+      degree: string | null;
+      graduationYear: number | null;
     } | null;
     verdict: "selected" | "rejected" | "not_disclosed" | null | undefined;
     company: {

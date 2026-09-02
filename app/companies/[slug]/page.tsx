@@ -31,7 +31,6 @@ async function getCompany(slug: string) {
 export default async function CompanyPage({ params }: Props) {
   const { slug } = await params;
   const company = await getCompany(slug);
-  console.log(company?.experiences);
   if (!company) notFound();
   const count = company.experiences.length;
 
