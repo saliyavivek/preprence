@@ -204,9 +204,10 @@ export function ExperienceDirectory({ experiences }: { experiences: Experience[]
   const companies = Array.from(new Map(experiences.map((item) => [item.company.slug, item.company])).values())
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((company) => ({ value: company.slug, label: company.name }));
-  const degrees = Array.from(new Set(experiences.map((item) => item.degree)))
-    .sort((a, b) => a.localeCompare(b))
-    .map((degree) => ({ value: degree, label: degree }));
+  const degrees = Array.from(new Set(experiences.map((item) => item.author?.degree)))
+    .filter(Boolean)
+    .sort((a, b) => (a as string).localeCompare(b as string))
+    .map((degree) => ({ value: degree as string, label: degree as string }));
   const years = Array.from(new Set(experiences.map((item) => new Date(item.interviewDate).getFullYear())))
     .sort((a, b) => b - a)
     .map((year) => ({ value: String(year), label: String(year) }));
@@ -216,7 +217,7 @@ export function ExperienceDirectory({ experiences }: { experiences: Experience[]
     .filter((experience) => {
       return (
         (!filters.company || experience.company.slug === filters.company) &&
-        (!filters.degree || experience.degree === filters.degree) &&
+        (!filters.degree || experience.author?.degree === filters.degree) &&
         (!filters.year || new Date(experience.interviewDate).getFullYear() === Number(filters.year))
       );
     })

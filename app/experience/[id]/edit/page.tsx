@@ -22,7 +22,20 @@ export default async function EditExperiencePage({ params }: Props) {
   const [experience, skills] = await Promise.all([
     prisma.experience.findUnique({
       where: { id },
-      include: { company: true, rounds: { orderBy: { roundNumber: "asc" } }, role: true, author: { select: { name: true, email: true } }, experienceSkills: { include: { skill: true } } },
+      include: {
+        company: true,
+        rounds: { orderBy: { roundNumber: "asc" } },
+        role: true,
+        author: {
+          select: {
+            name: true,
+            email: true,
+            degree: true,
+            graduationYear: true,
+          },
+        },
+        experienceSkills: { include: { skill: true } },
+      },
     }),
     prisma.skill.findMany({
       orderBy: { name: "asc" },

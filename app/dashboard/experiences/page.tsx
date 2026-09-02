@@ -11,7 +11,18 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 async function getExperiences(userId: string) {
   return prisma.experience.findMany({
     where: { authorId: userId },
-    include: { company: true, rounds: true, role: true, experienceSkills: { include: { skill: true } } },
+    include: {
+      company: true,
+      author: {
+        select: {
+          degree: true,
+          graduationYear: true,
+        },
+      },
+      rounds: true,
+      role: true,
+      experienceSkills: { include: { skill: true } },
+    },
     orderBy: { updatedAt: "desc" },
   });
 }

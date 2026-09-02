@@ -45,7 +45,8 @@ model User {
   email String  @unique
   name  String?
 
-  branch String?
+  degree         String
+  graduationYear Int
 
   isAdmin Boolean @default(false)
 
@@ -79,9 +80,6 @@ model Experience {
   author  User    @relation(fields: [authorId], references: [id])
   company Company @relation(fields: [companyId], references: [id])
 
-  degree         String
-  graduationYear Int
-
   roleId String? @db.Uuid
   role   Role?   @relation(fields: [roleId], references: [id])
 
@@ -102,7 +100,6 @@ model Experience {
   @@index([companyId])
   @@index([authorId])
   @@index([status])
-  @@index([graduationYear])
 }
 
 model Round {

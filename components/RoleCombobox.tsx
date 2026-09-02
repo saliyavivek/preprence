@@ -65,7 +65,7 @@ export function RoleCombobox({ roles }: { roles: Role[] }) {
   }, [roles, query, selectedRole]);
 
   const exactMatch = matches.find((role) => normalizeQuery(role.name) === normalizeQuery(query));
-  const visibleRoles = query.trim() ? matches : roles.slice(0, 8);
+  const visibleRoles = query.trim() ? matches : roles;
 
   useEffect(() => {
     function handleOutsidePointer(event: PointerEvent) {
@@ -115,7 +115,7 @@ export function RoleCombobox({ roles }: { roles: Role[] }) {
       />
 
       {isOpen && !selectedRole && (
-        <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 overflow-hidden rounded-xl border border-border bg-card shadow-xl">
+        <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 max-h-50 overflow-y-scroll rounded-xl border border-border bg-card shadow-xl">
           {!query.trim() ? (
             visibleRoles.map((role) => (
               <RoleOption

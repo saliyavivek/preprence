@@ -187,7 +187,7 @@ export default function ExperienceHeader({
                   className="w-4 h-4"
                   icon={GraduationCapIcon}
                 />
-                {experience.degree}
+                {experience.author?.degree}
               </span>
               <span className="flex items-center gap-1 rounded-md border border-border px-2 py-1">
                 <HugeiconsIcon
@@ -195,7 +195,7 @@ export default function ExperienceHeader({
                   size="100%"
                   icon={School01Icon}
                 />
-                Class of {experience.graduationYear}
+                Class of {experience.author?.graduationYear}
               </span>
             </div>
           )}

@@ -11,8 +11,10 @@ interface ExperienceRowProps {
       name: string;
       id: string;
     } | null;
-    degree: string;
-    graduationYear: number;
+    author: {
+      degree: string;
+      graduationYear: number;
+    } | null;
     verdict: "selected" | "rejected" | "not_disclosed" | null | undefined;
     company: {
       name: string;
@@ -60,7 +62,7 @@ export function HomeExperienceRowCard({ experience }: ExperienceRowProps) {
         </div>
       </div>
       <p className="hidden text-sm text-muted-foreground sm:block">
-        {experience.degree} <span aria-hidden="true">·</span> Class of {experience.graduationYear}
+        {experience.author?.degree} <span aria-hidden="true">·</span> Class of {experience.author?.graduationYear}
       </p>
       <p className="hidden text-sm text-muted-foreground sm:block">
         {rounds} {rounds === 1 ? "round" : "rounds"}

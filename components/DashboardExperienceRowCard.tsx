@@ -11,8 +11,7 @@ export type DashboardExperienceRow = {
   id: string;
   status?: ExperienceStatus | string;
   role: { id: string; name: string } | null;
-  degree: string;
-  graduationYear: number;
+  author: { degree: string; graduationYear: number } | null;
   interviewDate: Date | string;
   rounds: Array<unknown>;
   company: {
@@ -49,7 +48,7 @@ export function DashboardExperienceRowCard({ experience, className = "" }: { exp
                     size="100%"
                     icon={GraduationCapIcon}
                   />
-                  <span className="truncate">{experience.degree}</span>
+                  <span className="truncate">{experience.author?.degree}</span>
                 </span>
                 <span
                   aria-hidden="true"
@@ -63,7 +62,7 @@ export function DashboardExperienceRowCard({ experience, className = "" }: { exp
                     size="100%"
                     icon={School01Icon}
                   />
-                  <span className="truncate">Class of {experience.graduationYear}</span>
+                  <span className="truncate">Class of {experience.author?.graduationYear}</span>
                 </span>
                 <span
                   aria-hidden="true"

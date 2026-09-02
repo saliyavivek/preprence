@@ -60,7 +60,7 @@ export function CompanyCombobox({ companies }: { companies: Company[] }) {
   }, [matches, query, selectedCompany]);
 
   const exactMatch = matches.find((company) => normalizeCompanyName(company.name) === normalizeCompanyName(query));
-  const visibleCompanies = query.trim() ? matches : companies.slice(0, 8);
+  const visibleCompanies = query.trim() ? matches : companies;
 
   useEffect(() => {
     function handleOutsidePointer(event: PointerEvent) {
@@ -110,7 +110,7 @@ export function CompanyCombobox({ companies }: { companies: Company[] }) {
       />
 
       {isOpen && !selectedCompany && (
-        <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 overflow-hidden rounded-xl border border-border bg-card shadow-xl">
+        <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 max-h-50 overflow-y-scroll rounded-xl border border-border bg-card shadow-xl">
           {!query.trim() ? (
             visibleCompanies.map((company) => (
               <CompanyOption

@@ -125,17 +125,22 @@ export default async function ExperiencePage({ params }: Props) {
   const { id } = await params;
   const experience = await prisma.experience.findFirst({
     where: { id, status: "published" },
-    include: { company: true, rounds: { orderBy: { roundNumber: "asc" } }, role: true, experienceSkills: { include: { skill: true } } },
+    include: {
+      company: true,
+      author: {
+        select: {
+          name: true,
+          degree: true,
+          graduationYear: true,
+        },
+      },
+      rounds: { orderBy: { roundNumber: "asc" } },
+      role: true,
+      experienceSkills: { include: { skill: true } },
+    },
   });
 
   if (!experience) notFound();
-
-  const author = experience.isAnonymous
-    ? null
-    : await prisma.user.findUnique({
-        where: { id: experience.authorId },
-        select: { name: true, email: true },
-      });
 
   const verdict = formatVerdict(experience.verdict);
 
@@ -144,7 +149,7 @@ export default async function ExperiencePage({ params }: Props) {
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-8 sm:gap-10 sm:px-8 sm:py-16 lg:px-10">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Interview experiences", href: "/experiences" }, { label: experience.company.name }]} />
         <section className="flex flex-col gap-5 border-b border-border pb-7 sm:flex-row sm:items-start sm:justify-between">
-          <ExperienceHeader experience={{ ...experience, author }} />
+          <ExperienceHeader experience={experience} />
           {verdict && (
             <div className="hidden sm:flex shrink-0 sm:px-4 sm:py-3">
               <VerdictBadge verdict={verdict} />

@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/client";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Alert02Icon, Building03Icon, FileIcon, FilePlusIcon, Folder01Icon, Linkedin01Icon, Logout01Icon, Mail01Icon, User03Icon } from "@hugeicons/core-free-icons";
+import { Alert02Icon, Building03Icon, FileIcon, FilePlusIcon, Folder02Icon, Linkedin01Icon, Logout01Icon, Mail01Icon, User03Icon } from "@hugeicons/core-free-icons";
 import Logo from "./Logo";
 
 function cx(...classes: Array<string | false | undefined>) {
@@ -268,7 +268,7 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
                           role="menuitem"
                         >
                           <HugeiconsIcon
-                            icon={Folder01Icon}
+                            icon={Folder02Icon}
                             className="h-4 w-4"
                           />
                           Your experiences
@@ -390,7 +390,7 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
                     onClick={() => setMobileProfileMenuOpen(false)}
                     className="rounded-md px-2 py-3 text-base text-foreground transition-colors hover:bg-foreground/4 flex gap-2 items-center"
                   >
-                    <HugeiconsIcon icon={Folder01Icon} />
+                    <HugeiconsIcon icon={Folder02Icon} />
                     Your experiences
                   </Link>
                 </div>

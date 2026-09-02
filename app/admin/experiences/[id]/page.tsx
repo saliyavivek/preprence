@@ -25,6 +25,8 @@ export default async function AdminExperiencePage({ params }: Props) {
         select: {
           name: true,
           email: true,
+          degree: true,
+          graduationYear: true,
         },
       },
       reports: {
@@ -63,14 +65,14 @@ export default async function AdminExperiencePage({ params }: Props) {
         <h2>Basic Information</h2>
 
         <p>Company: {experience.company.name}</p>
-        <p>Degree: {experience.degree}</p>
-        <p>Graduation Year: {experience.graduationYear}</p>
+        <p>Degree: {experience.author?.degree}</p>
+        <p>Graduation Year: {experience.author?.graduationYear}</p>
         <p>Role: {experience.role?.name || "N/A"}</p>
         <p>Interview Date: {experience.interviewDate.toLocaleDateString()}</p>
         <p>Verdict: {experience.verdict ?? "Not provided"}</p>
         <p>Status: {experience.status}</p>
 
-        <p>Author: {experience.isAnonymous ? "Anonymous" : (experience.author.name ?? experience.author.email)}</p>
+        <p>Author: {experience.isAnonymous ? "Anonymous" : (experience.author?.name ?? experience.author?.email)}</p>
       </section>
 
       <section>

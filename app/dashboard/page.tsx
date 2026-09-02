@@ -17,7 +17,19 @@ async function getDashboardData(userId: string) {
     }),
     prisma.experience.findMany({
       where: { authorId: userId },
-      include: { company: true, rounds: true, role: true, experienceSkills: { include: { skill: true } } },
+      include: {
+        company: true,
+        author: {
+          select: {
+            name: true,
+            degree: true,
+            graduationYear: true,
+          },
+        },
+        rounds: true,
+        role: true,
+        experienceSkills: { include: { skill: true } },
+      },
       orderBy: { updatedAt: "desc" },
       take: 5,
     }),
