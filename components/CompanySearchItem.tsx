@@ -18,7 +18,7 @@ type CompanySearchItemProps = {
 };
 
 const itemClassName =
-  "flex w-full items-center gap-3 border-b border-border/70 px-3 py-2.5 text-left transition-colors last:border-b-0 hover:bg-muted/60 focus-visible:bg-muted/60 focus-visible:outline-none sm:px-4";
+  "group flex w-full items-center gap-3 border-b border-border/70 px-3 py-2.5 text-left transition-colors last:border-b-0 hover:bg-muted/60 focus-visible:bg-muted/60 focus-visible:outline-none sm:px-4";
 
 function CompanySearchItemContent({ company, showArrow }: { company: SearchCompany; showArrow: boolean }) {
   const count = company._count?.experiences ?? 0;
@@ -44,7 +44,7 @@ function CompanySearchItemContent({ company, showArrow }: { company: SearchCompa
           <HugeiconsIcon
             icon={ArrowRight01Icon}
             size="100%"
-            className="h-4 w-4"
+            className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
           />
         </span>
       ) : null}

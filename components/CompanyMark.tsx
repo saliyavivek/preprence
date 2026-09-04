@@ -53,7 +53,7 @@ export function CompanyMarkSmall({ company }: { company: CompanyLike }) {
   return (
     <CompanyMarkBase
       company={company}
-      className="relative grid size-14 shrink-0 place-items-center overflow-hidden rounded-xl border border-border bg-card font-semibold tracking-tight text-muted-foreground text-base"
+      className="relative grid size-14 shrink-0 place-items-center overflow-hidden rounded-xl border border-border bg-white/60 font-semibold tracking-tight text-muted-foreground text-base"
       fallbackClassName="flex size-full items-center justify-center"
       initialsLength={2}
       imageClassName="max-h-full max-w-full scale-150 object-contain p-2"
@@ -77,7 +77,7 @@ export function CompanyMarkLarge({ company }: { company: CompanyLike }) {
   return (
     <CompanyMarkBase
       company={company}
-      className="flex h-[134px] w-[134px] shrink-0 items-center justify-center overflow-hidden rounded-xl border-[3px] bg-card"
+      className="flex h-[134px] w-[134px] shrink-0 items-center justify-center overflow-hidden rounded-xl border-[3px] bg-white/60"
       fallbackClassName="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#ffffff] via-[#f7f7f7] to-[#ececec] text-[3.2rem] font-black tracking-[-0.12em] text-foreground"
       initialsLength={3}
       imageClassName="h-full w-full object-contain p-3"

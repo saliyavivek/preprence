@@ -40,7 +40,7 @@ export default function Loading() {
               className="grid gap-4 sm:grid-cols-[3.5rem_minmax(0,1fr)] sm:gap-5"
             >
               <Skeleton className="size-10 rounded-full" />
-              <div className="overflow-hidden rounded-lg border border-border bg-card">
+              <div className="overflow-hidden rounded-lg border border-border bg-white/60">
                 <Skeleton className="h-12 rounded-none" />
                 <div className="space-y-4 p-5">
                   <Skeleton className="h-5 w-2/3" />
