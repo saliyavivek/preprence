@@ -36,7 +36,7 @@ export function DirectorySidebar({ experiences }: { experiences: Experience[] })
   const companies = Array.from(new Map(experiences.map((item) => [item.company.slug, item.company])).values()).slice(0, 5);
   return (
     <aside className="hidden flex-col gap-5 lg:flex">
-      <div className="rounded-lg border border-border bg-card p-5">
+      <div className="rounded-lg border border-border bg-white/60 p-5">
         <h2 className="font-semibold">At a glance</h2>
         <div className="mt-5 flex flex-col gap-5 text-sm">
           <Stat
@@ -51,7 +51,7 @@ export function DirectorySidebar({ experiences }: { experiences: Experience[] })
           />
         </div>
       </div>
-      <div className="rounded-lg border border-border bg-card p-5">
+      <div className="rounded-lg border border-border bg-white/60 p-5">
         <h2 className="font-semibold">Popular companies</h2>
         <div className="mt-4 flex flex-col gap-4">
           {companies.map((company) => (
@@ -175,7 +175,7 @@ export function DirectoryFilters({
   hasActiveFilters: boolean;
 }) {
   return (
-    <div className="rounded-lg border border-border bg-card p-3 transition-colors hover:border-primary/25 sm:p-4">
+    <div className="rounded-lg border border-border bg-white/60 p-3 transition-colors hover:border-primary/25 sm:p-4">
       <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-3">
         <FilterSelect
           label="All Companies"
@@ -266,7 +266,7 @@ export function ExperienceDirectory({ experiences }: { experiences: Experience[]
       <div className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_17rem]">
         <div className="flex min-w-0 flex-col gap-6">
           <section
-            className="h-fit min-w-0 overflow-hidden rounded-lg border border-border bg-card"
+            className="h-fit min-w-0 overflow-hidden rounded-lg border border-border bg-white/60"
             aria-label="Interview experiences"
           >
             <div className="border-b border-border px-5 py-4 text-sm text-muted-foreground">

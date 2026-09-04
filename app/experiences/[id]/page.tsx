@@ -33,7 +33,7 @@ function formatRoundType(type: string) {
 
 function RoundSummary({ round, index }: { round: ExperienceRound; index: number }) {
   return (
-    <div className="flex w-full flex-col justify-between gap-4 rounded-xl border border-border bg-card px-4 py-4 shadow-sm sm:gap-5 sm:px-5">
+    <div className="flex w-full flex-col justify-between gap-4 rounded-xl border border-border bg-white/60 px-4 py-4 shadow-sm sm:gap-5 sm:px-5">
       <div className="flex items-center gap-4">
         <span className="flex size-12 shrink-0 items-center justify-center rounded-full border-2 border-primary bg-primary/10 text-lg font-semibold text-[#1d7f7b]">
           {String(index + 1).padStart(2, "0")}
@@ -81,7 +81,7 @@ function RoundDetail({ round, isLast = false }: { round: ExperienceRound; isLast
           />
         )}
       </div>
-      <div className="rounded-lg border border-border bg-card shadow-sm">
+      <div className="rounded-lg border border-border bg-white/60 shadow-sm">
         <div className="flex items-start gap-4 rounded-t-lg bg-primary/10 px-4 py-3 sm:px-6">
           <h3 className="w-full text-lg font-semibold tracking-tight text-foreground">{formatRoundType(round.roundType)}</h3>
         </div>

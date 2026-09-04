@@ -19,7 +19,7 @@ export default function Loading() {
           {Array.from({ length: 5 }).map((_, index) => (
             <div
               key={index}
-              className="flex flex-col gap-5 rounded-sm border border-border bg-card p-4 sm:flex-row sm:items-center sm:p-6"
+              className="flex flex-col gap-5 rounded-sm border border-border bg-white/60 p-4 sm:flex-row sm:items-center sm:p-6"
             >
               <Skeleton className="size-20 shrink-0 rounded-lg" />
               <div className="flex min-w-0 flex-1 flex-col gap-3">

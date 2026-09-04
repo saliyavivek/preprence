@@ -15,7 +15,7 @@ export default function Loading() {
         <Skeleton className="h-20 rounded-lg p-3 sm:h-16" />
         <div className="mt-0 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_17rem]">
           <div className="flex min-w-0 flex-col gap-6">
-            <section className="overflow-hidden rounded-lg border border-border bg-card">
+            <section className="overflow-hidden rounded-lg border border-border bg-white/60">
               <Skeleton className="h-12 rounded-none border-b border-border" />
               {Array.from({ length: 4 }).map((_, index) => (
                 <div

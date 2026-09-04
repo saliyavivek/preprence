@@ -99,7 +99,7 @@ export function CompanySearch() {
             onFocus={() => query.trim() && setIsOpen(true)}
             placeholder="Search companies..."
             autoComplete="off"
-            className="h-12 w-full rounded-md border border-input bg-card pl-11 pr-4 text-base outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15"
+            className="h-12 w-full rounded-md border border-input bg-white/60 pl-11 pr-4 text-base outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15"
           />
 
           {isOpen && query.trim() && (

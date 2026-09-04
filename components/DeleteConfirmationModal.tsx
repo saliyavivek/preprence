@@ -94,7 +94,7 @@ export function DeleteConfirmationModal({
             if (event.target === event.currentTarget) closeModal();
           }}
         >
-          <div className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-xl sm:p-6">
+          <div className="w-full max-w-md rounded-xl border border-border bg-white/60 p-5 shadow-xl sm:p-6">
             <div className="flex items-start gap-4">
               <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-destructive/10 text-destructive">
                 <HugeiconsIcon

@@ -22,7 +22,7 @@ function SquareCompanyCard({ company }: { company: Company }) {
   return (
     <Link
       href={`/companies/${company.slug}`}
-      className="group relative flex min-h-28 min-w-0 items-center gap-4 border border-border bg-card px-4 py-4 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.3 hover:border-primary/45 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:px-5 rounded-md"
+      className="group relative flex min-h-28 min-w-0 items-center gap-4 border border-border bg-white/60 px-4 py-4 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.3 hover:border-primary/45 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:px-5 rounded-md"
     >
       <CompanyMarkSmall company={company} />
       <span className="min-w-0 flex-1 pr-5">

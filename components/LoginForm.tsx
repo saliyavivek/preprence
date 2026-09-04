@@ -54,7 +54,7 @@ export function LoginForm({ initialMessage, nextPath }: LoginFormProps) {
 
   return (
     <main className="flex min-h-svh w-full items-center justify-center px-4 py-8 sm:min-h-screen sm:px-8 sm:py-16">
-      <section className="w-full max-w-120 rounded-xl border border-border bg-card px-4 py-6 shadow-[0_12px_40px_rgba(32,37,34,0.04)] sm:px-10 sm:py-10">
+      <section className="w-full max-w-120 rounded-xl border border-border bg-white/60 px-4 py-6 shadow-[0_12px_40px_rgba(32,37,34,0.04)] sm:px-10 sm:py-10">
         <div className="flex flex-col gap-4 sm:gap-6">
           <header className="flex flex-col items-center gap-4 text-center">
             <p className="hidden text-2xl font-semibold tracking-tighter text-foreground sm:block">

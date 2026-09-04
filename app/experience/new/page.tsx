@@ -74,7 +74,7 @@ export default async function NewExperiencePage() {
           action={createExperience}
           className="flex flex-col gap-7"
         >
-          <section className="rounded-2xl border border-border bg-card p-6 shadow-[0_8px_30px_rgba(32,37,34,0.04)] sm:p-8">
+          <section className="rounded-2xl border border-border bg-white/60 p-6 shadow-[0_8px_30px_rgba(32,37,34,0.04)] sm:p-8">
             <div className="flex flex-col gap-7">
               <h2 className="text-2xl font-semibold tracking-tight">About the interview</h2>
               <div className="grid gap-6 md:grid-cols-2">
@@ -133,13 +133,13 @@ export default async function NewExperiencePage() {
               >
                 <SkillCombobox skills={skills} />
               </Field>
-              <p className="text-sm text-muted-foreground">
+              {/* <p className="text-sm text-muted-foreground">
                 <span className="text-destructive">*</span> Required fields
-              </p>
+              </p> */}
             </div>
           </section>
 
-          <section className="flex flex-col gap-6 rounded-2xl border border-border bg-card p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+          <section className="flex flex-col gap-6 rounded-2xl border border-border bg-white/60 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
             <div>
               <h2 className="font-semibold text-muted-foreground">You&apos;ll be able to add the interview rounds, tips and other details in the next step.</h2>
             </div>
