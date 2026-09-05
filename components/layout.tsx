@@ -143,6 +143,7 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
           isHeaderVisible ? "translate-y-0" : "-translate-y-full",
         )}
       >
+<<<<<<< Updated upstream
         <Container className="flex min-h-18 items-center justify-between">
           <Link
             href="/"
@@ -153,6 +154,151 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
 
           {/* Mobile profile trigger */}
           <div className="md:hidden">
+=======
+        <Container className="flex h-16 items-center justify-between gap-4 sm:gap-6">
+          {/* Left: Brand & Nav Links */}
+          <div className="flex items-center gap-6 lg:gap-8">
+            <Link
+              href="/"
+              aria-label="preprence."
+              className="shrink-0 mt-1"
+            >
+              <Logo className="h-5 w-auto" />
+            </Link>
+
+            <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
+              <Link
+                href="/companies"
+                className={cx("transition-colors hover:text-primary", pathname === "/companies" && "text-primary font-semibold")}
+              >
+                Companies
+              </Link>
+
+              <Link
+                href="/experiences"
+                className={cx("inline-flex items-center gap-1 transition-colors hover:text-primary", pathname.startsWith("/experiences") && "text-primary font-semibold")}
+              >
+                <span>Experiences</span>
+              </Link>
+            </nav>
+          </div>
+
+          {/* Middle: Global Search Input (Hidden on mobile) */}
+          <div className="hidden md:flex flex-1 max-w-md lg:max-w-lg items-center justify-center">
+            <GlobalSearch />
+          </div>
+
+          {/* Right: Write Experience & Profile */}
+          <div className="hidden md:flex items-center gap-4">
+            <Link
+              href={!isAuthenticated ? "/login" : "/experience/new"}
+              className="text-sm font-medium text-foreground hover:text-primary transition-colors whitespace-nowrap"
+            >
+              Write Experience
+            </Link>
+
+            {isAuthenticated ? (
+              <>
+                <span
+                  className="h-4 w-[1px] bg-border"
+                  aria-hidden="true"
+                />
+
+                <div
+                  ref={desktopProfileMenuRef}
+                  className="relative"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setDesktopProfileMenuOpen((current) => !current)}
+                    className="flex items-center gap-1.5 rounded-full p-0.5 hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                    aria-expanded={desktopProfileMenuOpen}
+                    aria-haspopup="menu"
+                    aria-label="Open profile menu"
+                  >
+                    <UserAvatar name={userName} />
+                    <HugeiconsIcon
+                      icon={ChevronDownIcon}
+                      size={14}
+                      strokeWidth={2.5}
+                      className={`text-muted-foreground transition-transform duration-200 ${desktopProfileMenuOpen ? "rotate-180" : ""}`}
+                    />
+                  </button>
+
+                  {desktopProfileMenuOpen && (
+                    <div
+                      role="menu"
+                      className="absolute right-0 top-full z-50 mt-3 w-70 overflow-hidden rounded-xl border border-border bg-background shadow-xl"
+                    >
+                      <div className="flex items-center gap-3 border-b border-border bg-primary/10 px-4 py-3.5">
+                        <UserAvatar name={userName} />
+                        <div className="min-w-0">
+                          {userName ? <div className="truncate text-sm font-medium text-foreground">{userName}</div> : null}
+                          <div className="truncate text-xs text-muted-foreground">{userEmail || ""}</div>
+                        </div>
+                      </div>
+
+                      <div className="px-3 py-3">
+                        <div className="space-y-1">
+                          <Link
+                            href="/dashboard"
+                            onClick={() => setDesktopProfileMenuOpen(false)}
+                            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+                            role="menuitem"
+                          >
+                            <HugeiconsIcon
+                              icon={User03Icon}
+                              className="h-4 w-4"
+                            />
+                            Profile
+                          </Link>
+
+                          <Link
+                            href="/dashboard/experiences"
+                            onClick={() => setDesktopProfileMenuOpen(false)}
+                            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+                            role="menuitem"
+                          >
+                            <HugeiconsIcon
+                              icon={Folder02Icon}
+                              className="h-4 w-4"
+                            />
+                            Your experiences
+                          </Link>
+                        </div>
+
+                        <div className="my-2 border-t border-border" />
+
+                        <button
+                          type="button"
+                          onClick={handleLogout}
+                          className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-foreground transition-colors hover:bg-muted"
+                          role="menuitem"
+                        >
+                          <HugeiconsIcon
+                            icon={Logout01Icon}
+                            className="h-4 w-4"
+                          />
+                          Sign out
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <Link
+                href="/login"
+                className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+              >
+                Sign in
+              </Link>
+            )}
+          </div>
+
+          {/* Mobile Avatar / Trigger (Preserved mobile implementation) */}
+          <div className="md:hidden flex items-center">
+>>>>>>> Stashed changes
             {isAuthenticated ? (
               <button
                 type="button"
@@ -429,7 +575,7 @@ export function Footer() {
                 href="/"
                 aria-label="preprence."
               >
-                <Logo className="w-30 h-auto" />
+                <Logo className="h-5 w-auto" />
               </Link>
               <p className="max-w-sm text-sm leading-6 text-muted-foreground">Interview experiences from students. For students.</p>
             </div>

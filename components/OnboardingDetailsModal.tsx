@@ -41,7 +41,11 @@ export default function OnboardingDetailsModal({ onComplete }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 backdrop-blur-[2px]">
+<<<<<<< Updated upstream
       <div className="w-full max-w-[440px] rounded-[1.25rem] border border-border bg-card p-8 shadow-xl sm:p-10">
+=======
+      <div className="w-full max-w-[440px] max-h-[90vh] flex flex-col rounded-[1.25rem] border border-border bg-card shadow-xl overflow-hidden">
+>>>>>>> Stashed changes
         {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="text-[1.75rem] font-semibold leading-tight tracking-tight text-foreground">Tell us a little about yourself</h1>
@@ -86,9 +90,55 @@ export default function OnboardingDetailsModal({ onComplete }: Props) {
               Branch
             </label>
 
+<<<<<<< Updated upstream
             <div className="relative">
               <select
                 id="branch"
+=======
+              <div
+                ref={branchRootRef}
+                className="relative"
+              >
+                <button
+                  ref={branchButtonRef}
+                  type="button"
+                  onClick={() => setIsBranchOpen(!isBranchOpen)}
+                  className="flex min-h-11 sm:min-h-12 w-full items-center justify-between gap-3 rounded-md border border-input bg-background px-4 text-sm text-foreground outline-none transition-colors hover:border-input focus:border-primary focus:ring-2 focus:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-60"
+                  disabled={loading}
+                >
+                  <span className="text-left">{selectedBranch?.label || "Select your branch"}</span>
+                  <HugeiconsIcon
+                    icon={ArrowDown01Icon}
+                    size="100%"
+                    className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${isBranchOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+
+                {/* Dropdown menu */}
+                {isBranchOpen && (
+                  <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 rounded-md border border-border bg-card shadow-xl">
+                    {BRANCH_OPTIONS.map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => {
+                          setBranch(option.value);
+                          setIsBranchOpen(false);
+                          branchButtonRef.current?.focus();
+                        }}
+                        className="flex w-full items-center gap-3 border-b border-border/70 px-4 py-2.5 text-left text-sm transition-colors last:border-b-0 hover:bg-muted/60 focus-visible:bg-muted/60 focus-visible:outline-none"
+                      >
+                        <span className="block truncate font-medium text-foreground">{option.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Hidden input for form submission */}
+              <input
+                type="hidden"
+>>>>>>> Stashed changes
                 name="branch"
                 value={branch}
                 onChange={(event) => setBranch(event.target.value)}
