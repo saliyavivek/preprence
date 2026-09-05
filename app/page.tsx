@@ -3,13 +3,13 @@ import { prisma } from "@/lib/prisma";
 import { CompanyCard } from "@/components/CompanyCard";
 import { HomeExperienceRowCard } from "@/components/HomeExperienceRowCard";
 import { InterviewFlow } from "@/components/InterviewFlow";
-import { CompanySearch } from "@/components/CompanySearch";
 import { createClient } from "@/lib/supabase/server";
 import OnboardingDetailsModal from "../components/OnboardingDetailsModal";
 import { unstable_cache } from "next/cache";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { TrustStats } from "@/components/TrustStats";
+import { GlobalSearch } from "@/components/GlobalSearch";
 
 const getLandingData = unstable_cache(
   async () => {
@@ -34,7 +34,18 @@ const getLandingData = unstable_cache(
       }),
       prisma.experience.findMany({
         where: { status: "published" },
-        include: { company: true, rounds: true, role: true, experienceSkills: { include: { skill: true } } },
+        include: {
+          company: true,
+          author: {
+            select: {
+              degree: true,
+              graduationYear: true,
+            },
+          },
+          rounds: true,
+          role: true,
+          experienceSkills: { include: { skill: true } },
+        },
         orderBy: { createdAt: "desc" },
         take: 6,
       }),
@@ -108,7 +119,7 @@ export default async function HomePage() {
               <p className="mt-5 max-w-md text-pretty text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">Read real interview experiences shared by students from your college.</p>
 
               <div className="mt-7 w-full max-w-[560px] sm:mt-8">
-                <CompanySearch />
+                <GlobalSearch />
                 <TrustStats
                   totalUsers={totalUsers}
                   totalExperiences={totalExperiences}
@@ -182,7 +193,7 @@ export default async function HomePage() {
             {experiences.length === 0 ? (
               <p className="border-t border-border py-5 text-muted-foreground">No published experiences yet.</p>
             ) : (
-              <div className="rounded-lg border border-border bg-card">
+              <div className="rounded-lg border border-border bg-white/60">
                 {experiences.map((experience) => (
                   <HomeExperienceRowCard
                     key={experience.id}
@@ -210,7 +221,7 @@ export default async function HomePage() {
                     className="flex items-center"
                   >
                     <div className="flex w-[56px] flex-col items-center gap-2">
-                      <span className="grid size-8 place-items-center rounded-full border border-primary/30 bg-card text-[11px] font-semibold text-primary">0{index + 1}</span>
+                      <span className="grid size-8 place-items-center rounded-full border border-primary/30 bg-white/60 text-[11px] font-semibold text-primary">0{index + 1}</span>
                       <span className="text-[11px] text-muted-foreground">{label}</span>
                     </div>
                     {index < 3 && <span className="mb-5 h-px w-6 bg-primary/20" />}

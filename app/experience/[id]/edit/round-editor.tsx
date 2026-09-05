@@ -85,7 +85,7 @@ const editorCommands = [customTitle, customBold, customItalic, commands.divider,
 
 // 3. Custom Tailwind wrapper to handle the mobile stacked layout & toolbar spacing safely
 const editorWrapperClasses =
-  "font-normal w-full overflow-hidden rounded-md border border-input bg-card [&_.w-md-editor]:!shadow-none [&_.w-md-editor-toolbar]:!flex [&_.w-md-editor-toolbar]:!items-center [&_.w-md-editor-toolbar]:!gap-1 [&_.w-md-editor-toolbar]:!min-h-11 [&_.w-md-editor-toolbar]:!h-11 [&_.w-md-editor-toolbar]:!px-1.5 [&_.w-md-editor-toolbar]:!py-1 [&_.w-md-editor-toolbar_ul]:!m-0 [&_.w-md-editor-toolbar_ul]:!flex [&_.w-md-editor-toolbar_ul]:!items-center [&_.w-md-editor-toolbar_ul]:!gap-0.5 [&_.w-md-editor-toolbar_li]:!m-0 [&_.w-md-editor-toolbar_li]:!flex [&_.w-md-editor-toolbar_li]:!items-center [&_.w-md-editor-toolbar_li>button]:!m-0 [&_.w-md-editor-toolbar_li>button]:!flex [&_.w-md-editor-toolbar_li>button]:!h-9 [&_.w-md-editor-toolbar_li>button]:!w-9 [&_.w-md-editor-toolbar_li>button]:!items-center [&_.w-md-editor-toolbar_li>button]:!justify-center [&_.w-md-editor-toolbar_li>button]:!p-0";
+  "font-normal w-full overflow-hidden rounded-md border border-input bg-white/60 [&_.w-md-editor]:!shadow-none [&_.w-md-editor-toolbar]:!flex [&_.w-md-editor-toolbar]:!items-center [&_.w-md-editor-toolbar]:!gap-1 [&_.w-md-editor-toolbar]:!min-h-11 [&_.w-md-editor-toolbar]:!h-11 [&_.w-md-editor-toolbar]:!px-1.5 [&_.w-md-editor-toolbar]:!py-1 [&_.w-md-editor-toolbar_ul]:!m-0 [&_.w-md-editor-toolbar_ul]:!flex [&_.w-md-editor-toolbar_ul]:!items-center [&_.w-md-editor-toolbar_ul]:!gap-0.5 [&_.w-md-editor-toolbar_li]:!m-0 [&_.w-md-editor-toolbar_li]:!flex [&_.w-md-editor-toolbar_li]:!items-center [&_.w-md-editor-toolbar_li>button]:!m-0 [&_.w-md-editor-toolbar_li>button]:!flex [&_.w-md-editor-toolbar_li>button]:!h-9 [&_.w-md-editor-toolbar_li>button]:!w-9 [&_.w-md-editor-toolbar_li>button]:!items-center [&_.w-md-editor-toolbar_li>button]:!justify-center [&_.w-md-editor-toolbar_li>button]:!p-0";
 
 type Round = {
   id: string;
@@ -131,7 +131,7 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
 
   if (isEditing) {
     return (
-      <article className="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-6">
+      <article className="rounded-xl border border-border bg-white/60 p-4 shadow-sm sm:p-6">
         <form
           action={updateRound.bind(null, experienceId, round.id)}
           className="space-y-4"
@@ -143,7 +143,7 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
               value={roundType}
               onChange={(e) => setRoundType(e.target.value)}
               required
-              className="min-h-10 rounded-md border border-input bg-card px-3 font-normal"
+              className="min-h-10 rounded-md border border-input bg-white/60 px-3 font-normal"
             >
               <option value="aptitude">Aptitude</option>
               <option value="online_assessment">Online Assessment</option>
@@ -161,7 +161,7 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
               name="difficulty"
               value={difficulty}
               onChange={(e) => setDifficulty(e.target.value)}
-              className="min-h-10 rounded-md border border-input bg-card px-3 font-normal"
+              className="min-h-10 rounded-md border border-input bg-white/60 px-3 font-normal"
             >
               <option value="">Not specified</option>
               <option value="easy">Easy</option>
@@ -178,7 +178,7 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
               min="1"
               value={durationMinutes}
               onChange={(e) => setDurationMinutes(e.target.value)}
-              className="min-h-10 rounded-md border border-input bg-card px-3 font-normal"
+              className="min-h-10 rounded-md border border-input bg-white/60 px-3 font-normal"
             />
           </label>
 
@@ -292,7 +292,7 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
   }
 
   return (
-    <article className="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-6">
+    <article className="rounded-xl border border-border bg-white/60 p-4 shadow-sm sm:p-6">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex min-w-0 gap-4">
           <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-primary/30 bg-primary/5 text-sm font-semibold text-primary">
@@ -444,7 +444,7 @@ export function AddRoundForm({ experienceId }: { experienceId: string }) {
               value={roundType}
               onChange={(e) => setRoundType(e.target.value)}
               required
-              className="min-h-11 rounded-md border border-input bg-card px-3 font-normal"
+              className="min-h-11 rounded-md border border-input bg-white/60 px-3 font-normal"
             >
               <option value="">Select round type</option>
               <option value="aptitude">Aptitude</option>
@@ -463,7 +463,7 @@ export function AddRoundForm({ experienceId }: { experienceId: string }) {
               name="difficulty"
               value={difficulty}
               onChange={(e) => setDifficulty(e.target.value)}
-              className="min-h-11 rounded-md border border-input bg-card px-3 font-normal"
+              className="min-h-11 rounded-md border border-input bg-white/60 px-3 font-normal"
             >
               <option value="">Not specified</option>
               <option value="easy">Easy</option>
@@ -481,7 +481,7 @@ export function AddRoundForm({ experienceId }: { experienceId: string }) {
               placeholder="45"
               value={durationMinutes}
               onChange={(e) => setDurationMinutes(e.target.value)}
-              className="min-h-11 rounded-md border border-input bg-card px-3 font-normal"
+              className="min-h-11 rounded-md border border-input bg-white/60 px-3 font-normal"
             />
           </label>
 

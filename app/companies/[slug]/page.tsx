@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { CompanyMarkLarge } from "@/components/CompanyMark";
 import { NormalExperienceRowCard } from "@/components/NormalExperienceRowCard";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowRight01Icon, Edit01Icon, ExternalLinkIcon, File02Icon, Globe02Icon, World } from "@hugeicons/core-free-icons";
+import { ArrowRight01Icon, Edit01Icon, ExternalLinkIcon, File02Icon, Globe02Icon } from "@hugeicons/core-free-icons";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -17,6 +17,7 @@ async function getCompany(slug: string) {
         where: { status: "published" },
         include: {
           company: true,
+          author: { select: { degree: true, graduationYear: true } },
           rounds: { orderBy: { roundNumber: "asc" } },
           role: true,
           experienceSkills: { include: { skill: true } },
@@ -38,7 +39,7 @@ export default async function CompanyPage({ params }: Props) {
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Companies", href: "/companies" }, { label: company.name }]} />
 
-        <section className="rounded-lg border border-border bg-card">
+        <section className="rounded-lg border border-border bg-white/60">
           <div className="flex flex-col gap-7 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
             <div className="flex flex-col items-center gap-5 sm:flex-row sm:gap-6">
               <div className="flex size-24 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border bg-background sm:size-32">
@@ -89,7 +90,7 @@ export default async function CompanyPage({ params }: Props) {
             >
               Interview Experiences
             </h2>
-            <div className="overflow-hidden rounded-lg border border-border bg-card">
+            <div className="overflow-hidden rounded-lg border border-border bg-white/60">
               {company.experiences.map((experience) => (
                 <NormalExperienceRowCard
                   key={experience.id}
@@ -102,7 +103,7 @@ export default async function CompanyPage({ params }: Props) {
         )}
 
         {count === 0 && (
-          <section className="flex flex-col gap-3 rounded-lg border border-dashed border-border bg-card p-8 text-center">
+          <section className="flex flex-col gap-3 rounded-lg border border-dashed border-border bg-white/60 p-8 text-center">
             <h2 className="text-xl font-semibold">No interview experiences yet.</h2>
             <p className="text-muted-foreground">Be the first student to share what your interview was like.</p>
             <Link

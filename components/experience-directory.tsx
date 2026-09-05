@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowDown01Icon, ArrowRight02Icon, Building01Icon, Edit02Icon, People } from "@hugeicons/core-free-icons";
 import type { Experience } from "@/lib/types";
@@ -36,7 +36,7 @@ export function DirectorySidebar({ experiences }: { experiences: Experience[] })
   const companies = Array.from(new Map(experiences.map((item) => [item.company.slug, item.company])).values()).slice(0, 5);
   return (
     <aside className="hidden flex-col gap-5 lg:flex">
-      <div className="rounded-lg border border-border bg-card p-5">
+      <div className="rounded-lg border border-border bg-white/60 p-5">
         <h2 className="font-semibold">At a glance</h2>
         <div className="mt-5 flex flex-col gap-5 text-sm">
           <Stat
@@ -51,7 +51,7 @@ export function DirectorySidebar({ experiences }: { experiences: Experience[] })
           />
         </div>
       </div>
-      <div className="rounded-lg border border-border bg-card p-5">
+      <div className="rounded-lg border border-border bg-white/60 p-5">
         <h2 className="font-semibold">Popular companies</h2>
         <div className="mt-4 flex flex-col gap-4">
           {companies.map((company) => (
@@ -105,35 +105,59 @@ const defaultFilters: FilterState = {
 };
 
 function FilterSelect({ label, value, onChange, options }: { label: string; value: string; onChange: (value: string) => void; options: Array<{ value: string; label: string }> }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  const selectedOption = options.find((opt) => opt.value === value);
+  const displayLabel = selectedOption?.label || label;
+
+  useEffect(() => {
+    function handleOutsidePointer(event: PointerEvent) {
+      if (!rootRef.current?.contains(event.target as Node)) setIsOpen(false);
+    }
+
+    document.addEventListener("pointerdown", handleOutsidePointer);
+    return () => document.removeEventListener("pointerdown", handleOutsidePointer);
+  }, []);
+
+  function selectOption(optionValue: string) {
+    onChange(optionValue);
+    setIsOpen(false);
+  }
+
   return (
-    <label className="group relative min-w-0">
-      <span className="sr-only">{label}</span>
-      <select
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        className="min-h-10 w-full appearance-none rounded-md border border-input bg-background px-3 pr-8 text-left text-xs text-foreground transition-colors hover:border-primary/45 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15 sm:min-w-36 sm:text-sm"
+    <div
+      ref={rootRef}
+      className="relative min-w-0"
+    >
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="min-h-12 w-full rounded-xl border border-input bg-background px-4 text-left text-sm text-foreground outline-none transition-colors hover:border-primary/45 focus:border-primary focus:ring-4 focus:ring-primary/10 flex items-center justify-between gap-2"
       >
-        <option value="">{label}</option>
-        {options.map((option) => (
-          <option
-            key={option.value}
-            value={option.value}
-          >
-            {option.label}
-          </option>
-        ))}
-      </select>
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors group-hover:text-primary"
-      >
+        <span className="truncate">{displayLabel}</span>
         <HugeiconsIcon
           icon={ArrowDown01Icon}
           size="100%"
-          className="h-4 w-4"
+          className={`h-5 w-5 flex-shrink-0 text-muted-foreground transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
         />
-      </span>
-    </label>
+      </button>
+
+      {isOpen && (
+        <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 max-h-64 overflow-y-auto rounded-xl border border-border bg-card shadow-xl">
+          {options.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => selectOption(option.value)}
+              className="flex w-full items-center gap-3 border-b border-border/70 px-4 py-2.5 text-left transition-colors last:border-b-0 hover:bg-muted/60 focus-visible:bg-muted/60 focus-visible:outline-none"
+            >
+              <span className="block truncate text-sm font-medium text-foreground">{option.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -151,7 +175,7 @@ export function DirectoryFilters({
   hasActiveFilters: boolean;
 }) {
   return (
-    <div className="rounded-lg border border-border bg-card p-3 transition-colors hover:border-primary/25 sm:p-4">
+    <div className="rounded-lg border border-border bg-white/60 p-3 transition-colors hover:border-primary/25 sm:p-4">
       <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-3">
         <FilterSelect
           label="All Companies"
@@ -184,7 +208,7 @@ export function DirectoryFilters({
           type="button"
           onClick={onReset}
           disabled={!hasActiveFilters}
-          className="col-span-2 min-h-10 w-full justify-self-end rounded-md border border-input px-4 py-2 text-sm font-medium text-primary transition-colors hover:border-primary/45 hover:bg-muted/40 disabled:cursor-not-allowed disabled:opacity-45 sm:col-span-1 sm:ml-auto sm:w-auto"
+          className="col-span-2 min-h-12 w-full justify-self-end rounded-xl border border-input px-4 py-2 text-sm font-medium text-primary transition-colors hover:border-primary/45 hover:bg-muted/40 disabled:cursor-not-allowed disabled:opacity-45 sm:col-span-1 sm:ml-auto sm:w-auto"
         >
           Clear filters
         </button>
@@ -204,9 +228,10 @@ export function ExperienceDirectory({ experiences }: { experiences: Experience[]
   const companies = Array.from(new Map(experiences.map((item) => [item.company.slug, item.company])).values())
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((company) => ({ value: company.slug, label: company.name }));
-  const degrees = Array.from(new Set(experiences.map((item) => item.degree)))
-    .sort((a, b) => a.localeCompare(b))
-    .map((degree) => ({ value: degree, label: degree }));
+  const degrees = Array.from(new Set(experiences.map((item) => item.author?.degree)))
+    .filter(Boolean)
+    .sort((a, b) => (a as string).localeCompare(b as string))
+    .map((degree) => ({ value: degree as string, label: degree as string }));
   const years = Array.from(new Set(experiences.map((item) => new Date(item.interviewDate).getFullYear())))
     .sort((a, b) => b - a)
     .map((year) => ({ value: String(year), label: String(year) }));
@@ -216,7 +241,7 @@ export function ExperienceDirectory({ experiences }: { experiences: Experience[]
     .filter((experience) => {
       return (
         (!filters.company || experience.company.slug === filters.company) &&
-        (!filters.degree || experience.degree === filters.degree) &&
+        (!filters.degree || experience.author?.degree === filters.degree) &&
         (!filters.year || new Date(experience.interviewDate).getFullYear() === Number(filters.year))
       );
     })
@@ -241,7 +266,7 @@ export function ExperienceDirectory({ experiences }: { experiences: Experience[]
       <div className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_17rem]">
         <div className="flex min-w-0 flex-col gap-6">
           <section
-            className="h-fit min-w-0 overflow-hidden rounded-lg border border-border bg-card"
+            className="h-fit min-w-0 overflow-hidden rounded-lg border border-border bg-white/60"
             aria-label="Interview experiences"
           >
             <div className="border-b border-border px-5 py-4 text-sm text-muted-foreground">

@@ -20,7 +20,7 @@ export function CompanyCard({ company }: CompanyCardProps) {
   return (
     <Link
       href={`/companies/${company.slug}`}
-      className="group flex min-w-0 items-center gap-4 rounded-xl border border-border bg-card px-5 py-4 transition-colors hover:border-primary/35"
+      className="group flex min-w-0 items-center gap-4 rounded-xl border border-border bg-white/60 px-5 py-4 transition-colors hover:border-primary/35"
     >
       <CompanyMarkSmall company={company} />
       <span className="min-w-0 flex-1">

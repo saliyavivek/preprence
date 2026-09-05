@@ -51,7 +51,7 @@ export function ReportButton({ experienceId }: Props) {
       {isOpen && (
         <form
           action={submitReport}
-          className="flex w-full max-w-sm flex-col gap-3 rounded-md border border-border bg-card p-4 shadow-sm"
+          className="flex w-full max-w-sm flex-col gap-3 rounded-md border border-border bg-white/60 p-4 shadow-sm"
         >
           <label
             htmlFor="report-reason"

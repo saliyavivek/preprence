@@ -187,7 +187,7 @@ export default function ExperienceHeader({
                   className="w-4 h-4"
                   icon={GraduationCapIcon}
                 />
-                {experience.degree}
+                {experience.author?.degree}
               </span>
               <span className="flex items-center gap-1 rounded-md border border-border px-2 py-1">
                 <HugeiconsIcon
@@ -195,7 +195,7 @@ export default function ExperienceHeader({
                   size="100%"
                   icon={School01Icon}
                 />
-                Class of {experience.graduationYear}
+                Class of {experience.author?.graduationYear}
               </span>
             </div>
           )}
@@ -204,7 +204,7 @@ export default function ExperienceHeader({
         {/* Add Skills Modal */}
         {showAddSkillsModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-            <div className="relative flex max-h-[80vh] w-full max-w-md flex-col gap-4 rounded-xl border border-border bg-card p-6 shadow-xl">
+            <div className="relative flex max-h-[80vh] w-full max-w-md flex-col gap-4 rounded-xl border border-border bg-white/60 p-6 shadow-xl">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold">Add skills to your experience</h2>
                 <button
@@ -243,7 +243,7 @@ export default function ExperienceHeader({
         {/* All Skills Modal */}
         {showAllSkills && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-            <div className="relative flex max-h-[80vh] w-full max-w-sm flex-col gap-4 rounded-xl border border-border bg-card p-6 shadow-xl">
+            <div className="relative flex max-h-[80vh] w-full max-w-sm flex-col gap-4 rounded-xl border border-border bg-white/60 p-6 shadow-xl">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold">All Skills ({allSkills.length})</h2>
                 <button

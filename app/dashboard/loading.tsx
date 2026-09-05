@@ -23,7 +23,7 @@ export default function Loading() {
           ))}
         </div>
       </section>
-      <section className="mt-12 overflow-hidden rounded-2xl border border-border bg-card">
+      <section className="mt-12 overflow-hidden rounded-2xl border border-border bg-white/60">
         <div className="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-5">
           <Skeleton className="h-6 w-52" />
           <Skeleton className="h-5 w-16" />

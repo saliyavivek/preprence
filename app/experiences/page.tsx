@@ -9,7 +9,18 @@ async function getExperiences() {
   return prisma.experience.findMany({
     where: { status: "published" },
     orderBy: { interviewDate: "desc" },
-    include: { company: true, rounds: { orderBy: { roundNumber: "asc" } }, role: true, experienceSkills: { include: { skill: true } } },
+    include: {
+      company: true,
+      author: {
+        select: {
+          degree: true,
+          graduationYear: true,
+        },
+      },
+      rounds: { orderBy: { roundNumber: "asc" } },
+      role: true,
+      experienceSkills: { include: { skill: true } },
+    },
   });
 }
 

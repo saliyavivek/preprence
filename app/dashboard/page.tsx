@@ -17,7 +17,19 @@ async function getDashboardData(userId: string) {
     }),
     prisma.experience.findMany({
       where: { authorId: userId },
-      include: { company: true, rounds: true, role: true, experienceSkills: { include: { skill: true } } },
+      include: {
+        company: true,
+        author: {
+          select: {
+            name: true,
+            degree: true,
+            graduationYear: true,
+          },
+        },
+        rounds: true,
+        role: true,
+        experienceSkills: { include: { skill: true } },
+      },
       orderBy: { updatedAt: "desc" },
       take: 5,
     }),
@@ -84,7 +96,7 @@ export default async function DashboardPage() {
       <section className="mt-12">
         <h2 className="text-[1.3rem] sm:text-[1.4rem] font-semibold tracking-tight text-foreground">Your activity</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="flex items-center gap-5 rounded-2xl border border-border bg-card p-6 shadow-sm">
+          <div className="flex items-center gap-5 rounded-2xl border border-border bg-white/60 p-6 shadow-sm">
             <span className="flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center rounded-full bg-[#e1ecf5] text-[#094770] text-xl">
               <HugeiconsIcon icon={FileIcon} />
             </span>
@@ -95,7 +107,7 @@ export default async function DashboardPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-5 rounded-2xl border border-border bg-card p-6 shadow-sm">
+          <div className="flex items-center gap-5 rounded-2xl border border-border bg-white/60 p-6 shadow-sm">
             <span className="flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center rounded-full bg-[#e3fbee] text-[#1c7b39] text-xl">
               <HugeiconsIcon icon={Tick03Icon} />
             </span>
@@ -106,7 +118,7 @@ export default async function DashboardPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-5 rounded-2xl border border-border bg-card p-6 shadow-sm">
+          <div className="flex items-center gap-5 rounded-2xl border border-border bg-white/60 p-6 shadow-sm">
             <span className="flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center rounded-full bg-[#fdf3e1] text-[#a46600] text-xl">
               <HugeiconsIcon icon={Edit02Icon} />
             </span>
@@ -119,7 +131,7 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      <section className="mt-12 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+      <section className="mt-12 overflow-hidden rounded-2xl border border-border bg-white/60 shadow-sm">
         <div className="flex flex-row items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-5">
           <h2 className="text-[1.15rem] font-semibold tracking-tight text-foreground">Your recent experiences</h2>
           <Link

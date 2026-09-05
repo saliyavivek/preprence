@@ -32,7 +32,7 @@ export default function EditableSummary({ experience }: { experience: Experience
   }
 
   return (
-    <section className="rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6">
+    <section className="rounded-xl border border-border bg-white/60 p-5 shadow-sm sm:p-6">
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h2 className="text-xl font-semibold">Overall tips</h2>

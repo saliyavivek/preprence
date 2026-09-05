@@ -11,7 +11,18 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 async function getExperiences(userId: string) {
   return prisma.experience.findMany({
     where: { authorId: userId },
-    include: { company: true, rounds: true, role: true, experienceSkills: { include: { skill: true } } },
+    include: {
+      company: true,
+      author: {
+        select: {
+          degree: true,
+          graduationYear: true,
+        },
+      },
+      rounds: true,
+      role: true,
+      experienceSkills: { include: { skill: true } },
+    },
     orderBy: { updatedAt: "desc" },
   });
 }
@@ -48,7 +59,7 @@ export default async function MyExperiencesPage() {
         </header>
 
         {experiences.length === 0 ? (
-          <section className="flex flex-col items-center gap-5 rounded-xl border border-border bg-card px-6 py-16 text-center">
+          <section className="flex flex-col items-center gap-5 rounded-xl border border-border bg-white/60 px-6 py-16 text-center">
             <div
               className="flex size-14 items-center justify-center rounded-full bg-muted text-2xl text-primary"
               aria-hidden="true"

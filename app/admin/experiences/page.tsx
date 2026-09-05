@@ -16,6 +16,8 @@ export default async function AdminPage() {
         select: {
           name: true,
           email: true,
+          degree: true,
+          graduationYear: true,
         },
       },
       reports: {
@@ -59,10 +61,10 @@ export default async function AdminPage() {
                 <h3>{experience.company.name}</h3>
 
                 <p>
-                  {experience.degree} · {experience.role?.name || "N/A"}
+                  {experience.author?.degree} · {experience.role?.name || "N/A"}
                 </p>
 
-                <p>Submitted by: {experience.isAnonymous ? "Anonymous" : (experience.author.name ?? experience.author.email)}</p>
+                <p>Submitted by: {experience.isAnonymous ? "Anonymous" : (experience.author?.name ?? experience.author?.email)}</p>
 
                 <p>
                   {experience.rounds.length} {experience.rounds.length === 1 ? "round" : "rounds"}
@@ -89,7 +91,7 @@ export default async function AdminPage() {
                 <h3>{experience.company.name}</h3>
 
                 <p>
-                  {experience.degree} · {experience.role?.name || "N/A"}
+                  {experience.author?.degree} · {experience.role?.name || "N/A"}
                 </p>
 
                 <p>{experience.reports.length} report(s) received</p>

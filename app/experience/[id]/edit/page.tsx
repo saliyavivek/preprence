@@ -22,7 +22,20 @@ export default async function EditExperiencePage({ params }: Props) {
   const [experience, skills] = await Promise.all([
     prisma.experience.findUnique({
       where: { id },
-      include: { company: true, rounds: { orderBy: { roundNumber: "asc" } }, role: true, author: { select: { name: true, email: true } }, experienceSkills: { include: { skill: true } } },
+      include: {
+        company: true,
+        rounds: { orderBy: { roundNumber: "asc" } },
+        role: true,
+        author: {
+          select: {
+            name: true,
+            email: true,
+            degree: true,
+            graduationYear: true,
+          },
+        },
+        experienceSkills: { include: { skill: true } },
+      },
     }),
     prisma.skill.findMany({
       orderBy: { name: "asc" },
@@ -43,7 +56,7 @@ export default async function EditExperiencePage({ params }: Props) {
 
         <AddExperienceTimeline active={2} />
 
-        <section className="flex flex-col gap-5 rounded-xl border border-border bg-card p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <section className="flex flex-col gap-5 rounded-xl border border-border bg-white/60 p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div className="min-w-0">
             <ExperienceHeader
               experience={experience}
@@ -86,7 +99,7 @@ export default async function EditExperiencePage({ params }: Props) {
           }}
         />
 
-        <section className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <section className="flex flex-col gap-4 rounded-xl border border-border bg-white/60 p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div>
             <h2 className="text-xl font-semibold">{isDraft ? "Ready to share?" : "Done editing?"}</h2>
             <p className="mt-1 max-w-xl text-sm leading-6 text-muted-foreground">

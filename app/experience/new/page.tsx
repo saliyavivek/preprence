@@ -2,11 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { createExperience } from "./actions";
 import AddExperienceTimeline from "@/components/AddExperienceTimeline";
 import { HugeiconsIcon } from "@hugeicons/react";
-<<<<<<< Updated upstream
-import { ArrowDown01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
-=======
-import { ArrowRight01Icon, Calendar01Icon } from "@hugeicons/core-free-icons";
->>>>>>> Stashed changes
+import { ArrowDown01Icon, ArrowRight01Icon, Calendar01Icon } from "@hugeicons/core-free-icons";
 import { CompanyCombobox } from "@/components/CompanyCombobox";
 import { RoleCombobox } from "@/components/RoleCombobox";
 import { SkillCombobox } from "@/components/SkillCombobox";
@@ -31,34 +27,6 @@ function Field({ label, htmlFor, required = false, children }: { label: string; 
 
 const fieldClassName =
   "min-h-14 w-full rounded-xl border border-input bg-background px-4 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10";
-
-const selectClassName = `${fieldClassName} appearance-none pr-12`;
-
-function SelectField({ id, name, defaultValue, required = false, children }: { id: string; name: string; defaultValue: string; required?: boolean; children: React.ReactNode }) {
-  return (
-    <div className="relative">
-      <select
-        id={id}
-        name={name}
-        required={required}
-        className={selectClassName}
-        defaultValue={defaultValue}
-      >
-        {children}
-      </select>
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground"
-      >
-        <HugeiconsIcon
-          icon={ArrowDown01Icon}
-          size="100%"
-          className="h-5 w-5"
-        />
-      </span>
-    </div>
-  );
-}
 
 export default async function NewExperiencePage() {
   const supabase = await createClient();
@@ -106,7 +74,7 @@ export default async function NewExperiencePage() {
           action={createExperience}
           className="flex flex-col gap-7"
         >
-          <section className="rounded-2xl border border-border bg-card p-6 shadow-[0_8px_30px_rgba(32,37,34,0.04)] sm:p-8">
+          <section className="rounded-2xl border border-border bg-white/60 p-6 shadow-[0_8px_30px_rgba(32,37,34,0.04)] sm:p-8">
             <div className="flex flex-col gap-7">
               <h2 className="text-2xl font-semibold tracking-tight">About the interview</h2>
               <div className="grid gap-6 md:grid-cols-2">
@@ -125,45 +93,31 @@ export default async function NewExperiencePage() {
                   <RoleCombobox roles={roles} />
                 </Field>
                 <Field
-                  label="Degree"
-                  htmlFor="degree"
-                  required
-                >
-                  <input
-                    id="degree"
-                    name="degree"
-                    placeholder="e.g. MCA"
-                    required
-                    className={fieldClassName}
-                  />
-                </Field>
-                <Field
-                  label="Graduation year"
-                  htmlFor="graduationYear"
-                  required
-                >
-                  <input
-                    id="graduationYear"
-                    name="graduationYear"
-                    type="number"
-                    placeholder="e.g. 2027"
-                    required
-                    className={fieldClassName}
-                  />
-                </Field>
-                <Field
                   label="Interview date"
                   htmlFor="interviewDate"
                   required
                 >
-                  <input
-                    id="interviewDate"
-                    name="interviewDate"
-                    type="date"
-                    required
-                    className={fieldClassName}
-                  />
+                  <div className="relative">
+                    <input
+                      id="interviewDate"
+                      name="interviewDate"
+                      type="date"
+                      required
+                      className={`${fieldClassName} pr-2 [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer`}
+                    />
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground"
+                    >
+                      <HugeiconsIcon
+                        icon={Calendar01Icon}
+                        size="100%"
+                        className="h-5 w-5"
+                      />
+                    </span>
+                  </div>
                 </Field>
+
                 <Field
                   label="Verdict"
                   htmlFor="verdict"
@@ -179,13 +133,13 @@ export default async function NewExperiencePage() {
               >
                 <SkillCombobox skills={skills} />
               </Field>
-              <p className="text-sm text-muted-foreground">
+              {/* <p className="text-sm text-muted-foreground">
                 <span className="text-destructive">*</span> Required fields
-              </p>
+              </p> */}
             </div>
           </section>
 
-          <section className="flex flex-col gap-6 rounded-2xl border border-border bg-card p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+          <section className="flex flex-col gap-6 rounded-2xl border border-border bg-white/60 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
             <div>
               <h2 className="font-semibold text-muted-foreground">You&apos;ll be able to add the interview rounds, tips and other details in the next step.</h2>
             </div>

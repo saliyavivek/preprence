@@ -11,8 +11,7 @@ export type DashboardExperienceRow = {
   id: string;
   status?: ExperienceStatus | string;
   role: { id: string; name: string } | null;
-  degree: string;
-  graduationYear: number;
+  author: { degree: string | null; graduationYear: number | null } | null;
   interviewDate: Date | string;
   rounds: Array<unknown>;
   company: {
@@ -27,7 +26,7 @@ export function DashboardExperienceRowCard({ experience, className = "" }: { exp
   const actionLabel = experience.status === "draft" ? "Continue editing" : "View";
 
   return (
-    <article className={`border border-border rounded-sm bg-card p-4 shadow-[0_2px_10px_rgba(32,37,34,0.04)] sm:p-6 ${className}`}>
+    <article className={`border border-border rounded-sm bg-white/60 p-4 sm:p-6 ${className}`}>
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-6">
         <div className="flex min-w-0 flex-1 items-start gap-4">
           <div className="flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-background">
@@ -49,7 +48,7 @@ export function DashboardExperienceRowCard({ experience, className = "" }: { exp
                     size="100%"
                     icon={GraduationCapIcon}
                   />
-                  <span className="truncate">{experience.degree}</span>
+                  <span className="truncate">{experience.author?.degree}</span>
                 </span>
                 <span
                   aria-hidden="true"
@@ -63,7 +62,7 @@ export function DashboardExperienceRowCard({ experience, className = "" }: { exp
                     size="100%"
                     icon={School01Icon}
                   />
-                  <span className="truncate">Class of {experience.graduationYear}</span>
+                  <span className="truncate">Class of {experience.author?.graduationYear}</span>
                 </span>
                 <span
                   aria-hidden="true"
