@@ -125,7 +125,7 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
             <Link
               href="/"
               aria-label="preprence."
-              className="shrink-0"
+              className="shrink-0 mt-1"
             >
               <Logo className="h-5 w-auto" />
             </Link>
@@ -133,14 +133,14 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
             <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
               <Link
                 href="/companies"
-                className={cx("transition-colors hover:text-primary", pathname === "/companies" && "text-foreground font-semibold")}
+                className={cx("transition-colors hover:text-primary", pathname === "/companies" && "text-primary font-semibold")}
               >
                 Companies
               </Link>
 
               <Link
                 href="/experiences"
-                className={cx("inline-flex items-center gap-1 transition-colors hover:text-primary", pathname.startsWith("/experiences") && "text-foreground font-semibold")}
+                className={cx("inline-flex items-center gap-1 transition-colors hover:text-primary", pathname.startsWith("/experiences") && "text-primary font-semibold")}
               >
                 <span>Experiences</span>
               </Link>
@@ -405,7 +405,7 @@ export function Footer() {
                 href="/"
                 aria-label="preprence."
               >
-                <Logo className="w-30 h-auto" />
+                <Logo className="h-5 w-auto" />
               </Link>
               <p className="max-w-sm text-sm leading-6 text-muted-foreground">Interview experiences from students. For students.</p>
             </div>

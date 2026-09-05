@@ -68,7 +68,7 @@ export default function OnboardingDetailsModal({ onComplete }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 backdrop-blur-[2px]">
-      <div className="w-full max-w-[440px] max-h-[90vh] flex flex-col rounded-[1.25rem] border border-border bg-white/60 shadow-xl overflow-hidden">
+      <div className="w-full max-w-[440px] max-h-[90vh] flex flex-col rounded-[1.25rem] border border-border bg-card shadow-xl overflow-hidden">
         {/* Header */}
         <div className="flex-shrink-0 p-6 sm:p-8 pb-0 sm:pb-0">
           <div className="text-center">
@@ -138,7 +138,7 @@ export default function OnboardingDetailsModal({ onComplete }: Props) {
 
                 {/* Dropdown menu */}
                 {isBranchOpen && (
-                  <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 rounded-md border border-border bg-white/60 shadow-xl">
+                  <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 rounded-md border border-border bg-card shadow-xl">
                     {BRANCH_OPTIONS.map((option) => (
                       <button
                         key={option.value}

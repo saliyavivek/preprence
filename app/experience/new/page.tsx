@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { createExperience } from "./actions";
 import AddExperienceTimeline from "@/components/AddExperienceTimeline";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowDown01Icon, ArrowRight01Icon, Calendar01Icon } from "@hugeicons/core-free-icons";
+import { ArrowRight01Icon, Calendar01Icon } from "@hugeicons/core-free-icons";
 import { CompanyCombobox } from "@/components/CompanyCombobox";
 import { RoleCombobox } from "@/components/RoleCombobox";
 import { SkillCombobox } from "@/components/SkillCombobox";
