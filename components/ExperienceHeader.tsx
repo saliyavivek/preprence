@@ -5,7 +5,7 @@ import { CompanyMarkLarge } from "./CompanyMark";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Calendar03Icon, GhostIcon, User03Icon, Cancel01Icon, PlusSignIcon, GraduationCapIcon, School01Icon } from "@hugeicons/core-free-icons";
 import { VerdictBadge } from "./VerdictBadge";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SkillCombobox } from "./SkillCombobox";
 import { addSkillsToExperience, removeSkillFromExperience } from "@/app/experience/[id]/edit/actions";
 
@@ -203,8 +203,13 @@ export default function ExperienceHeader({
 
         {/* Add Skills Modal */}
         {showAddSkillsModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-            <div className="relative flex max-h-[80vh] w-full max-w-md flex-col gap-4 rounded-xl border border-border bg-white/60 p-6 shadow-xl">
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget) setShowAddSkillsModal(false);
+            }}
+          >
+            <div className="relative flex max-h-[80vh] w-full max-w-md flex-col gap-4 rounded-xl border border-border bg-card p-6 shadow-xl">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold">Add skills to your experience</h2>
                 <button
@@ -242,8 +247,13 @@ export default function ExperienceHeader({
 
         {/* All Skills Modal */}
         {showAllSkills && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-            <div className="relative flex max-h-[80vh] w-full max-w-sm flex-col gap-4 rounded-xl border border-border bg-white/60 p-6 shadow-xl">
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget) setShowAllSkills(false);
+            }}
+          >
+            <div className="relative flex max-h-[80vh] w-full max-w-sm flex-col gap-4 rounded-xl border border-border bg-card p-6 shadow-xl">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold">All Skills ({allSkills.length})</h2>
                 <button

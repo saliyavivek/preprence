@@ -436,8 +436,8 @@ export function Footer() {
           </div>
 
           <div className="flex flex-col gap-4 border-t border-border pt-6 text-sm text-muted-foreground sm:pt-8 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
-            <div className="flex max-w-xl flex-col gap-4">
-              <div className="flex items-start gap-2 leading-6">
+            <div className="flex w-full gap-4 flex-col lg:flex-row lg:justify-between">
+              <div className="flex items-start gap-2 leading-6 flex-1">
                 <HugeiconsIcon
                   icon={Alert02Icon}
                   size={16}
@@ -448,7 +448,7 @@ export function Footer() {
                 <p>preprence is an independent student platform and is not affiliated with or endorsed by any of the companies mentioned on this website.</p>
               </div>
 
-              <div className="pl-6 text-muted-foreground/80 leading-6">
+              <div className="pl-6 text-muted-foreground/80 leading-6 flex-1 lg:text-right">
                 Found a bug or have a suggestion? Reach out on{" "}
                 <a
                   href="https://www.linkedin.com/in/viveksaliya"
