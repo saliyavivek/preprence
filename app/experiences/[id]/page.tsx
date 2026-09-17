@@ -10,6 +10,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { ChartNoAxesColumnIcon, Clock01Icon, Edit03Icon, QuoteUpIcon } from "@hugeicons/core-free-icons";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
 
 type Props = {
   params: Promise<{
@@ -67,6 +68,71 @@ function RoundSummary({ round, index }: { round: ExperienceRound; index: number 
   );
 }
 
+function MarkdownContent({ content }: { content: string }) {
+  return (
+    <ReactMarkdown
+      components={{
+        ul: ({ ...props }) => (
+          <ul
+            className="ml-5 list-disc space-y-1"
+            {...props}
+          />
+        ),
+        ol: ({ ...props }) => (
+          <ol
+            className="ml-5 list-decimal space-y-1"
+            {...props}
+          />
+        ),
+        li: ({ ...props }) => (
+          <li
+            className="pl-1"
+            {...props}
+          />
+        ),
+        p: ({ ...props }) => (
+          <p
+            className="whitespace-pre-wrap leading-relaxed"
+            {...props}
+          />
+        ),
+        strong: ({ ...props }) => (
+          <strong
+            className="font-semibold text-foreground"
+            {...props}
+          />
+        ),
+        em: ({ ...props }) => (
+          <em
+            className="italic"
+            {...props}
+          />
+        ),
+        h1: ({ ...props }) => (
+          <h1
+            className="mb-2 mt-4 text-xl font-semibold text-foreground"
+            {...props}
+          />
+        ),
+        h2: ({ ...props }) => (
+          <h2
+            className="mb-2 mt-4 text-lg font-semibold text-foreground"
+            {...props}
+          />
+        ),
+        h3: ({ ...props }) => (
+          <h3
+            className="mb-2 mt-3 text-base font-semibold text-foreground"
+            {...props}
+          />
+        ),
+      }}
+    >
+      {content}
+    </ReactMarkdown>
+  );
+}
+
 function RoundDetail({ round, isLast = false }: { round: ExperienceRound; isLast?: boolean }) {
   return (
     <article className="relative grid gap-4 sm:grid-cols-[3.5rem_minmax(0,1fr)] sm:gap-5">
@@ -98,7 +164,9 @@ function RoundDetail({ round, isLast = false }: { round: ExperienceRound; isLast
         {round.questionsAsked && (
           <div className="mx-4 flex flex-col gap-1 pb-4 pt-4 sm:mx-6 sm:pb-6">
             <h4 className="text-sm font-semibold">Questions asked</h4>
-            <p className="whitespace-pre-line text-md leading-6 text-foreground">{round.questionsAsked}</p>
+            <div className="text-md leading-6 text-foreground">
+              <MarkdownContent content={round.questionsAsked} />
+            </div>
           </div>
         )}
       </div>
@@ -198,16 +266,20 @@ export default async function ExperiencePage({ params }: Props) {
           </div>
         </section>
 
-        <section className="flex flex-col gap-4">
-          <h2 className="text-xl font-semibold tracking-tight">Overall tips</h2>
-          <div className="flex items-start gap-3 rounded-lg border border-primary/15 bg-primary/5 px-4 py-4 sm:gap-4 sm:px-5">
-            <HugeiconsIcon
-              icon={QuoteUpIcon}
-              className="mt-0.5 shrink-0"
-            />
-            <p className="whitespace-pre-line text-sm leading-6 text-foreground sm:text-base">{experience.overallTips || "No tips provided."}</p>
-          </div>
-        </section>
+        {experience.overallTips && (
+          <section className="flex flex-col gap-4">
+            <h2 className="text-xl font-semibold tracking-tight">Overall tips</h2>
+            <div className="flex items-start gap-3 rounded-lg border border-primary/15 bg-primary/5 px-4 py-4 sm:gap-4 sm:px-5">
+              <HugeiconsIcon
+                icon={QuoteUpIcon}
+                className="mt-0.5 shrink-0"
+              />
+              <div className="text-sm leading-6 text-foreground sm:text-base">
+                <MarkdownContent content={experience.overallTips || "No tips provided."} />
+              </div>
+            </div>
+          </section>
+        )}
 
         <div className="flex flex-col gap-5 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-muted-foreground">Published on {experience.createdAt.toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}</p>

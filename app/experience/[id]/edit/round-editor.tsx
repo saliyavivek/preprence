@@ -7,7 +7,7 @@ import ReactMarkdown from "react-markdown";
 import { commands } from "@uiw/react-md-editor";
 import { createRound, deleteRound, updateRound } from "./actions";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ChartNoAxesColumnIcon, Clock01Icon, TextBoldIcon, TextItalicIcon, Heading01Icon, LeftToRightListBulletIcon, LeftToRightListNumberIcon } from "@hugeicons/core-free-icons";
+import { ChartNoAxesColumnIcon, Clock01Icon, TextBoldIcon, TextItalicIcon, Heading01Icon, LeftToRightListBulletIcon, LeftToRightListNumberIcon, Edit03Icon } from "@hugeicons/core-free-icons";
 import { DeleteConfirmationModal } from "@/components/DeleteConfirmationModal"; // Adjust path if needed
 
 // Dynamically import MDEditor with SSR disabled for Next.js App Router
@@ -392,9 +392,14 @@ export function RoundCard({ experienceId, round }: { experienceId: string; round
           <button
             type="button"
             onClick={() => setIsEditing(true)}
-            className="min-h-10 flex-1 whitespace-nowrap rounded-md border border-input px-3 py-2 text-sm font-medium transition-colors text-foreground hover:bg-primary/8 sm:flex-none"
+            className="min-h-10 flex-1 flex items-center justify-center gap-1 whitespace-nowrap rounded-md border border-input px-3 py-2 text-sm font-medium transition-colors bg-primary hover:bg-primary/90 text-primary-foreground sm:flex-none"
           >
-            Edit round
+            <HugeiconsIcon
+              icon={Edit03Icon}
+              size="100%"
+              className="w-4 h-4"
+            />
+            Edit
           </button>
           <DeleteConfirmationModal
             action={deleteRound.bind(null, experienceId, round.id)}

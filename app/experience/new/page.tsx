@@ -10,6 +10,7 @@ import { VerdictCombobox } from "@/components/VerdictCombobox";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { ContinueButton } from "./continue-button";
 
 function Field({ label, htmlFor, required = false, children }: { label: string; htmlFor: string; required?: boolean; children: React.ReactNode }) {
   return (
@@ -143,22 +144,7 @@ export default async function NewExperiencePage() {
             <div>
               <h2 className="font-semibold text-muted-foreground">You&apos;ll be able to add the interview rounds, tips and other details in the next step.</h2>
             </div>
-            <button
-              type="submit"
-              className="group inline-flex min-h-14 shrink-0 items-center justify-center gap-4 rounded-xl bg-primary px-6 font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/20"
-            >
-              Continue to next step{" "}
-              <span
-                aria-hidden="true"
-                className="text-xl transition-transform duration-200 group-hover:translate-x-1"
-              >
-                <HugeiconsIcon
-                  size="100%"
-                  className="h-4 w-4"
-                  icon={ArrowRight01Icon}
-                />
-              </span>
-            </button>
+            <ContinueButton />
           </section>
         </form>
       </div>
