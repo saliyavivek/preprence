@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth/admin";
 import { takeDownExperience } from "./actions";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import ReactMarkdown from "react-markdown";
 
 type Props = {
   params: Promise<{
@@ -77,7 +78,9 @@ export default async function AdminExperiencePage({ params }: Props) {
 
       <section>
         <h2>Overall Tips</h2>
-        <p>{experience.overallTips || "No tips provided."}</p>
+        <div>
+          <ReactMarkdown>{experience.overallTips || "No tips provided."}</ReactMarkdown>
+        </div>
       </section>
 
       <section>
@@ -91,7 +94,11 @@ export default async function AdminExperiencePage({ params }: Props) {
 
             {round.difficulty && <p>Difficulty: {round.difficulty}</p>}
 
-            {round.questionsAsked && <p>Questions: {round.questionsAsked}</p>}
+            {round.questionsAsked && (
+              <div>
+                <ReactMarkdown>{round.questionsAsked}</ReactMarkdown>
+              </div>
+            )}
 
             {round.durationMinutes && <p>Duration: {round.durationMinutes} minutes</p>}
           </article>

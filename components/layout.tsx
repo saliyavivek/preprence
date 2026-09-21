@@ -6,7 +6,20 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { createClient } from "@/lib/supabase/client";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Alert02Icon, Building03Icon, ChevronDownIcon, FileIcon, FilePlusIcon, Folder02Icon, Linkedin01Icon, Logout01Icon, Mail01Icon, User03Icon } from "@hugeicons/core-free-icons";
+import {
+  Alert02Icon,
+  Building03Icon,
+  ChevronDownIcon,
+  Edit01Icon,
+  FileIcon,
+  FilePlusIcon,
+  Folder02Icon,
+  Linkedin01Icon,
+  Logout01Icon,
+  Mail01Icon,
+  Pen01Icon,
+  User03Icon,
+} from "@hugeicons/core-free-icons";
 import Logo from "./Logo";
 import { GlobalSearch } from "./GlobalSearch";
 
@@ -156,11 +169,15 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
           <div className="hidden md:flex items-center gap-4">
             <Link
               href={!isAuthenticated ? "/login" : "/experience/new"}
-              className="text-sm font-medium text-foreground hover:text-primary transition-colors whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 bg-primary text-primary-foreground transition-opacity hover:opacity-90 sm:w-auto text-sm font-medium"
             >
-              Write Experience
+              <HugeiconsIcon
+                icon={Pen01Icon}
+                size="100%"
+                className="w-4 h-4"
+              />
+              Write experience
             </Link>
-
             {isAuthenticated ? (
               <>
                 <span

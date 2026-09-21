@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { ArrowDown01Icon, ArrowRight01Icon, ArrowUp01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { CompanyMarkSmall } from "./CompanyMark";
 
@@ -33,7 +33,7 @@ function SquareCompanyCard({ company }: { company: Company }) {
       </span>
       <span
         aria-hidden="true"
-        className="absolute right-4 top-4 text-primary transition-transform duration-200 group-hover:translate-x-1"
+        className="absolute right-4 text-primary transition-transform duration-200 group-hover:translate-x-1"
       >
         <HugeiconsIcon
           icon={ArrowRight01Icon}
@@ -67,9 +67,10 @@ export function CompanyGrid({ companies }: { companies: Company[] }) {
             type="button"
             aria-expanded={showAllCompanies}
             onClick={() => setShowAllCompanies((current) => !current)}
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-primary px-6 py-3 text-[0.95rem] font-medium bg-primary text-primary-foreground transition-opacity hover:opacity-90 sm:w-auto"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-primary px-6 py-3 text-[0.95rem] font-medium bg-card text-primary transition-opacity hover:opacity-90 sm:w-auto"
           >
             {showAllCompanies ? "Show fewer companies" : "View all companies"}
+            {showAllCompanies ? <HugeiconsIcon icon={ArrowUp01Icon} /> : <HugeiconsIcon icon={ArrowDown01Icon} />}
           </button>
         ) : null}
       </div>
