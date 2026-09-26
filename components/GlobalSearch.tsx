@@ -32,12 +32,7 @@ export function GlobalSearch() {
 
   useEffect(() => {
     const normalizedQuery = query.trim();
-    if (!normalizedQuery) {
-      setResults({ companies: [], roles: [], skills: [] });
-      setIsOpen(false);
-      setIsLoading(false);
-      return;
-    }
+    if (!normalizedQuery) return;
 
     const controller = new AbortController();
     const timeout = window.setTimeout(async () => {
@@ -71,6 +66,19 @@ export function GlobalSearch() {
     };
   }, [query]);
 
+  const handleQueryChange = (value: string) => {
+    setQuery(value);
+
+    if (!value.trim()) {
+      setResults({ companies: [], roles: [], skills: [] });
+      setIsOpen(false);
+      setIsLoading(false);
+      return;
+    }
+
+    setIsOpen(true);
+  };
+
   useEffect(() => {
     function handleOutsidePointer(event: PointerEvent) {
       if (!searchRef.current?.contains(event.target as Node)) setIsOpen(false);
@@ -84,7 +92,7 @@ export function GlobalSearch() {
   return (
     <div
       ref={searchRef}
-      className="relative w-full"
+      className="relative z-[60] w-full"
     >
       <div className="relative flex items-center w-full">
         <HugeiconsIcon
@@ -97,10 +105,7 @@ export function GlobalSearch() {
           ref={inputRef}
           type="text"
           value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            setIsOpen(true);
-          }}
+          onChange={(e) => handleQueryChange(e.target.value)}
           onFocus={() => query.trim() && setIsOpen(true)}
           placeholder="Search companies, roles, skills..."
           autoComplete="off"
@@ -112,8 +117,7 @@ export function GlobalSearch() {
             <button
               type="button"
               onClick={() => {
-                setQuery("");
-                setIsOpen(false);
+                handleQueryChange("");
               }}
               className="p-1 text-muted-foreground hover:text-foreground"
             >
@@ -132,7 +136,7 @@ export function GlobalSearch() {
 
       {/* Search Results Dropdown */}
       {isOpen && query.trim() && (
-        <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-50 max-h-[min(26rem,calc(100vh-10rem))] overflow-y-auto rounded-lg border border-border bg-card shadow-xl">
+        <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-[70] max-h-[min(26rem,calc(100vh-10rem))] overflow-y-auto rounded-lg border border-border bg-card shadow-xl">
           {isLoading ? (
             <p className="px-4 py-3 text-sm text-muted-foreground">Searching...</p>
           ) : hasResults ? (

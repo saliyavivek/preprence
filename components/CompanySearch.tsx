@@ -22,12 +22,7 @@ export function CompanySearch() {
 
   useEffect(() => {
     const normalizedQuery = query.trim();
-    if (!normalizedQuery) {
-      setCompanies([]);
-      setIsOpen(false);
-      setIsLoading(false);
-      return;
-    }
+    if (!normalizedQuery) return;
 
     const controller = new AbortController();
     const timeout = window.setTimeout(async () => {
@@ -55,6 +50,20 @@ export function CompanySearch() {
       controller.abort();
     };
   }, [query]);
+
+  const handleQueryChange = (value: string) => {
+    const normalizedValue = value;
+    setQuery(normalizedValue);
+
+    if (!normalizedValue.trim()) {
+      setCompanies([]);
+      setIsOpen(false);
+      setIsLoading(false);
+      return;
+    }
+
+    setIsOpen(true);
+  };
 
   useEffect(() => {
     function handleOutsidePointer(event: PointerEvent) {
@@ -92,10 +101,7 @@ export function CompanySearch() {
             name="search"
             type="search"
             value={query}
-            onChange={(event) => {
-              setQuery(event.target.value);
-              setIsOpen(true);
-            }}
+            onChange={(event) => handleQueryChange(event.target.value)}
             onFocus={() => query.trim() && setIsOpen(true)}
             placeholder="Search companies..."
             autoComplete="off"

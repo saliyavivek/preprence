@@ -30,8 +30,6 @@ interface ExperienceRowProps {
 export function HomeExperienceRowCard({ experience }: ExperienceRowProps) {
   const rounds = experience.rounds.length;
   const allSkills = (experience.experienceSkills ?? []).map((es) => es.skill.name);
-  const visibleSkills = allSkills.slice(0, 3);
-  const hiddenSkillsCount = Math.max(0, allSkills.length - 3);
 
   return (
     <Link
@@ -48,17 +46,6 @@ export function HomeExperienceRowCard({ experience }: ExperienceRowProps) {
             </div>
           </div>
           <p className="truncate text-sm leading-5 text-muted-foreground">{experience.role?.name}</p>
-          {/* <p className="text-[10px] sm:text-xs flex items-center gap-1 sm:mt-1 mt-2 leading-5 text-muted-foreground">
-            {visibleSkills.map((skill) => (
-              <span
-                key={skill}
-                className="max-w-full rounded-md border border-border px-1 py-0.2 sm:px-1.5 text-muted-foreground"
-              >
-                {skill}
-              </span>
-            ))}
-            {hiddenSkillsCount > 0 && <span className="max-w-full rounded-md border border-border px-1 py-0.2 sm:px-1.5  text-muted-foreground">+{hiddenSkillsCount}</span>}
-          </p> */}
         </div>
       </div>
       <p className="hidden text-sm text-muted-foreground sm:block">

@@ -6,22 +6,11 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { createClient } from "@/lib/supabase/client";
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  Alert02Icon,
-  Building03Icon,
-  ChevronDownIcon,
-  Edit01Icon,
-  FileIcon,
-  FilePlusIcon,
-  Folder02Icon,
-  Linkedin01Icon,
-  Logout01Icon,
-  Mail01Icon,
-  Pen01Icon,
-  User03Icon,
-} from "@hugeicons/core-free-icons";
+import { Alert02Icon, ChevronDownIcon, Folder02Icon, Linkedin01Icon, Logout01Icon, Mail01Icon, Pen01Icon, User03Icon } from "@hugeicons/core-free-icons";
 import Logo from "./Logo";
 import { GlobalSearch } from "./GlobalSearch";
+import { MobileNavFloatingPill } from "./MobileNavFloatingPill";
+import { MobileProfileSheet } from "./MobileProfileSheet";
 
 function cx(...classes: Array<string | false | undefined>) {
   return classes.filter(Boolean).join(" ");
@@ -123,288 +112,201 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
 
   const isMobileMenuOpen = isAuthenticated && mobileProfileMenuOpen;
 
+  const handleOpenMobileProfileSheet = () => {
+    if (!isAuthenticated) {
+      router.push("/login");
+      return;
+    }
+
+    setMobileProfileMenuOpen(true);
+  };
+
   return (
     <>
-      <header
-        className={cx(
-          "sticky top-0 z-50 border-b border-border bg-white/60 backdrop-blur-md transition-transform duration-300 ease-out",
-          pathname === "/login" ? "hidden" : "",
-          isHeaderVisible ? "translate-y-0" : "-translate-y-full",
-        )}
-      >
-        <Container className="flex h-16 items-center justify-between gap-4 sm:gap-6">
-          {/* Left: Brand & Nav Links */}
-          <div className="flex items-center gap-6 lg:gap-8">
-            <Link
-              href="/"
-              aria-label="preprence."
-              className="shrink-0 mt-1"
-            >
-              <Logo className="h-5 w-auto" />
-            </Link>
-
-            <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
+      <header className={cx("sticky top-0 z-50 transition-transform duration-300 ease-out", pathname === "/login" ? "hidden" : "", isHeaderVisible ? "translate-y-0" : "-translate-y-full")}>
+        <Container className="py-2">
+          <div className="glass-nav-shell flex h-[58px] items-center justify-between gap-4 rounded-full px-4 sm:h-16 sm:gap-6 sm:px-6">
+            {/* Left: Brand & Nav Links */}
+            <div className="flex items-center gap-6 lg:gap-8">
               <Link
-                href="/companies"
-                className={cx("transition-colors hover:text-primary", pathname === "/companies" && "text-primary font-semibold")}
+                href="/"
+                aria-label="preprence."
+                className="shrink-0 mt-1"
               >
-                Companies
+                <Logo className="h-4 sm:h-5 w-auto" />
               </Link>
 
-              <Link
-                href="/experiences"
-                className={cx("inline-flex items-center gap-1 transition-colors hover:text-primary", pathname.startsWith("/experiences") && "text-primary font-semibold")}
-              >
-                <span>Experiences</span>
-              </Link>
-            </nav>
-          </div>
-
-          {/* Middle: Global Search Input (Hidden on mobile) */}
-          <div className="hidden md:flex flex-1 max-w-md lg:max-w-lg items-center justify-center">
-            <GlobalSearch />
-          </div>
-
-          {/* Right: Write Experience & Profile */}
-          <div className="hidden md:flex items-center gap-4">
-            <Link
-              href={!isAuthenticated ? "/login" : "/experience/new"}
-              className="inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 bg-primary text-primary-foreground transition-opacity hover:opacity-90 sm:w-auto text-sm font-medium"
-            >
-              <HugeiconsIcon
-                icon={Pen01Icon}
-                size="100%"
-                className="w-4 h-4"
-              />
-              Write experience
-            </Link>
-            {isAuthenticated ? (
-              <>
-                <span
-                  className="h-4 w-[1px] bg-border"
-                  aria-hidden="true"
-                />
-
-                <div
-                  ref={desktopProfileMenuRef}
-                  className="relative"
+              <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
+                <Link
+                  href="/companies"
+                  className={cx("transition-colors hover:text-primary", pathname === "/companies" && "text-primary font-semibold")}
                 >
-                  <button
-                    type="button"
-                    onClick={() => setDesktopProfileMenuOpen((current) => !current)}
-                    className="flex items-center gap-1.5 rounded-full p-0.5 hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-                    aria-expanded={desktopProfileMenuOpen}
-                    aria-haspopup="menu"
-                    aria-label="Open profile menu"
+                  Companies
+                </Link>
+
+                <Link
+                  href="/experiences"
+                  className={cx("inline-flex items-center gap-1 transition-colors hover:text-primary", pathname.startsWith("/experiences") && "text-primary font-semibold")}
+                >
+                  <span>Experiences</span>
+                </Link>
+              </nav>
+            </div>
+
+            {/* Middle: Global Search Input (Hidden on mobile) */}
+            <div className="hidden md:flex flex-1 max-w-md lg:max-w-lg items-center justify-center">
+              <GlobalSearch />
+            </div>
+
+            {/* Right: Write Experience & Profile */}
+            <div className="hidden md:flex items-center gap-4">
+              <Link
+                href={!isAuthenticated ? "/login" : "/experience/new"}
+                className="inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 bg-primary text-primary-foreground transition-opacity hover:opacity-90 sm:w-auto text-sm font-medium"
+              >
+                <HugeiconsIcon
+                  icon={Pen01Icon}
+                  size="100%"
+                  className="w-4 h-4"
+                />
+                Write experience
+              </Link>
+              {isAuthenticated ? (
+                <>
+                  <span
+                    className="h-4 w-[1px] bg-border/70"
+                    aria-hidden="true"
+                  />
+
+                  <div
+                    ref={desktopProfileMenuRef}
+                    className="relative"
                   >
-                    <UserAvatar name={userName} />
-                    <HugeiconsIcon
-                      icon={ChevronDownIcon}
-                      size={14}
-                      strokeWidth={2.5}
-                      className={`text-muted-foreground transition-transform duration-200 ${desktopProfileMenuOpen ? "rotate-180" : ""}`}
-                    />
-                  </button>
-
-                  {desktopProfileMenuOpen && (
-                    <div
-                      role="menu"
-                      className="absolute right-0 top-full z-50 mt-3 w-70 overflow-hidden rounded-xl border border-border bg-background shadow-xl"
+                    <button
+                      type="button"
+                      onClick={() => setDesktopProfileMenuOpen((current) => !current)}
+                      className="flex items-center gap-1.5 rounded-full p-0.5 hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                      aria-expanded={desktopProfileMenuOpen}
+                      aria-haspopup="menu"
+                      aria-label="Open profile menu"
                     >
-                      <div className="flex items-center gap-3 border-b border-border bg-primary/10 px-4 py-3.5">
-                        <UserAvatar name={userName} />
-                        <div className="min-w-0">
-                          {userName ? <div className="truncate text-sm font-medium text-foreground">{userName}</div> : null}
-                          <div className="truncate text-xs text-muted-foreground">{userEmail || ""}</div>
-                        </div>
-                      </div>
+                      <UserAvatar name={userName} />
+                      <HugeiconsIcon
+                        icon={ChevronDownIcon}
+                        size={14}
+                        strokeWidth={2.5}
+                        className={`text-muted-foreground transition-transform duration-200 ${desktopProfileMenuOpen ? "rotate-180" : ""}`}
+                      />
+                    </button>
 
-                      <div className="px-3 py-3">
-                        <div className="space-y-1">
-                          <Link
-                            href="/dashboard"
-                            onClick={() => setDesktopProfileMenuOpen(false)}
-                            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+                    {desktopProfileMenuOpen && (
+                      <div
+                        role="menu"
+                        className="absolute right-0 top-full z-50 mt-6 w-70 overflow-hidden rounded-xl border border-border bg-background shadow-xl"
+                      >
+                        <div className="flex items-center gap-3 border-b border-border bg-primary/10 px-4 py-3.5">
+                          <UserAvatar name={userName} />
+                          <div className="min-w-0">
+                            {userName ? <div className="truncate text-sm font-medium text-foreground">{userName}</div> : null}
+                            <div className="truncate text-xs text-muted-foreground">{userEmail || ""}</div>
+                          </div>
+                        </div>
+
+                        <div className="px-3 py-3">
+                          <div className="space-y-1">
+                            <Link
+                              href="/dashboard"
+                              onClick={() => setDesktopProfileMenuOpen(false)}
+                              className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+                              role="menuitem"
+                            >
+                              <HugeiconsIcon
+                                icon={User03Icon}
+                                className="h-4 w-4"
+                              />
+                              Profile
+                            </Link>
+
+                            <Link
+                              href="/dashboard/experiences"
+                              onClick={() => setDesktopProfileMenuOpen(false)}
+                              className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+                              role="menuitem"
+                            >
+                              <HugeiconsIcon
+                                icon={Folder02Icon}
+                                className="h-4 w-4"
+                              />
+                              Your experiences
+                            </Link>
+                          </div>
+
+                          <div className="my-2 border-t border-border" />
+
+                          <button
+                            type="button"
+                            onClick={handleLogout}
+                            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-foreground transition-colors hover:bg-muted"
                             role="menuitem"
                           >
                             <HugeiconsIcon
-                              icon={User03Icon}
+                              icon={Logout01Icon}
                               className="h-4 w-4"
                             />
-                            Profile
-                          </Link>
-
-                          <Link
-                            href="/dashboard/experiences"
-                            onClick={() => setDesktopProfileMenuOpen(false)}
-                            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
-                            role="menuitem"
-                          >
-                            <HugeiconsIcon
-                              icon={Folder02Icon}
-                              className="h-4 w-4"
-                            />
-                            Your experiences
-                          </Link>
+                            Sign out
+                          </button>
                         </div>
-
-                        <div className="my-2 border-t border-border" />
-
-                        <button
-                          type="button"
-                          onClick={handleLogout}
-                          className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-foreground transition-colors hover:bg-muted"
-                          role="menuitem"
-                        >
-                          <HugeiconsIcon
-                            icon={Logout01Icon}
-                            className="h-4 w-4"
-                          />
-                          Sign out
-                        </button>
                       </div>
-                    </div>
-                  )}
-                </div>
-              </>
-            ) : (
-              <Link
-                href="/login"
-                className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-              >
-                Sign in
-              </Link>
-            )}
-          </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <Link
+                  href="/login"
+                  className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+                >
+                  Sign in
+                </Link>
+              )}
+            </div>
 
-          {/* Mobile Avatar / Trigger (Preserved mobile implementation) */}
-          <div className="md:hidden flex items-center">
-            {isAuthenticated ? (
-              <button
-                type="button"
-                onClick={() => setMobileProfileMenuOpen((current) => !current)}
-                className="flex h-10 w-10 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-                aria-expanded={mobileProfileMenuOpen}
-                aria-controls="mobile-profile-drawer"
-                aria-label={mobileProfileMenuOpen ? "Close profile menu" : "Open profile menu"}
-              >
-                <UserAvatar name={userName} />
-              </button>
-            ) : (
-              <Link
-                href="/login"
-                className="inline-flex min-h-9 items-center rounded-full bg-muted px-4 text-sm font-semibold text-primary"
-              >
-                Sign in
-              </Link>
-            )}
+            {/* Mobile Avatar / Trigger (Preserved mobile implementation) */}
+            <div className="md:hidden flex items-center">
+              {isAuthenticated ? (
+                <button
+                  type="button"
+                  onClick={handleOpenMobileProfileSheet}
+                  className="flex h-10 w-10 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                  aria-expanded={mobileProfileMenuOpen}
+                  aria-controls="mobile-profile-drawer"
+                  aria-label={mobileProfileMenuOpen ? "Close profile menu" : "Open profile menu"}
+                >
+                  <UserAvatar name={userName} />
+                </button>
+              ) : (
+                <Link
+                  href="/login"
+                  className="inline-flex min-h-9 items-center rounded-full bg-muted/70 px-4 text-sm font-semibold text-primary"
+                >
+                  Sign in
+                </Link>
+              )}
+            </div>
           </div>
         </Container>
       </header>
 
-      {/* Mobile profile drawer */}
-      {isMobileMenuOpen && (
-        <>
-          <button
-            type="button"
-            aria-label="Close profile menu"
-            onClick={() => setMobileProfileMenuOpen(false)}
-            className="fixed inset-0 z-60 bg-foreground/35 md:hidden"
-          />
+      <MobileNavFloatingPill
+        visibleOnRoutes={["/", "/companies", "/experiences", "/dashboard", "/profile"]}
+        hiddenOnRoutes={["/login", "/experience/new", "/experience/[id]/edit"]}
+      />
 
-          <aside
-            id="mobile-profile-drawer"
-            role="dialog"
-            aria-label="Profile menu"
-            className="fixed right-0 top-0 z-70 h-dvh w-[min(78vw,380px)] overflow-y-auto border-l border-border bg-background text-left shadow-xl md:hidden"
-          >
-            <div className="flex items-center gap-3 border-b border-border bg-primary/10 px-5 py-3.5">
-              <UserAvatar name={userName} />
-              <div className="min-w-0">
-                {userName ? <div className="truncate text-base font-medium text-foreground">{userName}</div> : null}
-                <div className="truncate text-sm text-muted-foreground">{userEmail || ""}</div>
-              </div>
-            </div>
-
-            <div className="px-5 py-5">
-              <nav aria-label="Mobile navigation">
-                <div className="space-y-1">
-                  <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Explore</p>
-                  <Link
-                    href="/companies"
-                    onClick={() => setMobileProfileMenuOpen(false)}
-                    className={cx(
-                      "rounded-md px-2 py-3 text-base transition-colors flex gap-2 items-center",
-                      pathname === "/companies" ? "font-medium text-primary" : "text-foreground hover:bg-foreground/4",
-                    )}
-                  >
-                    <HugeiconsIcon icon={Building03Icon} /> Companies
-                  </Link>
-
-                  <Link
-                    href="/experiences"
-                    onClick={() => setMobileProfileMenuOpen(false)}
-                    className={cx(
-                      "rounded-md px-2 py-3 text-base transition-colors flex gap-2 items-center",
-                      pathname === "/experiences" ? "font-medium text-primary" : "text-foreground hover:bg-foreground/4",
-                    )}
-                  >
-                    <HugeiconsIcon icon={FileIcon} />
-                    Interview experiences
-                  </Link>
-
-                  <Link
-                    href="/experience/new"
-                    onClick={() => setMobileProfileMenuOpen(false)}
-                    className={cx(
-                      "rounded-md px-2 py-3 text-base transition-colors flex gap-2 items-center",
-                      pathname === "/experience/new" ? "font-medium text-primary" : "text-foreground hover:bg-foreground/4",
-                    )}
-                  >
-                    <HugeiconsIcon icon={FilePlusIcon} />
-                    Share your experience
-                  </Link>
-                </div>
-
-                <div className="my-5 border-t border-border" />
-
-                <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Your Account</p>
-
-                <div className="space-y-1">
-                  <Link
-                    href="/dashboard"
-                    onClick={() => setMobileProfileMenuOpen(false)}
-                    className="rounded-md px-2 py-3 text-base text-foreground transition-colors hover:bg-foreground/4 flex gap-2 items-center"
-                  >
-                    <HugeiconsIcon icon={User03Icon} />
-                    Profile
-                  </Link>
-
-                  <Link
-                    href="/dashboard/experiences"
-                    onClick={() => setMobileProfileMenuOpen(false)}
-                    className="rounded-md px-2 py-3 text-base text-foreground transition-colors hover:bg-foreground/4 flex gap-2 items-center"
-                  >
-                    <HugeiconsIcon icon={Folder02Icon} />
-                    Your experiences
-                  </Link>
-                </div>
-
-                <div className="my-5 border-t border-border" />
-
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="w-full rounded-md px-2 text-left text-base text-foreground transition-colors hover:bg-foreground/4 flex gap-2 items-center"
-                >
-                  <HugeiconsIcon icon={Logout01Icon} />
-                  Sign out
-                </button>
-              </nav>
-            </div>
-          </aside>
-        </>
-      )}
+      <MobileProfileSheet
+        open={isMobileMenuOpen}
+        onClose={() => setMobileProfileMenuOpen(false)}
+        user={{ name: userName, email: userEmail }}
+        onLogout={handleLogout}
+      />
     </>
   );
 }

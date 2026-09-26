@@ -54,3 +54,29 @@ body {
 ::selection {
   background: color-mix(in srgb, var(--primary) 20%, transparent);
 }
+
+@layer components {
+  .glass-nav-shell {
+    @apply relative isolate overflow-visible border border-white/45 bg-white/8 shadow-[inset_2px_2px_0_rgba(255,255,255,0.8),inset_0_0_5px_1px_rgba(255,255,255,0.7),0_18px_36px_rgba(15,23,42,0.18)] backdrop-blur-2xl backdrop-saturate-200;
+  }
+
+  .glass-nav-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.08) 42%, rgba(255, 255, 255, 0.18));
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .glass-nav-shell::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.18), transparent 30%, rgba(255, 255, 255, 0.1) 58%, transparent 100%);
+    pointer-events: none;
+    z-index: -1;
+  }
+}

@@ -65,7 +65,7 @@ export function CompanyMarkMedium({ company }: { company: CompanyLike }) {
   return (
     <CompanyMarkBase
       company={company}
-      className="relative grid size-20 shrink-0 place-items-center overflow-hidden rounded-lg bg-foreground"
+      className="relative grid size-20 shrink-0 place-items-center overflow-hidden rounded-lg bg-background"
       fallbackClassName="flex size-full items-center justify-center text-xl font-bold text-background"
       initialsLength={1}
       imageClassName="size-full rounded-lg object-contain"

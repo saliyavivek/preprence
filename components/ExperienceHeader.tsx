@@ -5,7 +5,7 @@ import { CompanyMarkLarge } from "./CompanyMark";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Calendar03Icon, GhostIcon, User03Icon, Cancel01Icon, PlusSignIcon, GraduationCapIcon, School01Icon } from "@hugeicons/core-free-icons";
 import { VerdictBadge } from "./VerdictBadge";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { SkillCombobox } from "./SkillCombobox";
 import { addSkillsToExperience, removeSkillFromExperience } from "@/app/experience/[id]/edit/actions";
 
