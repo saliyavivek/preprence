@@ -124,7 +124,7 @@ export function SiteHeader({ userName, userEmail, isLoggedIn = false }: { userNa
   return (
     <>
       <header
-        className={cx("sticky top-0 mx-auto mt-4 z-50 transition-transform duration-300 ease-out", pathname === "/login" ? "hidden" : "", isHeaderVisible ? "translate-y-0" : "-translate-y-full")}
+        className={cx("sticky top-0 mx-auto mt-4 z-99 transition-transform duration-300 ease-out", pathname === "/login" ? "hidden" : "", isHeaderVisible ? "translate-y-0" : "-translate-y-full")}
       >
         <Container className="py-2">
           <div className="glass-nav-shell flex h-[58px] items-center justify-between gap-4 rounded-full px-4 sm:h-16 sm:gap-6 sm:px-6">
