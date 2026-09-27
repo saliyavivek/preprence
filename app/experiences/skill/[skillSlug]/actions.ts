@@ -1,13 +1,15 @@
 "use server";
 
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { PUBLIC_BROWSE_REVALIDATE_SECONDS, PUBLIC_BROWSE_TAG } from "@/lib/public-cache";
 
 type SortOrder = "newest" | "oldest";
 
-export async function getSkillExperiencePageData(
+const getCachedSkillExperiencePageData = unstable_cache(async (
     skillSlug: string,
-    sort: SortOrder = "newest",
-) {
+    sort: SortOrder,
+) => {
     const skill = await prisma.skill.findUnique({
         where: { slug: skillSlug },
         select: { id: true, name: true, slug: true },
@@ -74,4 +76,8 @@ export async function getSkillExperiencePageData(
             skills: experience.experienceSkills.map(({ skill }) => skill.name),
         })),
     };
+}, ["skill-experience-page"], { revalidate: PUBLIC_BROWSE_REVALIDATE_SECONDS, tags: [PUBLIC_BROWSE_TAG] });
+
+export async function getSkillExperiencePageData(skillSlug: string, sort: SortOrder = "newest") {
+    return getCachedSkillExperiencePageData(skillSlug, sort);
 }

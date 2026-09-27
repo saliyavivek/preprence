@@ -2,23 +2,29 @@ import { CompanyCard } from "@/components/CompanyCard";
 import { CompanyGrid } from "@/components/CompanyGrid";
 import { prisma } from "@/lib/prisma";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { unstable_cache } from "next/cache";
+import { PUBLIC_BROWSE_REVALIDATE_SECONDS, PUBLIC_BROWSE_TAG } from "@/lib/public-cache";
 
-async function getCompanies() {
-  return prisma.company.findMany({
-    orderBy: { name: "asc" },
-    include: {
-      _count: {
-        select: {
-          experiences: {
-            where: {
-              status: "published",
+const getCompanies = unstable_cache(
+  async () => {
+    return prisma.company.findMany({
+      orderBy: { name: "asc" },
+      include: {
+        _count: {
+          select: {
+            experiences: {
+              where: {
+                status: "published",
+              },
             },
           },
         },
       },
-    },
-  });
-}
+    });
+  },
+  ["companies-directory"],
+  { revalidate: PUBLIC_BROWSE_REVALIDATE_SECONDS, tags: [PUBLIC_BROWSE_TAG] },
+);
 
 function EmptyState() {
   return (

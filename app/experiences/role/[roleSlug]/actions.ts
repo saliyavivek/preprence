@@ -1,13 +1,15 @@
 "use server";
 
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { PUBLIC_BROWSE_REVALIDATE_SECONDS, PUBLIC_BROWSE_TAG } from "@/lib/public-cache";
 
 type SortOrder = "newest" | "oldest";
 
-export async function getRoleExperiencePageData(
+const getCachedRoleExperiencePageData = unstable_cache(async (
     roleSlug: string,
-    sort: SortOrder = "newest",
-) {
+    sort: SortOrder,
+) => {
     const role = await prisma.role.findUnique({
         where: { slug: roleSlug },
         select: {
@@ -98,4 +100,8 @@ export async function getRoleExperiencePageData(
             skills: experience.experienceSkills.map(({ skill }) => skill.name),
         })),
     };
+}, ["role-experience-page"], { revalidate: PUBLIC_BROWSE_REVALIDATE_SECONDS, tags: [PUBLIC_BROWSE_TAG] });
+
+export async function getRoleExperiencePageData(roleSlug: string, sort: SortOrder = "newest") {
+    return getCachedRoleExperiencePageData(roleSlug, sort);
 }

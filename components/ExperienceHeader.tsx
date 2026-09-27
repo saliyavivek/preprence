@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { Experience } from "@/lib/types";
 import { CompanyMarkLarge } from "./CompanyMark";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -15,21 +16,12 @@ type Skill = {
   slug: string;
 };
 
-export default function ExperienceHeader({
-  experience,
-  isEditing = false,
-  onSkillsAdded,
-  availableSkills = [],
-}: {
-  experience: Experience;
-  isEditing?: boolean;
-  onSkillsAdded?: () => void;
-  availableSkills?: Skill[];
-}) {
+export default function ExperienceHeader({ experience, isEditing = false, availableSkills = [] }: { experience: Experience; isEditing?: boolean; availableSkills?: Skill[] }) {
+  const router = useRouter();
   const [showAllSkills, setShowAllSkills] = useState(false);
   const [showAddSkillsModal, setShowAddSkillsModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const interviewDate = experience.interviewDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+  const interviewDate = new Date(String(experience.interviewDate)).toLocaleDateString("en-US", { month: "long", year: "numeric" });
   const authorLabel = experience.isAnonymous ? "Anonymous" : (experience.author?.name ?? experience.author?.email);
 
   const allSkills = experience.experienceSkills ?? [];
@@ -40,9 +32,9 @@ export default function ExperienceHeader({
     setIsSubmitting(true);
     try {
       await addSkillsToExperience(experience.id, formData);
+      setIsSubmitting(false);
       setShowAddSkillsModal(false);
-      // Reload page to refresh experience data
-      window.location.reload();
+      router.refresh();
     } catch (error) {
       console.error("Error adding skills:", error);
       alert("Failed to add skills. Please try again.");
@@ -53,7 +45,7 @@ export default function ExperienceHeader({
   const handleDeleteSkillSubmit = async (formData: FormData) => {
     try {
       await removeSkillFromExperience(experience.id, formData);
-      window.location.reload();
+      router.refresh();
     } catch (error) {
       console.error("Error deleting skill:", error);
       alert("Failed to delete skill. Please try again.");

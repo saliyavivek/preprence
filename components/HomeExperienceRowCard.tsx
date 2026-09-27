@@ -29,7 +29,6 @@ interface ExperienceRowProps {
 
 export function HomeExperienceRowCard({ experience }: ExperienceRowProps) {
   const rounds = experience.rounds.length;
-  const allSkills = (experience.experienceSkills ?? []).map((es) => es.skill.name);
 
   return (
     <Link

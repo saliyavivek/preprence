@@ -51,7 +51,7 @@ const customUnorderedList = {
       className="h-5 w-5"
     />
   ),
-  execute: (state: any, api: any) => {
+  execute: (state: { selectedText?: string }, api: { replaceSelection: (value: string) => void }) => {
     if (!state.selectedText) {
       api.replaceSelection("- ");
     } else {
@@ -69,7 +69,7 @@ const customOrderedList = {
       className="h-5 w-5"
     />
   ),
-  execute: (state: any, api: any) => {
+  execute: (state: { selectedText?: string }, api: { replaceSelection: (value: string) => void }) => {
     if (!state.selectedText) {
       api.replaceSelection("1. ");
     } else {

@@ -6,6 +6,7 @@ import { Verdict as VerdictEnum } from "@/app/generated/prisma/enums";
 import type { Verdict as VerdictType } from "@/app/generated/prisma/enums";
 import { redirect } from "next/navigation";
 import { companySimilarity, isCloseCompanyMatch, normalizeCompanyName, slugifyCompanyName } from "@/lib/company-matching";
+import { invalidatePublicBrowseCache } from "@/lib/public-cache";
 
 function slugifyRole(text: string) {
     return text
@@ -160,5 +161,6 @@ export async function createExperience(formData: FormData): Promise<void> {
         },
     });
 
+    invalidatePublicBrowseCache();
     redirect(`/experience/${experience.id}/edit`);
 }

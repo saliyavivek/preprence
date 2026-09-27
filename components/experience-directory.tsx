@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowDown01Icon, ArrowRight02Icon, Building01Icon, Edit02Icon, People } from "@hugeicons/core-free-icons";
 import type { Experience } from "@/lib/types";
@@ -14,16 +15,31 @@ type Company = {
 };
 
 export function PopularCompanyItem({ company }: { company: Company }) {
+  const initials = company.name
+    .split(" ")
+    .map((word) => word[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
   return (
     <Link
       key={company.slug}
       href={`/companies/${company.slug}`}
       className="text-sm hover:text-primary flex gap-4 items-center"
     >
-      <img
-        src={company.logoUrl!}
-        className="w-12 rounded-lg border"
-      />
+      {company.logoUrl ? (
+        <Image
+          src={company.logoUrl}
+          alt={`${company.name} logo`}
+          width={48}
+          height={48}
+          className="w-12 h-12 rounded-lg border object-contain"
+          unoptimized
+        />
+      ) : (
+        <div className="flex h-12 w-12 items-center justify-center rounded-lg border bg-muted text-sm font-semibold text-foreground">{initials}</div>
+      )}
       <div>
         <span className="font-semibold">{company.name}</span>
         <span className="block text-sm text-muted-foreground">Interview experiences</span>
@@ -33,7 +49,7 @@ export function PopularCompanyItem({ company }: { company: Company }) {
 }
 
 export function DirectorySidebar({ experiences }: { experiences: Experience[] }) {
-  const companies = Array.from(new Map(experiences.map((item) => [item.company.slug, item.company])).values()).slice(0, 5);
+  const companies = useMemo(() => Array.from(new Map(experiences.map((item) => [item.company.slug, item.company])).values()).slice(0, 5), [experiences]);
   return (
     <aside className="hidden flex-col gap-5 lg:flex">
       <div className="rounded-lg border border-border bg-white/60 p-5">
@@ -225,30 +241,35 @@ type DirectoryFilterOptions = {
 
 export function ExperienceDirectory({ experiences }: { experiences: Experience[] }) {
   const [filters, setFilters] = useState(defaultFilters);
-  const companies = Array.from(new Map(experiences.map((item) => [item.company.slug, item.company])).values())
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .map((company) => ({ value: company.slug, label: company.name }));
-  const degrees = Array.from(new Set(experiences.map((item) => item.author?.degree)))
-    .filter(Boolean)
-    .sort((a, b) => (a as string).localeCompare(b as string))
-    .map((degree) => ({ value: degree as string, label: degree as string }));
-  const years = Array.from(new Set(experiences.map((item) => new Date(item.interviewDate).getFullYear())))
-    .sort((a, b) => b - a)
-    .map((year) => ({ value: String(year), label: String(year) }));
-  const options: DirectoryFilterOptions = { companies, degrees, years };
+  const options = useMemo<DirectoryFilterOptions>(() => {
+    const companies = Array.from(new Map(experiences.map((item) => [item.company.slug, item.company])).values())
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((company) => ({ value: company.slug, label: company.name }));
+    const degrees = Array.from(new Set(experiences.map((item) => item.author?.degree).filter((degree): degree is string => Boolean(degree))))
+      .sort((a, b) => a.localeCompare(b))
+      .map((degree) => ({ value: degree, label: degree }));
+    const years = Array.from(new Set(experiences.map((item) => new Date(item.interviewDate).getFullYear())))
+      .sort((a, b) => b - a)
+      .map((year) => ({ value: String(year), label: String(year) }));
+
+    return { companies, degrees, years };
+  }, [experiences]);
   const hasActiveFilters = Boolean(filters.company || filters.degree || filters.year || filters.sort !== "newest");
-  const filteredExperiences = experiences
-    .filter((experience) => {
-      return (
-        (!filters.company || experience.company.slug === filters.company) &&
-        (!filters.degree || experience.author?.degree === filters.degree) &&
-        (!filters.year || new Date(experience.interviewDate).getFullYear() === Number(filters.year))
-      );
-    })
-    .sort((a, b) => {
-      const difference = new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime();
-      return filters.sort === "newest" ? difference : -difference;
-    });
+  const filteredExperiences = useMemo(
+    () =>
+      experiences
+        .filter(
+          (experience) =>
+            (!filters.company || experience.company.slug === filters.company) &&
+            (!filters.degree || experience.author?.degree === filters.degree) &&
+            (!filters.year || new Date(experience.interviewDate).getFullYear() === Number(filters.year)),
+        )
+        .sort((a, b) => {
+          const difference = new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime();
+          return filters.sort === "newest" ? difference : -difference;
+        }),
+    [experiences, filters.company, filters.degree, filters.year, filters.sort],
+  );
 
   function setFilter(key: keyof FilterState, value: string) {
     setFilters((current) => ({ ...current, [key]: value }));

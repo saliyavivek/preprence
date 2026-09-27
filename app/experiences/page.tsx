@@ -4,25 +4,37 @@ import { ExperienceDirectory } from "@/components/experience-directory";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Edit02Icon } from "@hugeicons/core-free-icons";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { unstable_cache } from "next/cache";
+import { PUBLIC_BROWSE_REVALIDATE_SECONDS, PUBLIC_BROWSE_TAG } from "@/lib/public-cache";
 
-async function getExperiences() {
-  return prisma.experience.findMany({
-    where: { status: "published" },
-    orderBy: { interviewDate: "desc" },
-    include: {
-      company: true,
-      author: {
-        select: {
-          degree: true,
-          graduationYear: true,
+const getExperiences = unstable_cache(
+  async () => {
+    const experiences = await prisma.experience.findMany({
+      where: { status: "published" },
+      orderBy: { interviewDate: "desc" },
+      include: {
+        company: true,
+        author: {
+          select: {
+            degree: true,
+            graduationYear: true,
+          },
         },
+        rounds: { orderBy: { roundNumber: "asc" } },
+        role: true,
+        experienceSkills: { include: { skill: true } },
       },
-      rounds: { orderBy: { roundNumber: "asc" } },
-      role: true,
-      experienceSkills: { include: { skill: true } },
-    },
-  });
-}
+    });
+
+    return experiences.map((experience) => ({
+      ...experience,
+      createdAt: new Date(String(experience.createdAt)),
+      interviewDate: new Date(String(experience.interviewDate)),
+    }));
+  },
+  ["published-experiences-directory"],
+  { revalidate: PUBLIC_BROWSE_REVALIDATE_SECONDS, tags: [PUBLIC_BROWSE_TAG] },
+);
 
 export default async function ExperiencesPage() {
   const experiences = await getExperiences();

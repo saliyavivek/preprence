@@ -10,6 +10,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { TrustStats } from "@/components/TrustStats";
 import { GlobalSearch } from "@/components/GlobalSearch";
+import { PUBLIC_BROWSE_TAG } from "@/lib/public-cache";
 
 const getLandingData = unstable_cache(
   async () => {
@@ -69,7 +70,7 @@ const getLandingData = unstable_cache(
     }));
   },
   ["landing-data"],
-  { revalidate: 300 },
+  { revalidate: 300, tags: [PUBLIC_BROWSE_TAG] },
 );
 
 export default async function HomePage() {

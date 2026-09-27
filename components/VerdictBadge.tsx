@@ -1,4 +1,6 @@
-export function VerdictBadge({ verdict }: { verdict: any }) {
+type Verdict = "selected" | "rejected" | "not_disclosed" | null | undefined;
+
+export function VerdictBadge({ verdict }: { verdict: Verdict }) {
   if (!verdict) return null;
 
   const selected = verdict === "selected";

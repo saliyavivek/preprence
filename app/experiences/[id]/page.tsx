@@ -11,12 +11,49 @@ import { ChartNoAxesColumnIcon, Clock01Icon, Edit03Icon, QuoteUpIcon } from "@hu
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
+import { unstable_cache } from "next/cache";
+import { PUBLIC_BROWSE_REVALIDATE_SECONDS, PUBLIC_BROWSE_TAG } from "@/lib/public-cache";
 
 type Props = {
   params: Promise<{
     id: string;
   }>;
 };
+
+const getCachedPublishedExperience = unstable_cache(
+  async (id: string) => {
+    return prisma.experience.findFirst({
+      where: { id, status: "published" },
+      include: {
+        company: true,
+        author: {
+          select: {
+            name: true,
+            degree: true,
+            graduationYear: true,
+          },
+        },
+        rounds: { orderBy: { roundNumber: "asc" } },
+        role: true,
+        experienceSkills: { include: { skill: true } },
+      },
+    });
+  },
+  ["published-experience-detail"],
+  { revalidate: PUBLIC_BROWSE_REVALIDATE_SECONDS, tags: [PUBLIC_BROWSE_TAG] },
+);
+
+async function getPublishedExperience(id: string) {
+  const experience = await getCachedPublishedExperience(id);
+
+  if (!experience) return null;
+
+  return {
+    ...experience,
+    createdAt: new Date(String(experience.createdAt)),
+    interviewDate: new Date(String(experience.interviewDate)),
+  };
+}
 
 function formatVerdict(verdict: string | null) {
   return verdict ? verdict.replaceAll("_", " ") : null;
@@ -191,22 +228,7 @@ export default async function ExperiencePage({ params }: Props) {
   } = await supabase.auth.getUser();
 
   const { id } = await params;
-  const experience = await prisma.experience.findFirst({
-    where: { id, status: "published" },
-    include: {
-      company: true,
-      author: {
-        select: {
-          name: true,
-          degree: true,
-          graduationYear: true,
-        },
-      },
-      rounds: { orderBy: { roundNumber: "asc" } },
-      role: true,
-      experienceSkills: { include: { skill: true } },
-    },
-  });
+  const experience = await getPublishedExperience(id);
 
   if (!experience) notFound();
 

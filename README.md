@@ -1,138 +1,189 @@
 # Preprence
 
-Preprence is a student interview-experience platform for browsing and sharing real interview experiences from the college community.
+Preprence is a student-focused platform for discovering and sharing real interview experiences from the college community. It helps students compare hiring processes, explore companies and roles, and document the details of their own interviews.
 
-Built with Next.js, TypeScript, Tailwind CSS, Supabase Auth, PostgreSQL, and Prisma.
+## Features
 
-## Setup
+- Browse published interview experiences by company, role, and skill.
+- Search the company, role, and skill directory from a global search interface.
+- Submit experiences with interview rounds, outcomes, difficulty, and supporting details.
+- Manage draft and published experiences from a personal dashboard.
+- Authenticate with a college email address using Supabase magic links.
+- Provide anonymous experience submissions when appropriate.
+- Moderate reports and published experiences through an admin dashboard.
 
-Requirements: Node.js 22+, pnpm, PostgreSQL, and a Supabase project with email magic-link authentication enabled.
+## Technology
 
-1. Install dependencies:
+- Next.js 16 with the App Router
+- React 19 and TypeScript
+- Tailwind CSS 4
+- PostgreSQL with Prisma ORM 7
+- Supabase Auth with server-side session handling
+- pnpm for package management
 
-   ```bash
-   pnpm install
-   ```
+## Requirements
 
-2. Create `.env` in the project root:
+- Node.js 22 or newer
+- pnpm 10 or newer
+- PostgreSQL 14 or newer, or a hosted PostgreSQL provider such as Supabase
+- A Supabase project configured for email magic-link authentication
 
-   ```env
-   NEXT_PUBLIC_SITE_URL=http://localhost:3000
-   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-supabase-publishable-key
-   DATABASE_URL="postgresql://postgres.<project-ref>:<password>@aws-0-<region>.pooler.supabase.com:6543/postgres?pgbouncer=true"
-   COLLEGE_EMAIL_DOMAIN=ldce.ac.in
-   ```
+## Getting Started
 
-3. Generate Prisma Client and apply migrations:
+### 1. Install dependencies
 
-   ```bash
-   pnpm prisma generate
-   pnpm prisma migrate deploy
-   ```
+```bash
+pnpm install
+```
 
-4. Seed the company directory if needed:
+### 2. Configure environment variables
 
-   ```bash
-   pnpm prisma db seed
-   ```
+Create a `.env` file in the project root:
 
-5. Start the app:
+```env
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-supabase-publishable-key
+DATABASE_URL="postgresql://postgres.<project-ref>:<password>@aws-0-<region>.pooler.supabase.com:6543/postgres?pgbouncer=true"
+COLLEGE_EMAIL_DOMAIN=ldce.ac.in
+```
 
-   ```bash
-   pnpm dev
-   ```
+| Variable                               | Description                                             |
+| -------------------------------------- | ------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`                 | Base URL used when creating authentication callbacks.   |
+| `NEXT_PUBLIC_SUPABASE_URL`             | URL of the Supabase project.                            |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Public Supabase key used by the application.            |
+| `DATABASE_URL`                         | PostgreSQL connection string used by Prisma at runtime. |
+| `COLLEGE_EMAIL_DOMAIN`                 | Email domain allowed for user authentication.           |
 
-Open [http://localhost:3000](http://localhost:3000).
+For Supabase, a transaction pooler connection on port `6543` should include `?pgbouncer=true`. The runtime currently reads `DATABASE_URL` directly; `DIRECT_URL` is not required.
 
-## Environment Variables
+### 3. Configure Supabase
 
-| Variable                               | Purpose                               |
-| -------------------------------------- | ------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL`                 | Site URL used for auth callbacks.     |
-| `NEXT_PUBLIC_SUPABASE_URL`             | Supabase project URL.                 |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase publishable key.             |
-| `DATABASE_URL`                         | PostgreSQL connection used by Prisma. |
-| `COLLEGE_EMAIL_DOMAIN`                 | Allowed college email domain.         |
+Enable email magic-link authentication in Supabase and add the following redirect URL to the Supabase authentication settings:
 
-The app reads `DATABASE_URL` directly. `DIRECT_URL` is not currently used by the runtime. For Supabase, use the transaction pooler on port `6543` with `?pgbouncer=true`, or a reachable session/direct connection on port `5432`.
+```text
+http://localhost:3000/auth/callback
+```
 
-Configure `<site-url>/auth/callback` as a Supabase redirect URL. Never commit database passwords or private credentials.
+Use the equivalent URL for each deployed environment. Do not commit `.env` files, database passwords, or private credentials.
 
-## Routes
+### 4. Initialize the database
 
-| Route                                 | Purpose                                                     |
-| ------------------------------------- | ----------------------------------------------------------- |
-| `/`                                   | Landing page with popular companies and recent experiences. |
-| `/login`                              | College-email magic-link login.                             |
-| `/companies`                          | Company directory.                                          |
-| `/companies/[slug]`                   | Experiences for a company.                                  |
-| `/experiences`                        | Published experience directory.                             |
-| `/experiences/[id]`                   | Experience details.                                         |
-| `/dashboard`                          | User dashboard.                                             |
-| `/dashboard/experiences`              | Manage submitted experiences.                               |
-| `/experience/new`                     | Start a new experience.                                     |
-| `/experience/[id]/edit`               | Add rounds and publish an experience.                       |
-| `/admin/experiences`                  | Admin moderation dashboard.                                 |
-| `/admin/experiences/[id]`             | Review or take down an experience.                          |
-| `GET /api/companies/search?q=<query>` | Search companies with published experiences.                |
+Generate the Prisma client and apply the existing migrations:
 
-## Database Commands
+```bash
+pnpm prisma generate
+pnpm prisma migrate deploy
+```
+
+To populate the company directory with seed data:
+
+```bash
+pnpm prisma db seed
+```
+
+### 5. Start the development server
+
+```bash
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in a browser.
+
+## Common Commands
+
+| Command                                 | Description                                           |
+| --------------------------------------- | ----------------------------------------------------- |
+| `pnpm dev`                              | Start the Next.js development server.                 |
+| `pnpm build`                            | Generate Prisma Client and create a production build. |
+| `pnpm start`                            | Start the production server.                          |
+| `pnpm lint`                             | Run ESLint.                                           |
+| `pnpm prisma generate`                  | Generate the Prisma Client.                           |
+| `pnpm prisma migrate dev --name <name>` | Create and apply a development migration.             |
+| `pnpm prisma migrate deploy`            | Apply pending migrations in a deployment environment. |
+| `pnpm prisma studio`                    | Open Prisma Studio.                                   |
+
+## Application Routes
+
+| Route                       | Description                                                  |
+| --------------------------- | ------------------------------------------------------------ |
+| `/`                         | Landing page with featured companies and recent experiences. |
+| `/login`                    | College-email magic-link authentication.                     |
+| `/companies`                | Browse the company directory.                                |
+| `/companies/[slug]`         | View published experiences for a company.                    |
+| `/experiences`              | Browse published interview experiences.                      |
+| `/experiences/[id]`         | View an individual interview experience.                     |
+| `/experiences/role/[slug]`  | Browse experiences by role.                                  |
+| `/experiences/skill/[slug]` | Browse experiences by skill.                                 |
+| `/dashboard`                | View the authenticated user's dashboard.                     |
+| `/dashboard/experiences`    | Manage submitted experiences.                                |
+| `/experience/new`           | Create a new interview experience.                           |
+| `/experience/[id]/edit`     | Add rounds and publish an experience.                        |
+| `/admin/experiences`        | Review and moderate experiences.                             |
+| `/admin/experiences/[id]`   | Review an individual experience.                             |
+
+## API
+
+| Method | Endpoint                          | Description                                  |
+| ------ | --------------------------------- | -------------------------------------------- |
+| `GET`  | `/api/search?q=<query>`           | Search companies, roles, and skills.         |
+| `GET`  | `/api/companies/search?q=<query>` | Search companies with published experiences. |
+
+## Database Workflow
+
+The Prisma schema is located at [`prisma/schema.prisma`](prisma/schema.prisma), and migrations are stored in [`prisma/migrations`](prisma/migrations).
+
+For local schema changes, create a named migration:
 
 ```bash
 pnpm prisma migrate dev --name describe-change
-pnpm prisma migrate deploy
-pnpm prisma generate
-pnpm prisma studio
 ```
 
-The Prisma schema is in `prisma/schema.prisma`. Migrations are in `prisma/migrations`.
-
-## Scripts
-
-| Command      | Purpose                                   |
-| ------------ | ----------------------------------------- |
-| `pnpm dev`   | Start development server.                 |
-| `pnpm build` | Generate Prisma Client and build the app. |
-| `pnpm start` | Start the production server.              |
-| `pnpm lint`  | Run ESLint.                               |
-
-## Deployment
-
-For Vercel:
-
-1. Add all environment variables to the Vercel project.
-2. Set `NEXT_PUBLIC_SITE_URL` to the deployed URL.
-3. Add the deployed URL and `/auth/callback` to Supabase redirect settings.
-4. Deploy with `pnpm build`.
-
-## Troubleshooting
-
-### `P1001: Can't reach database server`
-
-Check that:
-
-- `DATABASE_URL` is configured in Vercel.
-- The Supabase host, port, password, and project reference are correct.
-- Port `6543` uses `?pgbouncer=true`.
-- The database allows connections from the deployment environment.
-- You redeployed after changing environment variables.
-
-The login page can work while other routes fail because most other pages query PostgreSQL during server rendering.
-
-### Magic-link redirect failure
-
-Check `NEXT_PUBLIC_SITE_URL` and the Supabase allowed redirect URLs.
+Review the generated migration before committing it. Use `pnpm prisma migrate deploy` in shared or production environments.
 
 ## Project Structure
 
 ```text
-app/          Routes, pages, server actions, and API handlers
-components/   Reusable UI components
-lib/          Prisma, Supabase, auth, and shared utilities
-prisma/       Schema, migrations, and seed data
+app/          Routes, pages, server actions, API handlers, and generated Prisma client
+components/   Reusable React components
+lib/          Database, authentication, matching, and shared utilities
+prisma/       Prisma schema, migrations, and seed script
 public/       Static assets
 proxy.ts      Protected-route session handling
 ```
 
-See [DESIGN.md](DESIGN.md) for the interface guidelines.
+See [`DESIGN.md`](DESIGN.md) for the project's interface guidelines.
+
+## Deployment
+
+Preprence can be deployed to Vercel or another platform that supports Next.js:
+
+1. Provision a PostgreSQL database and configure Supabase Auth.
+2. Add all required environment variables to the deployment environment.
+3. Set `NEXT_PUBLIC_SITE_URL` to the deployed application URL.
+4. Add `<deployed-url>/auth/callback` to the Supabase redirect URL allowlist.
+5. Run the production build with `pnpm build`.
+6. Apply pending database migrations with `pnpm prisma migrate deploy`.
+
+Make sure the deployment can reach the PostgreSQL host. A successful login does not guarantee database connectivity because most application pages query PostgreSQL during server rendering.
+
+## Troubleshooting
+
+### Database connection errors
+
+For `P1001: Can't reach database server` errors, verify the following:
+
+- `DATABASE_URL` is present in the active environment.
+- The database host, port, credentials, and project reference are correct.
+- Supabase pooler URLs use port `6543` and include `?pgbouncer=true`.
+- The database accepts connections from the deployment environment.
+- The application was redeployed after changing environment variables.
+
+### Magic-link redirect errors
+
+Confirm that `NEXT_PUBLIC_SITE_URL` matches the current environment and that the corresponding `/auth/callback` URL is present in the Supabase redirect allowlist.
+
+## License
+
+This project is private and is not currently distributed under an open-source license.
