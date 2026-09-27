@@ -2,7 +2,7 @@ import Image from "next/image";
 
 type CompanyLike = {
   name: string;
-  logoUrl: string | null;
+  logoUrl?: string | null;
 };
 
 function getInitials(name: string, length: number) {

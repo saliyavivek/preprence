@@ -55,10 +55,6 @@ async function getPublishedExperience(id: string) {
   };
 }
 
-function formatVerdict(verdict: string | null) {
-  return verdict ? verdict.replaceAll("_", " ") : null;
-}
-
 // Helper function to format round types (e.g., "online_assessment" -> "Online Assessment")
 function formatRoundType(type: string) {
   if (type.toLowerCase() === "hr") return "HR";
@@ -232,17 +228,15 @@ export default async function ExperiencePage({ params }: Props) {
 
   if (!experience) notFound();
 
-  const verdict = formatVerdict(experience.verdict);
-
   return (
     <main>
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-8 sm:gap-10 sm:px-8 sm:py-16 lg:px-10">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Interview experiences", href: "/experiences" }, { label: experience.company.name }]} />
         <section className="flex flex-col gap-5 border-b border-border pb-7 sm:flex-row sm:items-start sm:justify-between">
           <ExperienceHeader experience={experience} />
-          {verdict && (
+          {experience.verdict && (
             <div className="hidden sm:flex shrink-0 sm:px-4 sm:py-3">
-              <VerdictBadge verdict={verdict} />
+              <VerdictBadge verdict={experience.verdict} />
             </div>
           )}
         </section>
