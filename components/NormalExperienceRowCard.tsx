@@ -6,6 +6,7 @@ import { VerdictBadge } from "./VerdictBadge";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 export function NormalExperienceRowCard({ experience, showCompanyMark = true }: { experience: Experience; showCompanyMark?: boolean }) {
+  const interviewDate = new Date(String(experience.interviewDate));
   const allSkills = (experience.experienceSkills ?? []).map((es) => es.skill.name);
   const visibleSkills = allSkills.slice(0, 3);
   const hiddenSkillsCount = Math.max(0, allSkills.length - 3);
@@ -57,7 +58,7 @@ export function NormalExperienceRowCard({ experience, showCompanyMark = true }: 
               size="100%"
               icon={Calendar03Icon}
             />
-            {experience.interviewDate.toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+            {interviewDate.toLocaleDateString("en-US", { month: "short", year: "numeric" })}
           </span>
           <span
             aria-hidden="true"

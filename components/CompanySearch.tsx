@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Search01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { useDebouncedSearch } from "@/lib/use-debounced-search";
 import { CompanySearchItem } from "./CompanySearchItem";
 
 type SearchCompany = {
@@ -13,52 +14,39 @@ type SearchCompany = {
   _count: { experiences: number };
 };
 
+const emptyCompanies: SearchCompany[] = [];
+
 export function CompanySearch() {
   const [query, setQuery] = useState("");
-  const [companies, setCompanies] = useState<SearchCompany[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const fetchCompanies = useCallback(async (normalizedQuery: string, controller: AbortController) => {
+    const response = await fetch(`/api/companies/search?q=${encodeURIComponent(normalizedQuery)}`, {
+      signal: controller.signal,
+    });
 
-  useEffect(() => {
-    const normalizedQuery = query.trim();
-    if (!normalizedQuery) return;
+    if (!response.ok) throw new Error("Search failed");
 
-    const controller = new AbortController();
-    const timeout = window.setTimeout(async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(`/api/companies/search?q=${encodeURIComponent(normalizedQuery)}`, {
-          signal: controller.signal,
-        });
-        if (!response.ok) throw new Error("Search failed");
-        const data: { companies: SearchCompany[] } = await response.json();
-        setCompanies(data.companies);
-        setIsOpen(true);
-      } catch (error) {
-        if (!controller.signal.aborted) {
-          setCompanies([]);
-          setIsOpen(true);
-        }
-      } finally {
-        if (!controller.signal.aborted) setIsLoading(false);
-      }
-    }, 250);
-
-    return () => {
-      window.clearTimeout(timeout);
-      controller.abort();
-    };
-  }, [query]);
+    const data: { companies: SearchCompany[] } = await response.json();
+    return data.companies;
+  }, []);
+  const {
+    value: companies,
+    isLoading,
+    isOpen,
+    setIsOpen,
+    reset,
+  } = useDebouncedSearch<SearchCompany[]>({
+    query,
+    initialValue: emptyCompanies,
+    debounceMs: 250,
+    fetcher: fetchCompanies,
+  });
 
   const handleQueryChange = (value: string) => {
-    const normalizedValue = value;
-    setQuery(normalizedValue);
+    setQuery(value);
 
-    if (!normalizedValue.trim()) {
-      setCompanies([]);
-      setIsOpen(false);
-      setIsLoading(false);
+    if (!value.trim()) {
+      reset();
       return;
     }
 
@@ -72,7 +60,7 @@ export function CompanySearch() {
 
     document.addEventListener("pointerdown", handleOutsidePointer);
     return () => document.removeEventListener("pointerdown", handleOutsidePointer);
-  }, []);
+  }, [setIsOpen]);
 
   return (
     <div

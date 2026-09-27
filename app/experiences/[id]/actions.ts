@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { invalidatePublicBrowseCache } from "@/lib/public-cache";
 
 export async function ReportExperience(
     experienceId: string,
@@ -93,5 +94,6 @@ export async function deleteExperience(
         }),
     ]);
 
+    invalidatePublicBrowseCache();
     redirect('/dashboard/experiences');
 }

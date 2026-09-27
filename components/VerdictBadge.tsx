@@ -1,4 +1,6 @@
-export function VerdictBadge({ verdict }: { verdict: any }) {
+import type { Verdict } from "@/app/generated/prisma/enums";
+
+export function VerdictBadge({ verdict }: { verdict: Verdict | null | undefined }) {
   if (!verdict) return null;
 
   const selected = verdict === "selected";

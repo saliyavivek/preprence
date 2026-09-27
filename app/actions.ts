@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
+import { invalidatePublicBrowseCache } from "@/lib/public-cache";
 
 export async function addOnboardingDetails(formData: FormData) {
     const supabase = await createClient();
@@ -61,6 +62,7 @@ export async function addOnboardingDetails(formData: FormData) {
 
     revalidatePath("/");
     revalidatePath("/dashboard");
+    invalidatePublicBrowseCache();
 
     return {
         success: true,

@@ -3,7 +3,18 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Calendar03Icon, ChevronRightIcon, GraduationCapIcon } from "@hugeicons/core-free-icons";
 import { CompanyMarkMedium } from "@/components/CompanyMark";
 
-export function SkillRoleExperienceRowCard({ experience }: { experience: any }) {
+type SkillRoleExperience = {
+  id: string;
+  company: { name: string; logoUrl?: string | null };
+  roleName?: string | null;
+  timing?: string | null;
+  degree?: string | null;
+  year?: string | number | null;
+  rounds: string[];
+  skills: string[];
+};
+
+export function SkillRoleExperienceRowCard({ experience }: { experience: SkillRoleExperience }) {
   return (
     <Link
       href={`/experiences/${experience.id}`}

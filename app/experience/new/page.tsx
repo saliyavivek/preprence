@@ -11,6 +11,8 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ContinueButton } from "./continue-button";
+import { unstable_cache } from "next/cache";
+import { PUBLIC_BROWSE_REVALIDATE_SECONDS, PUBLIC_BROWSE_TAG } from "@/lib/public-cache";
 
 function Field({ label, htmlFor, required = false, children }: { label: string; htmlFor: string; required?: boolean; children: React.ReactNode }) {
   return (
@@ -29,6 +31,28 @@ function Field({ label, htmlFor, required = false, children }: { label: string; 
 const fieldClassName =
   "min-h-14 w-full rounded-xl border border-input bg-background px-4 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10";
 
+const getExperienceFormOptions = unstable_cache(
+  async () =>
+    Promise.all([
+      prisma.company.findMany({
+        orderBy: { name: "asc" },
+        include: {
+          _count: {
+            select: {
+              experiences: {
+                where: { status: "published" },
+              },
+            },
+          },
+        },
+      }),
+      prisma.role.findMany({ orderBy: { name: "asc" } }),
+      prisma.skill.findMany({ orderBy: { name: "asc" } }),
+    ]),
+  ["experience-form-options"],
+  { revalidate: PUBLIC_BROWSE_REVALIDATE_SECONDS, tags: [PUBLIC_BROWSE_TAG] },
+);
+
 export default async function NewExperiencePage() {
   const supabase = await createClient();
   const {
@@ -36,26 +60,7 @@ export default async function NewExperiencePage() {
   } = await supabase.auth.getUser();
   if (!user) redirect(`/login?next=${encodeURIComponent("/experience/new")}`);
 
-  const [companies, roles, skills] = await Promise.all([
-    prisma.company.findMany({
-      orderBy: { name: "asc" },
-      include: {
-        _count: {
-          select: {
-            experiences: {
-              where: { status: "published" },
-            },
-          },
-        },
-      },
-    }),
-    prisma.role.findMany({
-      orderBy: { name: "asc" },
-    }),
-    prisma.skill.findMany({
-      orderBy: { name: "asc" },
-    }),
-  ]);
+  const [companies, roles, skills] = await getExperienceFormOptions();
 
   return (
     <main className="min-h-[calc(100vh-10rem)]">

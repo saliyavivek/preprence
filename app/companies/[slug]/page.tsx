@@ -6,27 +6,33 @@ import { NormalExperienceRowCard } from "@/components/NormalExperienceRowCard";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight01Icon, Edit01Icon, ExternalLinkIcon, File02Icon, Globe02Icon } from "@hugeicons/core-free-icons";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { unstable_cache } from "next/cache";
+import { PUBLIC_BROWSE_REVALIDATE_SECONDS, PUBLIC_BROWSE_TAG } from "@/lib/public-cache";
 
 type Props = { params: Promise<{ slug: string }> };
 
-async function getCompany(slug: string) {
-  return prisma.company.findUnique({
-    where: { slug },
-    include: {
-      experiences: {
-        where: { status: "published" },
-        include: {
-          company: true,
-          author: { select: { degree: true, graduationYear: true } },
-          rounds: { orderBy: { roundNumber: "asc" } },
-          role: true,
-          experienceSkills: { include: { skill: true } },
+const getCompany = unstable_cache(
+  async (slug: string) => {
+    return prisma.company.findUnique({
+      where: { slug },
+      include: {
+        experiences: {
+          where: { status: "published" },
+          include: {
+            company: true,
+            author: { select: { degree: true, graduationYear: true } },
+            rounds: { orderBy: { roundNumber: "asc" } },
+            role: true,
+            experienceSkills: { include: { skill: true } },
+          },
+          orderBy: { interviewDate: "desc" },
         },
-        orderBy: { interviewDate: "desc" },
       },
-    },
-  });
-}
+    });
+  },
+  ["company-detail"],
+  { revalidate: PUBLIC_BROWSE_REVALIDATE_SECONDS, tags: [PUBLIC_BROWSE_TAG] },
+);
 
 export default async function CompanyPage({ params }: Props) {
   const { slug } = await params;

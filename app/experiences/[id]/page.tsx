@@ -11,6 +11,8 @@ import { ChartNoAxesColumnIcon, Clock01Icon, Edit03Icon, QuoteUpIcon } from "@hu
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
+import { unstable_cache } from "next/cache";
+import { PUBLIC_BROWSE_REVALIDATE_SECONDS, PUBLIC_BROWSE_TAG } from "@/lib/public-cache";
 
 type Props = {
   params: Promise<{
@@ -18,8 +20,39 @@ type Props = {
   }>;
 };
 
-function formatVerdict(verdict: string | null) {
-  return verdict ? verdict.replaceAll("_", " ") : null;
+const getCachedPublishedExperience = unstable_cache(
+  async (id: string) => {
+    return prisma.experience.findFirst({
+      where: { id, status: "published" },
+      include: {
+        company: true,
+        author: {
+          select: {
+            name: true,
+            degree: true,
+            graduationYear: true,
+          },
+        },
+        rounds: { orderBy: { roundNumber: "asc" } },
+        role: true,
+        experienceSkills: { include: { skill: true } },
+      },
+    });
+  },
+  ["published-experience-detail"],
+  { revalidate: PUBLIC_BROWSE_REVALIDATE_SECONDS, tags: [PUBLIC_BROWSE_TAG] },
+);
+
+async function getPublishedExperience(id: string) {
+  const experience = await getCachedPublishedExperience(id);
+
+  if (!experience) return null;
+
+  return {
+    ...experience,
+    createdAt: new Date(String(experience.createdAt)),
+    interviewDate: new Date(String(experience.interviewDate)),
+  };
 }
 
 // Helper function to format round types (e.g., "online_assessment" -> "Online Assessment")
@@ -191,26 +224,9 @@ export default async function ExperiencePage({ params }: Props) {
   } = await supabase.auth.getUser();
 
   const { id } = await params;
-  const experience = await prisma.experience.findFirst({
-    where: { id, status: "published" },
-    include: {
-      company: true,
-      author: {
-        select: {
-          name: true,
-          degree: true,
-          graduationYear: true,
-        },
-      },
-      rounds: { orderBy: { roundNumber: "asc" } },
-      role: true,
-      experienceSkills: { include: { skill: true } },
-    },
-  });
+  const experience = await getPublishedExperience(id);
 
   if (!experience) notFound();
-
-  const verdict = formatVerdict(experience.verdict);
 
   return (
     <main>
@@ -218,9 +234,9 @@ export default async function ExperiencePage({ params }: Props) {
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Interview experiences", href: "/experiences" }, { label: experience.company.name }]} />
         <section className="flex flex-col gap-5 border-b border-border pb-7 sm:flex-row sm:items-start sm:justify-between">
           <ExperienceHeader experience={experience} />
-          {verdict && (
+          {experience.verdict && (
             <div className="hidden sm:flex shrink-0 sm:px-4 sm:py-3">
-              <VerdictBadge verdict={verdict} />
+              <VerdictBadge verdict={experience.verdict} />
             </div>
           )}
         </section>

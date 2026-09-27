@@ -1,22 +1,71 @@
 // components/GlobalSearch.tsx
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Search01Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { useDebouncedSearch } from "@/lib/use-debounced-search";
 import { GlobalSearchItem, SearchEntity } from "./GlobalSearchItem";
+
+type SearchApiResponse = {
+  companies: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    logoUrl?: string | null;
+    _count?: { experiences: number };
+  }>;
+  roles: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    _count?: { experiences: number };
+  }>;
+  skills: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    _count?: { experiences: number };
+  }>;
+};
+
+const emptySearchResults = { companies: [], roles: [], skills: [] as SearchEntity[] };
 
 export function GlobalSearch() {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<{
+  const searchRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const fetchSearchResults = useCallback(async (normalizedQuery: string, controller: AbortController) => {
+    const response = await fetch(`/api/search?q=${encodeURIComponent(normalizedQuery)}`, {
+      signal: controller.signal,
+    });
+
+    if (!response.ok) throw new Error("Search failed");
+
+    const data = (await response.json()) as SearchApiResponse;
+
+    return {
+      companies: (data.companies || []).map((company) => ({ ...company, type: "company" as const })),
+      roles: (data.roles || []).map((role) => ({ ...role, type: "role" as const })),
+      skills: (data.skills || []).map((skill) => ({ ...skill, type: "skill" as const })),
+    };
+  }, []);
+  const {
+    value: results,
+    isLoading,
+    isOpen,
+    setIsOpen,
+    reset,
+  } = useDebouncedSearch<{
     companies: SearchEntity[];
     roles: SearchEntity[];
     skills: SearchEntity[];
-  }>({ companies: [], roles: [], skills: [] });
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const searchRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  }>({
+    query,
+    initialValue: emptySearchResults,
+    debounceMs: 250,
+    fetcher: fetchSearchResults,
+  });
 
   // Focus shortcut: Cmd/Ctrl + K
   useEffect(() => {
@@ -30,49 +79,11 @@ export function GlobalSearch() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  useEffect(() => {
-    const normalizedQuery = query.trim();
-    if (!normalizedQuery) return;
-
-    const controller = new AbortController();
-    const timeout = window.setTimeout(async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(`/api/search?q=${encodeURIComponent(normalizedQuery)}`, {
-          signal: controller.signal,
-        });
-        if (!response.ok) throw new Error("Search failed");
-
-        const data = await response.json();
-        setResults({
-          companies: (data.companies || []).map((c: any) => ({ ...c, type: "company" })),
-          roles: (data.roles || []).map((r: any) => ({ ...r, type: "role" })),
-          skills: (data.skills || []).map((s: any) => ({ ...s, type: "skill" })),
-        });
-        setIsOpen(true);
-      } catch (error) {
-        if (!controller.signal.aborted) {
-          setResults({ companies: [], roles: [], skills: [] });
-          setIsOpen(true);
-        }
-      } finally {
-        if (!controller.signal.aborted) setIsLoading(false);
-      }
-    }, 250);
-
-    return () => {
-      window.clearTimeout(timeout);
-      controller.abort();
-    };
-  }, [query]);
-
   const handleQueryChange = (value: string) => {
     setQuery(value);
 
     if (!value.trim()) {
-      setResults({ companies: [], roles: [], skills: [] });
-      setIsOpen(false);
-      setIsLoading(false);
+      reset();
       return;
     }
 
@@ -85,7 +96,7 @@ export function GlobalSearch() {
     }
     document.addEventListener("pointerdown", handleOutsidePointer);
     return () => document.removeEventListener("pointerdown", handleOutsidePointer);
-  }, []);
+  }, [setIsOpen]);
 
   const hasResults = results.companies.length > 0 || results.roles.length > 0 || results.skills.length > 0;
 
@@ -181,7 +192,7 @@ export function GlobalSearch() {
               )}
             </div>
           ) : (
-            <p className="px-4 py-3 text-sm text-muted-foreground">No results found for "{query}"</p>
+            <p className="px-4 py-3 text-sm text-muted-foreground">No results found for &quot;{query}&quot;</p>
           )}
         </div>
       )}

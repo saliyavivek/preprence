@@ -29,7 +29,7 @@ export function GlobalSearchItem({ entity, href }: GlobalSearchItemProps) {
       <span className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-md bg-muted/50 text-muted-foreground">
         {entity.type === "company" ? (
           <span className="scale-75">
-            <CompanyMarkSmall company={entity as any} />
+            <CompanyMarkSmall company={entity} />
           </span>
         ) : entity.type === "role" ? (
           <HugeiconsIcon

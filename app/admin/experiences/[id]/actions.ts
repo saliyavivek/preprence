@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth/admin";
 import { redirect } from "next/navigation";
+import { invalidatePublicBrowseCache } from "@/lib/public-cache";
 
 export async function takeDownExperience(experienceId: string) {
     await requireAdmin();
@@ -30,5 +31,6 @@ export async function takeDownExperience(experienceId: string) {
         },
     });
 
+    invalidatePublicBrowseCache();
     redirect(`/admin/experiences`);
 }

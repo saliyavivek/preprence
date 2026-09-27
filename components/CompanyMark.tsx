@@ -1,6 +1,8 @@
+import Image from "next/image";
+
 type CompanyLike = {
   name: string;
-  logoUrl: string | null;
+  logoUrl?: string | null;
 };
 
 function getInitials(name: string, length: number) {
@@ -31,10 +33,13 @@ function CompanyMarkBase({
     <span className={className}>
       {company.logoUrl ? (
         <span className="flex size-full items-center justify-center">
-          <img
+          <Image
             src={company.logoUrl}
             alt={`${company.name} logo`}
+            width={120}
+            height={120}
             className={imageClassName}
+            unoptimized
           />
         </span>
       ) : (
@@ -84,7 +89,3 @@ export function CompanyMarkLarge({ company }: { company: CompanyLike }) {
     />
   );
 }
-
-// export function CompanyMark({ company }: { company: CompanyLike }) {
-//   return <CompanyMarkSmall company={company} />;
-// }

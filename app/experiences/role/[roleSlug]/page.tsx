@@ -67,7 +67,7 @@ export default async function RoleExperiencesPage({ params, searchParams }: Page
           </h2>
         </div>
         <div className="flex flex-col gap-3">
-          {experiences.map((experience: any) => (
+          {experiences.map((experience) => (
             <SkillRoleExperienceRowCard
               key={experience.id}
               experience={experience}

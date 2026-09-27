@@ -1,11 +1,12 @@
 import { statusLabels } from "@/components/StatusBadge";
+import type { Verdict } from "@/app/generated/prisma/enums";
 
 export type Experience = {
     id: string;
     status?: ExperienceStatus | string;
     role: { id: string; name: string } | null;
     interviewDate: Date;
-    verdict: string | null;
+    verdict: Verdict | null;
     isAnonymous: boolean;
     author?: { id?: string; name?: string | null; email?: string; degree?: string | null; graduationYear?: number | null } | null;
     company: { name: string; slug: string; logoUrl: string | null };

@@ -7,6 +7,7 @@ import { Difficulty as DifficultyEnum } from "@/app/generated/prisma/enums";
 import type { Difficulty as DifficultyType } from "@/app/generated/prisma/enums";
 import { RoundType as RoundTypeEnum } from "@/app/generated/prisma/enums";
 import type { RoundType } from "@/app/generated/prisma/enums";
+import { invalidatePublicBrowseCache } from "@/lib/public-cache";
 
 
 function slugifySkill(text: string) {
@@ -105,6 +106,7 @@ export async function createRound(
         },
     });
 
+    invalidatePublicBrowseCache();
     redirect(`/experience/${experienceId}/edit`);
 }
 
@@ -195,6 +197,7 @@ export async function updateRound(
         },
     });
 
+    invalidatePublicBrowseCache();
     redirect(`/experience/${experienceId}/edit`);
 }
 
@@ -264,6 +267,7 @@ export async function deleteRound(
         )
     );
 
+    invalidatePublicBrowseCache();
     redirect(`/experience/${experienceId}/edit`);
 }
 
@@ -310,6 +314,7 @@ export async function publishExperience(
         },
     });
 
+    invalidatePublicBrowseCache();
     redirect(`/experiences/${experienceId}`);
 }
 
@@ -352,6 +357,8 @@ export async function updateExperience(experienceId: string,
             isAnonymous
         }
     })
+
+    invalidatePublicBrowseCache();
 }
 
 export async function addSkillsToExperience(
@@ -423,6 +430,8 @@ export async function addSkillsToExperience(
             },
         },
     });
+
+    invalidatePublicBrowseCache();
 }
 
 export async function removeSkillFromExperience(
@@ -474,4 +483,6 @@ export async function removeSkillFromExperience(
             },
         },
     });
+
+    invalidatePublicBrowseCache();
 }
