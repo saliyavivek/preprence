@@ -96,7 +96,7 @@ export function MobileProfileSheet({ open, onClose, user, onLogout }: MobileProf
 
   return (
     <div
-      className={cn("fixed inset-0 z-[60] md:hidden transition-opacity duration-300 ease-out", open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0")}
+      className={cn("fixed inset-0 z-99 md:hidden transition-opacity duration-300 ease-out", open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0")}
       role="presentation"
     >
       <button
